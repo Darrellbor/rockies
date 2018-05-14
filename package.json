@@ -1,0 +1,42 @@
+{
+  "name": "rockies",
+  "version": "1.0.0",
+  "description": "This is an ever growing event platform for Africa and Nigeria",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Darrellbor/rockies.git"
+  },
+  "keywords": [
+    "event",
+    "Nigeria",
+    "Africa",
+    "rockies",
+    "tickets",
+    "shows",
+    "creative",
+    "innovative",
+    "solution",
+    "Covenant",
+    "University"
+  ],
+  "author": "Darrel Idiagbor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Darrellbor/rockies/issues"
+  },
+  "homepage": "https://github.com/Darrellbor/rockies#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-fileupload": "^0.4.0",
+    "jsonwebtoken": "^8.2.1",
+    "mongoose": "^5.0.16"
+  }
+}
