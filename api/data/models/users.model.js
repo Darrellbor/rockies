@@ -64,29 +64,7 @@ var userSchema = new mongoose.Schema({
             name: String,
             times: Number
         }],
-        incompleteEvents: [{
-            _id: {
-                type: mongoose.Schema.Types.ObjectId,
-                required: [true, "Event id cannot be empty!"]
-            },
-            title: String,
-            type: String,
-            startDate: Date,
-            eventImage: String,
-            category: String,
-            address: {
-                street: {
-                    type: String,
-                    required: [true, "street name cannot be empty!"]
-                },
-                cityOrProvince: String,
-                state: String,
-                zipCode: Number,
-                country: String
-            },
-            price: Number
-        }],
-        bookedEvents: [{
+        incompleteEventOrders: [{
             _id: {
                 type: mongoose.Schema.Types.ObjectId,
                 required: [true, "Event id cannot be empty!"]

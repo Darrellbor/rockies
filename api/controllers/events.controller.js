@@ -227,13 +227,18 @@ module.exports.eventsGetOne = function(req, res) {
 
 module.exports.checkEventTitle = function(req, res) {
     var title = "";
+    var query = {};
 
-    if(req.query && req.query.title) {
+    if(req.query && req.query.title && req.query.for === "eventLink") {
         title = req.query.title;
+        query = { eventLink: title };
+    } else if(req.query && req.query.title && req.query.for === "organizerUrl") {
+        title = req.query.title;
+        query = { "organizer.url": title };
     }
 
     Event
-        .find({ eventLink: title })
+        .find(query)
         .exec(function(err, events) {
             if(err) {
                 console.log('Error finding events');
@@ -248,6 +253,78 @@ module.exports.checkEventTitle = function(req, res) {
                 res
                     .status(200)
                     .json(events)
+            }
+        });
+}
+
+module.exports.eventsUpdateAll = function(req, res) {
+    var eventId = req.params.id;
+    console.log("GET event ", eventId);
+
+    Event
+        .findById(eventId)
+        .exec(function(err, doc) {
+            var response = {
+                status: 200,
+                message: doc
+            }
+            if(err) {
+                console.log('Error finding event');
+                response.status = 500;
+                response.message = {
+                    err, 
+                    message: "An error occured!"
+                };
+            } else if(!doc) {
+                response.status = 404;
+                response.message = {
+                    message: 'Event id not found! '+blogId
+                }
+            }
+
+            if(response.status !== 200) {
+                res 
+                    .status(response.status)
+                    .json(response.message)
+            } else {
+
+                var suppliedData = {
+                    description: req.body.description,
+                    startDate: req.body.startDate,
+                    endDate: req.body.endDate,
+                    location: req.body.location,    //expecting an object
+                    eventLink: req.body.eventLink,
+                    organizer: req.body.organizer,  //expecting an object
+                    ticket: req.body.ticket,      //expecting an object or array
+                    settings: req.body.settings 
+                }
+
+                if(!req.body.description || !req.body.startDate ||
+                   !req.body.endDate || !req.body.location || !req.body.eventLink || 
+                   !req.body.organizer || !req.body.ticket || !req.body.settings) {
+                        res 
+                            .status(400)
+                            .json({message: 'Please ensure all fields are filled '})
+                        return;
+                }
+
+                Event
+                    .update({
+                        _id: eventId
+                    }, suppliedData, function(err, updatedEvent) {
+                        if(err) {
+                            res 
+                                .status(500)
+                                .json({
+                                    err, 
+                                    message: "An error occured!"
+                                })
+                        } else {
+                            res 
+                                .status(204)
+                                .json()
+                        }
+                    });
             }
         });
 }
@@ -290,18 +367,54 @@ module.exports.eventsUpdateOne = function(req, res) {
                             message: "Please make sure that viewed is a numerical value"
                         })
                     return;
+                } else if(req.body.tickets && isNaN(req.body.tickets)) {
+                    res 
+                        .status(400)
+                        .json({
+                            message: "Please make sure that tickets is a numerical value"
+                        })
+                    return;
                 }
 
-                var suppliedData = {
-                    description: req.body.description,
-                    eventImage: req.body.eventImage, //handle as a fileupload
-                    startDate: req.body.startDate,
-                    endDate: req.body.endDate,
-                    location: req.body.location,    //expecting an object
-                    eventLink: req.body.eventLink,
-                    organizer: req.body.organizer,  //expecting an object
-                    ticket: req.body.ticket,      //expecting an object or array
-                    settings: req.body.settings 
+                //for updating totalViewed
+                var updateViewed = doc.totalViewed + parseInt(req.body.viewed, 10);
+
+                doc.totalViewed = updateViewed;
+
+                //for updating tickets
+                var updateTicketQuantity = doc.ticket[0].quantity;
+
+                if((req.body && req.body.tickets && !req.body.type && !req.body.operation) || 
+                   (req.body && !req.body.tickets && req.body.type && !req.body.operation) ||
+                   (req.body && !req.body.tickets && !req.body.type && req.body.operation) ||
+                   (req.body && req.body.tickets && req.body.type && !req.body.operation)  ||
+                   (req.body && req.body.tickets && !req.body.type && req.body.operation)  ||
+                   (req.body && !req.body.tickets && req.body.type && req.body.operation)) {
+                    res 
+                        .status(400)
+                        .json({
+                            message: "Please make sure that (type,tickets and operation) pair fields are available in order to patch quantity of tickets"
+                        })
+                    return;
+                } else if(req.body.type === "Normal" && req.body.operation === "Sub") {
+                    updateTicketQuantity = doc.ticket[0].quantity - parseInt(req.body.tickets, 10);
+
+                    doc.ticket[0].quantity = updateTicketQuantity;
+                    
+                } else if(req.body.type === "Normal" && req.body.operation === "Add") {
+                    updateTicketQuantity = doc.ticket[0].quantity + parseInt(req.body.tickets, 10);
+
+                    doc.ticket[0].quantity = updateTicketQuantity;
+                    
+                } else if(req.body.type === "Vip" && req.body.operation === "Sub") {
+                    updateTicketQuantity = doc.ticket[1].quantity - parseInt(req.body.tickets, 10);
+                    
+                    doc.ticket[1].quantity = updateTicketQuantity;
+
+                } else if(req.body.type === "Vip" && req.body.operation === "Add") {
+                    updateTicketQuantity = doc.ticket[1].quantity + parseInt(req.body.tickets, 10);
+                    
+                    doc.ticket[1].quantity = updateTicketQuantity;
                 }
 
                 if(req.body && req.body.viewed) {
@@ -313,23 +426,14 @@ module.exports.eventsUpdateOne = function(req, res) {
                             })
                         return;
                     }
-                    var updateViewed = doc.totalViewed + parseInt(req.body.viewed, 10);
-                    suppliedData = {
-                        totalViewed: updateViewed
-                    }
-                } else if(!req.body.description || !req.body.startDate ||
-                   !req.body.endDate || !req.body.location || !req.body.eventLink || 
-                   !req.body.organizer || !req.body.ticket || !req.body.settings) {
-                        res 
-                            .status(400)
-                            .json({message: 'Please ensure all fields are filled '})
-                        return;
-                }
+                    
+                    
+                } //handle the eventImage file in an else if block
 
                 Event
                     .update({
                         _id: eventId
-                    }, suppliedData, function(err, updatedEvent) {
+                    }, doc, function(err, updatedEvent) {
                         if(err) {
                             res 
                                 .status(500)
@@ -366,5 +470,38 @@ module.exports.eventsDeleteOne = function(req, res) {
                     .status(204)
                     .json()
             }
+        });
+}
+
+module.exports.organizerGetEvents = function(req, res) {
+    organizerId = req.params.id;
+
+    Event
+        .find({
+            "organizer._id": organizerId,
+            "startDate": { $gt: new Date() }
+        })
+        .sort("-createdOn")
+        .exec(function(err, events) {
+            var response = {
+                status: 200,
+                message: events
+            }
+            if(err) {
+                console.log('Error finding events');
+                response.status = 500;
+                response.message = {
+                    err, 
+                    message: "An error occured!"
+                };
+            } else if(!events) {
+                response.status = 404;
+                response.message = {
+                    message: 'Organizer id not found! '+organizerId
+                }
+            }
+            res 
+                .status(response.status)
+                .json(response.message)
         });
 }
