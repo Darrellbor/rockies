@@ -1,8 +1,7 @@
 var mongoose = require('mongoose');
 
-var settingsSchema = new mongoose.Schema({
-    categories: [{
-        name: {
+var categorySchema = new mongoose.Schema({
+     name: {
             type: String,
             required: [true, "Category name cannot be empty!"]
         },
@@ -18,9 +17,10 @@ var settingsSchema = new mongoose.Schema({
             type: Date,
             default: Date.now
         }
-    }],
-    locations: [{
-        name: {
+});
+
+var locationSchema = new mongoose.Schema({
+    name: {
             type: String,
             required: [true, "Location name cannot be empty!"]
         },
@@ -51,7 +51,11 @@ var settingsSchema = new mongoose.Schema({
             type: Date,
             default: Date.now
         }
-    }]
+});
+
+var settingsSchema = new mongoose.Schema({
+    categories: [categorySchema],
+    locations: [locationSchema]
 });
 
 mongoose.model('Settings', settingsSchema, 'settings');

@@ -196,7 +196,8 @@ module.exports.reviewDeleteOne = function(req, res) {
 
     Event
         .findOne({
-             _id: eventId
+             _id: eventId,
+             endDate: { $lt : new Date() }
         })
         .select('reviews')
         .exec(function(err, event) {
