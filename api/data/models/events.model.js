@@ -45,7 +45,7 @@ var reviewSchema = new mongoose.Schema({
         type: String,
         required: [true, "Review cannot be empty!"]
     },
-    semanticRating: Number,
+    sentimentRating: Number,
     reviewBy: {
         _id: {
             type: mongoose.Schema.Types.ObjectId,

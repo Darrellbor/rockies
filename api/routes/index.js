@@ -3,6 +3,7 @@ var router = express.Router();
 
 var eventsCtrl = require('../controllers/events.controller.js');
 var ordersCtrl = require('../controllers/orders.controller.js');
+var reviewsCtrl = require('../controllers/reviews.controller.js');
 
 router
     .route('/events/search')
@@ -28,5 +29,15 @@ router
     .route('/events/:id/orders')
     .get(ordersCtrl.getAllOrders)
     .post(ordersCtrl.orderAddOne);
+
+router
+    .route('/events/:id/reviews')
+    .get(reviewsCtrl.getAllReviews)
+    .post(reviewsCtrl.reviewAddOne);
+
+router
+    .route('/events/:id/reviews/:reviewId')
+    .put(reviewsCtrl.reviewUpdateOne)
+    .delete(reviewsCtrl.reviewDeleteOne);
 
 module.exports = router;
