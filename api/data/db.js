@@ -40,3 +40,5 @@ process.once('SIGUSR2', function() {
 require('./models/events.model.js');
 require('./models/users.model.js');
 require('./models/settings.model.js');
+require('./models/locations.model.js');
+require('./models/feedback.model.js');

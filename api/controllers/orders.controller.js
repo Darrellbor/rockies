@@ -27,7 +27,7 @@ module.exports.getAllOrders = function(req, res) {
                 }
             } else {
                  console.log('Found orders', doc.orders.length);
-                 response.message = doc.orders ? doc.orders : [];
+                 response.message = doc.orders.length !== 0 ? doc.orders : { message: 'There are no orders to display' };
             }
             res 
                 .status(response.status)

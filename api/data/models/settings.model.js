@@ -55,7 +55,7 @@ var locationSchema = new mongoose.Schema({
 
 var settingsSchema = new mongoose.Schema({
     categories: [categorySchema],
-    locations: [locationSchema]
+    locations: [locationSchema],
 });
 
 mongoose.model('Settings', settingsSchema, 'settings');

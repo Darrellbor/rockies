@@ -115,6 +115,10 @@ var eventSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             required: [true, "Organizer id cannot be empty!"]
         },
+        user_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: [true, "User id cannot be empty!"]
+        },
         name: String,
         about: String,
         phone: Number,

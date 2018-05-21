@@ -32,7 +32,7 @@ module.exports.getAllReviews = function(req, res) {
                 }
             } else {
                  console.log('Found reviews ', doc.reviews.length);
-                 response.message = doc.reviews ? doc.reviews : [];
+                 response.message = doc.reviews.length !== 0 ? doc.reviews : { message: 'There are no reviews to display' };
             }
             res 
                 .status(response.status)
@@ -82,7 +82,8 @@ module.exports.reviewAddOne = function(req, res) {
     Event
         .findOne({
              _id: eventId,
-             endDate: { $lt : new Date() }
+             endDate: { $lt : new Date() },
+             "orders.buyer._id": req.user._id
         })
         .select('reviews')
         .exec(function(err, doc) {
@@ -100,7 +101,7 @@ module.exports.reviewAddOne = function(req, res) {
             } else if(!doc) {
                 response.status = 404;
                 response.message = {
-                    message: 'Event not found, cannot add a review to an event that has not ended! '+ eventId
+                    message: 'Event not found, cannot add a review to an event that has not ended, neither can you review an event that you did not order for!'+ eventId
                 }
             } 
             

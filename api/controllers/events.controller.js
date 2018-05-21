@@ -86,7 +86,7 @@ module.exports.getAllEvents = function(req, res) {
     }
 
     if(req.body && req.body.filter) {
-        filter = req.body.filter;
+        filter = req.body.filter; 
     }
 
     if(isNaN(offset) || isNaN(count)) {
@@ -238,8 +238,8 @@ module.exports.checkEventTitle = function(req, res) {
     }
 
     Event
-        .find(query)
-        .exec(function(err, events) {
+        .findOne(query)
+        .exec(function(err, event) {
             if(err) {
                 console.log('Error finding events');
                 res
@@ -249,10 +249,9 @@ module.exports.checkEventTitle = function(req, res) {
                         message: "An error occured!"
                     })
             } else {
-                console.log('Found events', events.length);
                 res
                     .status(200)
-                    .json(events)
+                    .json(event)
             }
         });
 }
@@ -418,7 +417,7 @@ module.exports.eventsUpdateOne = function(req, res) {
                 }
 
                 if(req.body && req.body.viewed) {
-                    if(req.user.organizer._id === doc.organizer._id) {
+                    if(req.user._id === doc.organizer.user_id) {
                         res 
                             .status(200)
                             .json({

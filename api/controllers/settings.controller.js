@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
 var Settings = mongoose.model('Settings');
+var Location = mongoose.model('Location');
 
 module.exports.getAllCategories = function(req, res) {
-    var SettingsId = "5afc9fbdef24054494492ef4";
+    var SettingsId = "5afdeae7ef24054494492ef5";
     Settings
         .findById(SettingsId)
         .select('categories')
@@ -25,7 +26,7 @@ module.exports.getAllCategories = function(req, res) {
                 }
             } else {
                  console.log('Found categories', doc.categories.length);
-                 response.message = doc.categories ? doc.categories : [];
+                 response.message = doc.categories.length !== 0 ? doc.categories : { message: 'There are no categories to display' };
             }
             res 
                 .status(response.status)
@@ -60,7 +61,7 @@ var _addCategory = function(req, res, settings) {
 }
 
 module.exports.categoriesAddOne = function(req, res) {
-     var SettingsId = "5afc9fbdef24054494492ef4";
+     var SettingsId = "5afdeae7ef24054494492ef5";
 
      if(!req.body.name) {
         res 
@@ -102,7 +103,7 @@ module.exports.categoriesAddOne = function(req, res) {
 }
 
 module.exports.getAllLocations = function(req, res) {
-    var SettingsId = "5afc9fbdef24054494492ef4";
+    var SettingsId = "5afdeae7ef24054494492ef5";
     Settings
         .findById(SettingsId)
         .select('locations')
@@ -125,7 +126,7 @@ module.exports.getAllLocations = function(req, res) {
                 }
             } else {
                  console.log('Found locations', doc.locations.length);
-                 response.message = doc.locations ? doc.locations : [];
+                 response.message = doc.locations.length !== 0 ? doc.locations : { message: 'There are no loactions to display' };
             }
             res 
                 .status(response.status)
@@ -162,7 +163,7 @@ var _addLocations = function(req, res, settings) {
 }
 
 module.exports.locationsAddOne = function(req, res) {
-    var SettingsId = "5afc9fbdef24054494492ef4";
+    var SettingsId = "5afdeae7ef24054494492ef5";
 
      if(!req.body.name || !req.body.address || !req.body.coordinates) {
         res 
@@ -199,6 +200,65 @@ module.exports.locationsAddOne = function(req, res) {
                   res 
                     .status(response.status)
                     .json(response.message)
+            }
+        });
+}
+
+module.exports.getLocations = function(req, res) {
+    var count = 5;
+    var maxCount = 10;
+    var city = "";
+
+    if(req.query && req.query.count) {
+        count = parseInt(req.query.count, 10);
+    }
+
+    if(req.query && req.query.city) {
+        city = req.query.city; 
+        var splitCity = city.split("");
+        splitCity[0] = splitCity[0].toUpperCase();
+        city = splitCity.join("");
+    }
+
+    if(isNaN(count)) {
+        res 
+            .status(400)
+            .json({
+                message: 'Please make sure that the query string count is numeric'
+            })
+        return;
+    }
+
+    if(count > maxCount) {
+        res 
+            .status(400)
+            .json({
+                message: 'Count limit of '+maxCount+' exceeded!'
+            })
+        return;
+    }
+
+    Location
+        .find(
+            { "states": { "$regex": city } }, 
+            { "states.$": 1 }
+        )
+        .limit(count)
+        .select("states country")
+        .exec(function(err, locations) {
+            if(err) {
+                console.log('Error finding locations');
+                res
+                    .status(500)
+                    .json({
+                        err, 
+                        message: "An error occured!"
+                    })
+            } else {
+                console.log('Found locations', locations.length);
+                res
+                    .status(200)
+                    .json(locations)
             }
         });
 }

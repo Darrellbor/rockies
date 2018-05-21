@@ -12,6 +12,10 @@ var organizerSchema = new mongoose.Schema({
         type: String,
         required: [true, "Organizer name cannot be empty!"]
     },
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, "User id cannot be empty!"]
+    },
     about: String,
     url: String,
     phone: Number,
@@ -70,7 +74,7 @@ var userSchema = new mongoose.Schema({
                 required: [true, "Event id cannot be empty!"]
             },
             title: String,
-            type: String,
+            eventLink: String,
             startDate: Date,
             eventImage: String,
             category: String,
@@ -84,7 +88,7 @@ var userSchema = new mongoose.Schema({
                 zipCode: Number,
                 country: String
             },
-            price: Number
+            cost: Number
         }]
     },
     organizerProfile: [organizerSchema],
