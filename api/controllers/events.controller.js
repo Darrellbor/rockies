@@ -151,6 +151,13 @@ module.exports.eventsAddOne = function(req, res) {
         return;
     }
 
+    if (!req.files) {
+        res
+            .status(400)
+            .json({ message: 'No files were uploaded.' });
+        return;
+    }
+
     //Obtaining the event link
     var linkTitle = req.body.title.split(" ");
     linkTitle = linkTitle.join("-");
@@ -163,6 +170,7 @@ module.exports.eventsAddOne = function(req, res) {
     }
 
     linkTitle = linkTitle + "-" + uniqueKey;
+    imageTitle = linkTitle + "" + uniqueKey;
     //eventTitle = "https://rockies.ng/e/" + linkTitle;
     eventTitle = linkTitle;
 
@@ -171,13 +179,31 @@ module.exports.eventsAddOne = function(req, res) {
     if(req.body.exclusive) {
         exclusive = "Yes";
     }
+
+    //handling uploaded event image
+    var eventImage = req.files.eventImage;
  
+    // Use the mv() method to place the file somewhere on your server
+    eventImage.mv('../../assets/images/events/'+imageTitle+'.jpg', function(err) {
+        if (err) {
+            res
+                .status(500)
+                .send({
+                    err,
+                    message: 'An error occured uploading event image'
+                });
+            return;
+        }
     
+        console.log('File uploaded!', eventImage);
+    });
+    
+
     Event
         .create({
             title: req.body.title,
             description: req.body.description,
-            eventImage: req.body.eventImage, //handle as a fileupload
+            eventImage: imageTitle, //handle as a fileupload
             startDate: req.body.startDate,
             endDate: req.body.endDate,
             location: req.body.location,    //expecting an object
@@ -435,7 +461,32 @@ module.exports.eventsUpdateOne = function(req, res) {
                     }
                     
                     
-                } //handle the eventImage file in an else if block
+                }
+                
+                if(req.body.type === "eventImage" && req.files) {
+                    //handling uploaded event image
+                    var eventImage = req.files.eventImage;
+                
+                    // Use the mv() method to place the file somewhere on your server
+                    eventImage.mv('../../assets/images/events/'+eventImage.name, function(err) {
+                        if (err) {
+                            res
+                                .status(500)
+                                .send({
+                                    err,
+                                    message: 'An error occured uploading event image'
+                                });
+                            return;
+                        }
+                    
+                        console.log('File uploaded!', eventImage);
+                    });
+                } else if (req.body.type === "eventImage" && !req.files) {
+                    res
+                        .status(400)
+                        .json({ message: 'No files were uploaded.' });
+                    return;
+                }//handle the eventImage file in an else if block
 
                 Event
                     .update({
