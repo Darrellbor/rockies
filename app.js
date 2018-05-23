@@ -14,7 +14,9 @@ app.set('port', 3000);
 
 app.use(cors());
 
-app.use(fileUpload());
+app.use(fileUpload({
+  limits: { fileSize: 10 * 1024 * 1024 },
+}));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 

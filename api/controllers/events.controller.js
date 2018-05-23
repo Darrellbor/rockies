@@ -486,7 +486,7 @@ module.exports.eventsUpdateOne = function(req, res) {
                         .status(400)
                         .json({ message: 'No files were uploaded.' });
                     return;
-                }//handle the eventImage file in an else if block
+                }//handle the eventImage file upload here
 
                 Event
                     .update({
