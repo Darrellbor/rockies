@@ -163,7 +163,8 @@ module.exports.eventsAddOne = function(req, res) {
     }
 
     linkTitle = linkTitle + "-" + uniqueKey;
-    eventTitle = "https://rockies.ng/e/" + linkTitle;
+    //eventTitle = "https://rockies.ng/e/" + linkTitle;
+    eventTitle = linkTitle;
  
     
     Event

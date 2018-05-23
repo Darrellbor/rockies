@@ -20,12 +20,14 @@ var organizerSchema = new mongoose.Schema({
     url: String,
     phone: Number,
     email: String,
-    facebook: String,
-    twitter: String,
-    instagram: String,
+    socials: {
+        facebook: String,
+        twitter: String,
+        instagram: String,
+        website: String,
+        blog: String
+    },
     logo: String,
-    website: String,
-    blog: String,
     background_color: String,
     text_color: String,
     createdOn: {
@@ -91,7 +93,7 @@ var userSchema = new mongoose.Schema({
             cost: Number
         }]
     },
-    organizerProfile: [organizerSchema],
+    organizerProfiles: [organizerSchema],
     createdOn: {
         type: Date,
         default: Date.now

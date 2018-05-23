@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var usersCtrl = require('../controllers/users.controller.js');
+var organizersCtrl = require('../controllers/organizers.controller.js');
 
 router
     .route('/users/register')
@@ -40,5 +41,17 @@ router
 router
     .route('/users/feedback')
     .post(usersCtrl.authenticate, usersCtrl.userFeedback);
+
+router
+    .route('/organizer')
+    .get(usersCtrl.authenticate, organizersCtrl.getAllOrganizers)
+    .post(usersCtrl.authenticate, organizersCtrl.addOneOrganizer);
+
+router
+    .route('/organizer/:id')
+    .get(organizersCtrl.getOneOrganizer)
+    .put(usersCtrl.authenticate, organizersCtrl.updateAllOrganizer)
+    .patch(usersCtrl.authenticate, organizersCtrl.updateOneOrganizer)
+    .delete(usersCtrl.authenticate, organizersCtrl.deleteOneOrganizer);
 
 module.exports = router;
