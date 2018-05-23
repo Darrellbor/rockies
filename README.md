@@ -1,7 +1,7 @@
-#Rockies
+<h2>Rockies</h2>
 <small>This is an event platform for Africa and Nigeria</small>
 
-#features
+<h2>Features</h2>
 <ul>
     <li>View events and sort them by various criteria</li>
     <li>Buy tickets and have it sent to your mail</li>
@@ -10,7 +10,7 @@
     <li>Allow users to create events and track it.</li>
 </ul>
 
-#Api Endpoints
+<h2>Api Endpoints</h2>
 <h3>Event</h3>
 <ul>
     <li>GET /api/events/search</li>
