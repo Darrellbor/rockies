@@ -190,6 +190,11 @@ var eventSchema = new mongoose.Schema({
     },
     orders: [orderSchema],
     reviews: [reviewSchema],
+    exclusive: {         //accepts a yes or no
+        type: String,
+        trim: true,
+        default: "No"
+    }, 
     createdOn: {
         type: Date,
         default: Date.now

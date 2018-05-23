@@ -165,6 +165,12 @@ module.exports.eventsAddOne = function(req, res) {
     linkTitle = linkTitle + "-" + uniqueKey;
     //eventTitle = "https://rockies.ng/e/" + linkTitle;
     eventTitle = linkTitle;
+
+    //check for exclusives
+    var exclusive = "No";
+    if(req.body.exclusive) {
+        exclusive = "Yes";
+    }
  
     
     Event
@@ -179,7 +185,8 @@ module.exports.eventsAddOne = function(req, res) {
             totalViewed: 0,
             organizer: req.body.organizer,  //expecting an object
             ticket: req.body.ticket,      //expecting an object or array
-            settings: req.body.settings     //expecting an object
+            settings: req.body.settings,     //expecting an object
+            exclusive: exclusive
         }, function(err, event) {
             if(err) {
                 res 
