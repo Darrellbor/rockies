@@ -50,8 +50,27 @@ var _addOrganizerProfile = function(req, res, user) {
     }
 
     organizerName = organizerName + "-" + uniqueKey;
+    logoTitle = organizerName + "" + uniqueKey;
     //url = "https://rockies.ng/o/" + organizerName;
     url = organizerName;
+
+    //handling uploaded organizer logo
+    var organizerLogo = req.files.organizerLogo;
+ 
+    // Use the mv() method to place the file somewhere on your server
+    organizerLogo.mv('../../assets/images/organizers/'+logoTitle+'.jpg', function(err) {
+        if (err) {
+            res
+                .status(500)
+                .send({
+                    err,
+                    message: 'An error occured uploading organizer logo'
+                });
+            return;
+        }
+    
+        console.log('File uploaded!', organizerLogo);
+    });
 
     user.organizerProfiles.push({
         user_id: req.user._id,
@@ -62,7 +81,8 @@ var _addOrganizerProfile = function(req, res, user) {
         socials: req.body.socials,
         background_color: req.body.background_color,
         text_color: req.body.text_color,
-        url: url
+        url: url,
+        logo: logoTitle     //handle as file upload
     });
 
     user.save(function(err, organizerProfilesAdded) {
@@ -90,6 +110,13 @@ module.exports.addOneOrganizer = function(req, res) {
                 .status(400)
                 .json({message: 'Please ensure all fields are filled '})
            return;
+    }
+
+    if (!req.files) {
+        res
+            .status(400)
+            .json({ message: 'No files were uploaded.' });
+        return;
     }
 
     User
@@ -287,7 +314,84 @@ module.exports.updateAllOrganizer = function(req, res) {
         });
 }
 
-module.exports.updateOneOrganizer = function(req, res) {}
+module.exports.updateOneOrganizer = function(req, res) {
+    console.log('update a single organizer detail');
+
+    if (req.body.type === "logoImage" && !req.files) {
+        res
+            .status(400)
+            .json({ message: 'No files were uploaded.' });
+        return;
+    } else {
+        var organizerId = req.params.id;
+
+        User
+            .findOne({
+                "organizerProfiles._id": organizerId
+            })
+            .select("organizerProfiles")
+            .exec(function(err, user) {
+                var response = {
+                    status: 200,
+                    message: user
+                }
+                if(err) {
+                    console.log('Error finding event');
+                    response.status = 500;
+                    response.message = {
+                        err, 
+                        message: "An error occured!"
+                    };
+                } else if(!user) {
+                    response.status = 404;
+                    response.message = {
+                        message: 'User id not found! '
+                    }
+                } 
+
+                if(response.status != 200) {
+                    res 
+                        .status(response.status)
+                        .json(response.message)
+                } else {
+                    var organizerInstance = user.organizerProfiles.id(organizerId);
+
+                    //handling uploaded organizer logo
+                    var organizerLogo = req.files.organizerLogo;
+                
+                    // Use the mv() method to place the file somewhere on your server
+                    organizerLogo.mv('../../assets/images/organizers/'+organizerLogo.name, function(err) {
+                        if (err) {
+                            res
+                                .status(500)
+                                .send({
+                                    err,
+                                    message: 'An error occured uploading organizer logo'
+                                });
+                            return;
+                        }
+                    
+                        console.log('File uploaded!', organizerLogo);
+                    });
+
+                    user.save(function(err, organizerProfileUpdated) {
+                        if(err) {
+                            res 
+                                .status(500)
+                                .json({
+                                    err, 
+                                    message: "An error occured!"
+                                })
+                        } else {
+                            res 
+                                .status(204)
+                                .json()
+                        }
+                    });
+                }
+            });
+    }
+}
 
 module.exports.deleteOneOrganizer = function(req, res) {
     console.log('delete one user organizer');

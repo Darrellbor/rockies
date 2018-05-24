@@ -38,6 +38,7 @@
     "express-fileupload": "^0.4.0",
     "jsonwebtoken": "^8.2.1",
     "mongoose": "^5.0.16",
+    "nodemailer": "^4.6.5",
     "sentiment": "^5.0.0"
   }
 }
