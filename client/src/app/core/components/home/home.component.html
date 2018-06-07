@@ -1,0 +1,38 @@
+<div id="bg">
+  <div class="bg-banner">
+    <h1>We bring great events to your<br> finger tips</h1><br>
+
+    <form novalidate #searchE="ngForm" (ngSubmit)="searchEvents(searchE)">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <input type="text" class="form-control" id="searchCatTitle" placeholder="Event Title or Category">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <input type="text" class="form-control" id="searchLocation" placeholder="City Or Location">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <select type="text" class="form-control" id="searchDate">
+                <option value="All Dates">All Dates</option>
+                <option value="Today">Today</option>
+                <option value="Tomorrow">Tomorrow</option>
+                <option value="This Week">This Week</option>
+                <option value="This Weekend">This Weekend</option>
+                <option value="This Month">This Month</option>
+                <option value="Next Month">Next Month</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <button type="submit" class="form-control rockies-btn"><fa name="fas fa-search"></fa> Search</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
