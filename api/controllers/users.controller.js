@@ -113,7 +113,7 @@ module.exports.getUserProfile = function(req, res) {
 
     User
         .findOne({ _id: req.user._id })
-        .select("-organizerProfile -password")
+        .select("-organizerProfiles -password")
         .exec(function(err, user) {
             if(err) {
                 res
@@ -257,8 +257,8 @@ module.exports.editOneUserProfile = function(req, res) {
                     }
                 });
     } else if(req.body.type === "Incomplete Event" && req.body.function === "Add" && req.body._id && 
-        req.body.title &&  req.body.eventLink && req.body.startDate && req.body.eventImage &&
-        req.body.category && req.body.address && req.body.cost) {
+        req.body.title &&  req.body.eventLink && req.body.exclusive && req.body.startDate && 
+        req.body.eventImage && req.body.category && req.body.address && req.body.eventType && req.body.cost) {
             User
                 .findOne({ _id: req.user._id })
                 .select("explore.incompleteEventOrders")
@@ -278,11 +278,13 @@ module.exports.editOneUserProfile = function(req, res) {
                         user.explore.incompleteEventOrders.push({
                             _id: req.body._id,
                             title: req.body.title,
-                            type: req.body.type,
+                            eventLink: req.body.eventLink,
+                            exclusive: req.body.exclusive,
                             startDate: req.body.startDate,
                             eventImage: req.body.eventImage,
                             category: req.body.category,
                             address: req.body.address,
+                            eventType: req.body.eventType,
                             cost: req.body.cost
                         });
 

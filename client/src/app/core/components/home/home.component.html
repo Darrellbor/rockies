@@ -7,17 +7,22 @@
         <div class="row">
           <div class="col-md-3">
             <div class="form-group">
-              <input type="text" class="form-control" id="searchCatTitle" placeholder="Event Title or Category">
+              <input type="text" class="form-control" id="searchCatTitle" name="catTitle" placeholder="Event Title or Category" [(ngModel)]="search.catTitle" #catTitle="ngModel">
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
-              <input type="text" class="form-control" id="searchLocation" placeholder="City Or Location">
+              <input type="text" class="form-control" id="searchLocation" name="city" placeholder="City Or Location" [(ngModel)]="search.city" #location="ngModel" (keyup)="searchLocations()" (blur)="exitLocationSuggest()">
+            </div>
+            <div class="location-suggest" *ngIf="location_bar">
+              <div class="location-item" *ngFor="let location of locations">
+                <a href="Javascript:void(0)" (click)="setLocationBar(location.state, location.country)">{{ location.state }},{{ location.country }}</a>
+              </div>
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
-              <select type="text" class="form-control" id="searchDate">
+              <select type="text" class="form-control" id="searchDate" name="date" [(ngModel)]="search.date" #date="ngModel">
                 <option value="All Dates">All Dates</option>
                 <option value="Today">Today</option>
                 <option value="Tomorrow">Tomorrow</option>
@@ -30,9 +35,149 @@
           </div>
           <div class="col-md-3">
             <button type="submit" class="form-control rockies-btn"><fa name="fas fa-search"></fa> Search</button>
-          </div>
+          </div><br>
         </div>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- Fetching some events for users to see -->
+
+<div class="random-events">
+  <div class="random-events-inner">
+    <h3 class="random-events-heading">Events that may interest you</h3><br>
+    <div *ngIf="eventShow">
+      <div class="row">
+        <div class="col-lg-4 col-sm-6" *ngFor="let event of events[0]">
+          <div class="event-cover">
+            <a href="{{ event.eventLink }}">
+              <div class="event-image" [ngStyle]="{'background-image': 'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url(' + event.eventImage + ')'}">
+                <span class="event-image-label"><a href="Javascript:void(0)">{{event.settings.category}}</a></span>
+              </div>
+            </a>
+            <div class="event-body">
+              <time><a href="#">{{ event.startDate | date: "EEE, MMMM d, y h:mm a" }}</a></time>
+              <div class="event-title">
+                <a href="#">{{ event.title }}</a>
+              </div><br>
+              <span class="event-price" *ngFor="let eventTicket of event.ticket | slice:0:1;">
+                <a href="#" *ngIf="eventTicket.normalType === 'Paid'">From NGN {{ eventTicket.price}}</a>
+                <a href="#" *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</a>
+              </span>
+              <span class="event-exclusive" *ngIf="event.exclusive === 'Yes'" title="This event is exclusively sold on rockies!">
+                <fa name="fas fa-certificate"></fa>
+              </span><hr>
+              <div class="event-footer">
+                <fa name="fas fa-map-marker"></fa> 
+                <span class="event-venue">
+                  <a href="#">{{ event.location.address.street }},{{ event.location.address.state }} {{ event.location.address.country }}</a>
+                </span>
+              </div>
+            </div>
+          </div><br>
+        </div>
+
+        <div class="col-lg-4 col-sm-6" *ngIf="eventShowSet2">
+          <div *ngFor="let event of events[1]">
+              <div class="event-cover">
+                <a href="{{ event.eventLink }}">
+                  <div class="event-image" [ngStyle]="{'background-image': 'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url(' + event.eventImage + ')'}">
+                    <span class="event-image-label"><a href="Javascript:void(0)">{{event.settings.category}}</a></span>
+                  </div>
+                </a>
+                <div class="event-body">
+                  <time><a href="#">{{ event.startDate | date: "EEE, MMMM d, y h:mm a" }}</a></time>
+                  <div class="event-title">
+                    <a href="#">{{ event.title }}</a>
+                  </div><br>
+                  <span class="event-price" *ngFor="let eventTicket of event.ticket | slice:0:1;">
+                    <a href="#" *ngIf="eventTicket.normalType === 'Paid'">From NGN {{ eventTicket.price}}</a>
+                    <a href="#" *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</a>
+                  </span>
+                  <span class="event-exclusive" *ngIf="event.exclusive === 'Yes'" title="This event is exclusively sold on rockies!">
+                    <fa name="fas fa-certificate"></fa>
+                  </span><hr>
+                  <div class="event-footer">
+                    <fa name="fas fa-map-marker"></fa> 
+                    <span class="event-venue">
+                      <a href="#">{{ event.location.address.street }},{{ event.location.address.state }} {{ event.location.address.country }}</a>
+                    </span>
+                  </div>
+                </div>
+              </div><br>
+            </div>
+          </div>
+        </div>
+
+      <div class="event-loadMore">
+        <a href="#" class="btn rockies-btn-inverse">Load More...</a>
+      </div>
+    </div>
+
+    <h5 *ngIf="!eventShow" style="text-align: center;">
+      <fa name="fas fa-exclamation-triangle"></fa>
+      Sorry, there are no events to display
+    </h5>
+  </div>
+</div>
+
+<!-- call to action to either create an event or find one  -->
+
+<div class="call-to-action">
+  <h3>Get More With No Surprises</h3>
+  <h5>Easy to use platform for hosting successful events</h5><br>
+  <a href="#" class="btn rockies-btn-round">Create Event</a>
+  <a href="#" class="btn rockies-btn-inverse-round">Find Events</a><br><br>
+</div>
+
+<!-- incomplete events are shown here -->
+
+<div *ngIf="ie_visibility">
+  <br><br><h3 class="random-events-heading">Incomplete Event Orders</h3>
+
+  <div class="ie-scrollbar">
+    <div class="row">
+      <div class="col-lg-4 col-sm-6" *ngFor="let event of events[ie_index].incompleteEvents">
+        <div class="event-cover">
+          <a href="{{ event.eventLink }}">
+            <div class="event-image" [ngStyle]="{'background-image': 'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url(' + event.eventImage + ')'}">
+              <span class="event-image-label"><a href="#">{{event.category}}</a></span>
+            </div>
+          </a>
+          <div class="event-body">
+            <time><a href="#">{{ event.startDate | date: "EEE, MMMM d, y h:mm a" }}</a></time>
+            <div class="event-title">
+              <a href="#">{{ event.title }}</a>
+            </div><br>
+            <span class="event-exclusive" *ngIf="event.exclusive === 'Yes'" title="This event is exclusively sold on rockies!" style="margin-left: 0px;">
+              <fa name="fas fa-certificate"></fa>
+            </span><hr>
+            <div class="event-footer">
+              <fa name="fas fa-map-marker"></fa> 
+              <span class="event-venue">
+                <a href="#">{{ event.address.street }},{{ event.address.state }} {{ event.address.country }}</a>
+              </span>
+            </div>
+          </div>
+        </div><br>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- build top categories either based on users visits or top events visits -->
+<div class="cat-container" *ngIf="cat_visibility">
+  <br><h3 class="random-events-heading">Browse By Top Categories</h3><br>
+  <div class="row">
+    <div class="col-lg-4 col-sm-6" *ngFor="let category of events[cat_index].categories">
+      <a href="#" class="cat-box-link">
+        <div class="cat-box">
+          <h3>
+            <a href="#">{{ category }}</a>
+          </h3>
+        </div>
+      </a>
+    </div>
   </div>
 </div>

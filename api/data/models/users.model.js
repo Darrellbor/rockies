@@ -79,6 +79,7 @@ var userSchema = new mongoose.Schema({
             eventLink: String,
             startDate: Date,
             eventImage: String,
+            exclusive: String,
             category: String,
             address: {
                 street: {
@@ -90,6 +91,7 @@ var userSchema = new mongoose.Schema({
                 zipCode: Number,
                 country: String
             },
+            eventType: String,
             cost: Number
         }]
     },

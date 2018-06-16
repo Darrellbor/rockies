@@ -22,7 +22,7 @@ var runGeoQuery = function(req, res) {
 
     var geoOptions = {
         "spherical": true,
-        "maxDistance": 10000,
+        "maxDistance": 100000,
         "distanceField": 'dist.calculated',
         "includeLocs": "dist.location",
         "num": 6
@@ -37,7 +37,11 @@ var runGeoQuery = function(req, res) {
                     "distanceField": geoOptions.distanceField, 
                     "maxDistance": geoOptions.maxDistance,
                     "includeLocs": geoOptions.includeLocs,
-                    "num": geoOptions.num
+                    "num": geoOptions.num,
+                    "query": { startDate: { 
+                        $gte: new Date((new Date().getTime() + (-1 * 24 * 60 * 60 * 1000))),
+                        $lte: new Date((new Date().getTime() + (21 * 24 * 60 * 60 * 1000))) 
+                    } }
             }
         }])
         .exec(function(err, results) {
@@ -47,7 +51,7 @@ var runGeoQuery = function(req, res) {
                     .json(err);
             }
             if (results.length === 0) {
-                console.log('No events within 10 km');
+                console.log('No events within 100 km');
                 res
                     .status(204)
                     .json();
@@ -67,6 +71,7 @@ module.exports.getAllEvents = function(req, res) {
     var sort = "-createdOn";
     var maxCount = 15;
     var filter = {};
+    var distinct;
 
     if(req.query && req.query.lng && req.query.lat) {
         runGeoQuery(req, res);
@@ -87,6 +92,10 @@ module.exports.getAllEvents = function(req, res) {
 
     if(req.body && req.body.filter) {
         filter = req.body.filter; 
+    }
+
+    if(req.body && req.body.distinct) {
+        distinct = req.body.distinct; 
     }
 
     if(isNaN(offset) || isNaN(count)) {
@@ -451,15 +460,16 @@ module.exports.eventsUpdateOne = function(req, res) {
                 }
 
                 if(req.body && req.body.viewed) {
-                    if(req.user._id === doc.organizer.user_id) {
-                        res 
-                            .status(200)
-                            .json({
-                                message: "Skip"
-                            })
-                        return;
+                    if(req.body._id) {
+                        if(req.body._id === doc.organizer.user_id) {
+                            res 
+                                .status(200)
+                                .json({
+                                    message: "Skip"
+                                })
+                            return;
+                        }
                     }
-                    
                     
                 }
                 
@@ -537,7 +547,7 @@ module.exports.organizerGetEvents = function(req, res) {
     Event
         .find({
             "organizer._id": organizerId,
-            "startDate": { $gt: new Date() }
+            "startDate": { $gte: new Date() }
         })
         .sort("-createdOn")
         .exec(function(err, events) {

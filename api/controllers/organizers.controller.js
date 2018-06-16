@@ -188,7 +188,7 @@ module.exports.getOneOrganizer = function(req, res) {
                 Event
                     .find({
                         "organizer.url": organizerUrl,
-                        "startDate": { $gt: new Date() }
+                        "startDate": { $gte: new Date() }
                     })
                     .sort("-createdOn")
                     .exec(function(err, events) {
@@ -231,7 +231,7 @@ module.exports.getOneOrganizer = function(req, res) {
                                         organizer['pastEvents'] = events.length !== 0 ? events : { message: 'There are no past events to display' }
                                         response.message = organizer;
                                     }
-                                    console.log(response.message);
+                                    
                                     res 
                                         .status(response.status)
                                         .json(response.message)

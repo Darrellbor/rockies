@@ -5,6 +5,7 @@ import { AppRouting } from './app.routing';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 import { AppComponent } from './app.component';
+import { AuthService } from './services/auth.service';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -22,7 +23,7 @@ import { FooterComponent } from './components/footer/footer.component';
     AngularFontAwesomeModule,
     AppRouting
   ],
-  providers: [Title, Meta],
+  providers: [Title, Meta, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

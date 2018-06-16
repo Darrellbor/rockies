@@ -5,6 +5,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 import { CoreRoutingModule } from './core-routing.module';
 import { HomeComponent } from './components/home/home.component';
+import { HomeService } from './services/home.service';
+import { HomeResolveService } from './resolves/home-resolve.service';
 
 @NgModule({
   imports: [
@@ -15,6 +17,10 @@ import { HomeComponent } from './components/home/home.component';
   ],
   declarations: [
     HomeComponent
+  ],
+  providers: [
+    HomeService,
+    HomeResolveService
   ]
 })
 export class CoreModule { }
