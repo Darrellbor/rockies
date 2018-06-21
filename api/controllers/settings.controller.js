@@ -4,6 +4,7 @@ var Location = mongoose.model('Location');
 
 module.exports.getAllCategories = function(req, res) {
     var SettingsId = "5afdeae7ef24054494492ef5";
+
     Settings
         .findById(SettingsId)
         .select('categories')

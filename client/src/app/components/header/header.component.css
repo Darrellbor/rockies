@@ -7,12 +7,20 @@
     margin-right: 10px;
 }
 
-.nav-item a.nav-link{
+.nav-item a.nav-link {
     color: #757b82;
 }
 
+.nav-item a.active {
+    /* color: #777a7d;
+    font-weight: 600; */
+    margin-top: -3px;
+    border-top: 3px solid #4e2156;
+}
+
 .nav-item a:hover {
-    color: #4b4f52;
+    margin-top: -3px;
+    border-top: 3px solid #4e2156;
 }
 
 .headerDivider {

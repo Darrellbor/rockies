@@ -9,6 +9,7 @@ import { HomeService } from '../../services/home.service';
 })
 export class HomeComponent implements OnInit {
 
+  preloader: boolean = true;
   events;
   eventShow: boolean = false;
   eventShowSet2: boolean = false;
@@ -55,9 +56,10 @@ export class HomeComponent implements OnInit {
           if(this.events[this.cat_index].categories !== "empty") {
             this.cat_visibility = true;
           }
-          console.log(this.events);
+
+          this.preloader = false;
           
-        }, 3000);
+        }, 4000);
         
       }, (err) => {
         console.log(err);
@@ -100,6 +102,8 @@ export class HomeComponent implements OnInit {
     }, 1000);
   }
 
-  searchEvents({value, valid}) {}
+  searchEvents({value, valid}) {
+    this.router.navigate(['/c/sf', { catTitle: this.search.catTitle, city: this.search.city, date: this.search.date }]);
+  }
 
 }

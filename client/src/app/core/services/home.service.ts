@@ -18,4 +18,9 @@ export class HomeService {
       .map(res => res.json());
   }
 
+  getCategories() {
+    return this.http.get(this.authService.url + 'api/settings/categories')
+      .map(res => res.json());
+  }
+
 }

@@ -2,7 +2,7 @@ import { BrowserModule, Title, Meta } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { AppRouting } from './app.routing';
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { SharedModule } from './shared/shared.module';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './services/auth.service';
@@ -20,7 +20,7 @@ import { FooterComponent } from './components/footer/footer.component';
   imports: [
     BrowserModule,
     HttpModule,
-    AngularFontAwesomeModule,
+    SharedModule,
     AppRouting
   ],
   providers: [Title, Meta, AuthService],
