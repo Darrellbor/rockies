@@ -19,7 +19,7 @@ import { EventComponent } from './components/event/event.component';
     FormsModule,
     SharedModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCPMQxvJGqj6EDiAb1Zqdjl002nogzEVfA'
+      apiKey: ''
     }),
     CoreRoutingModule
   ],
