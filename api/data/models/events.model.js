@@ -123,9 +123,13 @@ var eventSchema = new mongoose.Schema({
         about: String,
         phone: Number,
         email: String,
-        facebook: String,
-        twitter: String,
-        instagram: String,
+        socials: {
+            facebook: String,
+            twitter: String,
+            instagram: String,
+            website: String,
+            blog: String
+        },
         logo: String,        //accepts an image url
         url: String
     },

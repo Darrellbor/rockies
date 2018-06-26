@@ -49,21 +49,21 @@
     <h3 class="random-events-heading">Events that may interest you</h3><br>
     <div *ngIf="eventShow">
       <div class="row">
-        <div class="col-lg-4 col-sm-6" *ngFor="let event of events[0]">
+        <div class="col-lg-3 col-sm-6" *ngFor="let event of events[0]">
           <div class="event-cover">
-            <a href="{{ event.eventLink }}">
+            <a href="#" [routerLink]="['/c/e', event.eventLink]">
               <div class="event-image" [ngStyle]="{'background-image': 'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url(' + event.eventImage + ')'}">
                 <span class="event-image-label"><a href="Javascript:void(0)" [routerLink]="['/c/sf',  {cat: event.settings.category}]">{{event.settings.category}}</a></span>
               </div>
             </a>
             <div class="event-body">
-              <time><a href="#">{{ event.startDate | date: "EEE, MMMM d, y h:mm a" }}</a></time>
+              <time><a href="#" [routerLink]="['/c/e', event.eventLink]">{{ event.startDate | date: "EEE, MMMM d, y h:mm a" }}</a></time>
               <div class="event-title">
-                <a href="#">{{ event.title }}</a>
+                <a href="#" [routerLink]="['/c/e', event.eventLink]">{{ event.title }}</a>
               </div><br>
               <span class="event-price" *ngFor="let eventTicket of event.ticket | slice:0:1;">
-                <a href="#" *ngIf="eventTicket.normalType === 'Paid'">From &#8358;{{ eventTicket.price}}</a>
-                <a href="#" *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</a>
+                <a href="#" *ngIf="eventTicket.normalType === 'Paid'" [routerLink]="['/c/e', event.eventLink]">From &#8358;{{ eventTicket.price | number:'2.' }}</a>
+                <a href="#" *ngIf="eventTicket.normalType === 'Free'" [routerLink]="['/c/e', event.eventLink]">{{ eventTicket.normalType}}</a>
               </span>
               <span class="event-exclusive" *ngIf="event.exclusive === 'Yes'" title="This event is exclusively sold on rockies!">
                 <fa name="fas fa-certificate"></fa>
@@ -71,29 +71,29 @@
               <div class="event-footer">
                 <fa name="fas fa-map-marker"></fa> 
                 <span class="event-venue">
-                  <a href="#">{{ event.location.address.street }},{{ event.location.address.state }} {{ event.location.address.country }}</a>
+                  <a href="#" [routerLink]="['/c/e', event.eventLink]">{{ event.location.address.street }}, {{ event.location.address.state }} {{ event.location.address.country }}</a>
                 </span>
               </div>
             </div>
           </div><br>
         </div>
 
-        <div class="col-lg-4 col-sm-6" *ngIf="eventShowSet2">
+        <div class="col-lg-3 col-sm-6" *ngIf="eventShowSet2">
           <div *ngFor="let event of events[1]">
               <div class="event-cover">
-                <a href="{{ event.eventLink }}">
+                <a href="#" [routerLink]="['/c/e', event.eventLink]">
                   <div class="event-image" [ngStyle]="{'background-image': 'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url(' + event.eventImage + ')'}">
                     <span class="event-image-label"><a href="Javascript:void(0)" [routerLink]="['/c/sf',  {cat: event.settings.category}]">{{event.settings.category}}</a></span>
                   </div>
                 </a>
                 <div class="event-body">
-                  <time><a href="#">{{ event.startDate | date: "EEE, MMMM d, y h:mm a" }}</a></time>
+                  <time><a href="#" [routerLink]="['/c/e', event.eventLink]">{{ event.startDate | date: "EEE, MMMM d, y h:mm a" }}</a></time>
                   <div class="event-title">
-                    <a href="#">{{ event.title }}</a>
+                    <a href="#" [routerLink]="['/c/e', event.eventLink]">{{ event.title }}</a>
                   </div><br>
                   <span class="event-price" *ngFor="let eventTicket of event.ticket | slice:0:1;">
-                    <a href="#" *ngIf="eventTicket.normalType === 'Paid'">From &#8358;{{ eventTicket.price}}</a>
-                    <a href="#" *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</a>
+                    <a href="#" *ngIf="eventTicket.normalType === 'Paid'" [routerLink]="['/c/e', event.eventLink]">From &#8358;{{ eventTicket.price | number:'2.' }}</a>
+                    <a href="#" *ngIf="eventTicket.normalType === 'Free'" [routerLink]="['/c/e', event.eventLink]">{{ eventTicket.normalType}}</a>
                   </span>
                   <span class="event-exclusive" *ngIf="event.exclusive === 'Yes'" title="This event is exclusively sold on rockies!">
                     <fa name="fas fa-certificate"></fa>
@@ -101,7 +101,7 @@
                   <div class="event-footer">
                     <fa name="fas fa-map-marker"></fa> 
                     <span class="event-venue">
-                      <a href="#">{{ event.location.address.street }},{{ event.location.address.state }} {{ event.location.address.country }}</a>
+                      <a href="#" [routerLink]="['/c/e', event.eventLink]">{{ event.location.address.street }}, {{ event.location.address.state }} {{ event.location.address.country }}</a>
                     </span>
                   </div>
                 </div>
@@ -138,17 +138,17 @@
 
   <div class="ie-scrollbar">
     <div class="row">
-      <div class="col-lg-4 col-sm-6" *ngFor="let event of events[ie_index].incompleteEvents">
+      <div class="col-lg-3 col-sm-6" *ngFor="let event of events[ie_index].incompleteEvents">
         <div class="event-cover">
-          <a href="{{ event.eventLink }}">
+          <a href="#" [routerLink]="['/c/e', event.eventLink]">
             <div class="event-image" [ngStyle]="{'background-image': 'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url(' + event.eventImage + ')'}">
               <span class="event-image-label"><a href="#" [routerLink]="['/c/sf',  {cat: event.category}]">{{event.category}}</a></span>
             </div>
           </a>
           <div class="event-body">
-            <time><a href="#">{{ event.startDate | date: "EEE, MMMM d, y h:mm a" }}</a></time>
+            <time><a href="#" [routerLink]="['/c/e', event.eventLink]">{{ event.startDate | date: "EEE, MMMM d, y h:mm a" }}</a></time>
             <div class="event-title">
-              <a href="#">{{ event.title }}</a>
+              <a href="#" [routerLink]="['/c/e', event.eventLink]">{{ event.title }}</a>
             </div><br>
             <span class="event-exclusive" *ngIf="event.exclusive === 'Yes'" title="This event is exclusively sold on rockies!" style="margin-left: 0px;">
               <fa name="fas fa-certificate"></fa>
@@ -156,7 +156,7 @@
             <div class="event-footer">
               <fa name="fas fa-map-marker"></fa> 
               <span class="event-venue">
-                <a href="#">{{ event.address.street }},{{ event.address.state }} {{ event.address.country }}</a>
+                <a href="#" [routerLink]="['/c/e', event.eventLink]">{{ event.address.street }}, {{ event.address.state }} {{ event.address.country }}</a>
               </span>
             </div>
           </div>

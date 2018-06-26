@@ -1,0 +1,328 @@
+<div class="event-bg">
+  <div class="container myContainer">
+    <div class="event-image" [ngStyle]="{'background-image': 'url(' + details.eventImage + ')'}"></div>
+    <div class="event-info">
+      <div class="row">
+        <div class="col-md-9">
+          <h1 class="event-title">
+            {{ details.title}}
+          </h1><br>
+          <time class="event-title-footer"><fa name="fas fa-calendar"></fa> {{ details.startDate | date: "EEE, MMMM d, y h:mm a" }}&nbsp;- {{ details.endDate | date: "EEE, MMMM d, y h:mm a" }}</time><br>
+          <span class="event-venue event-title-footer">
+            <fa name="fas fa-map-marker"></fa>
+            {{ details.location.address.street }}, {{ details.location.address.state }} {{ details.location.address.country }}
+          </span><br>
+          <span class="event-title-footer event-category">
+            #{{details.settings.category}}
+          </span>
+          <br><br>
+        </div>
+        <div class="col-md-3">
+          <div class="event-price">
+            <div class="inline-price" *ngFor="let eventTicket of details.ticket">
+              <span *ngIf="eventTicket.normalType === 'Paid'">&#8358;{{ eventTicket.price | number:'2.' }}</span>
+              <span *ngIf="eventTicket.normalType === 'Vip'">&nbsp;- &#8358;{{ eventTicket.price | number:'2.' }}</span>
+              <span *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><br>
+
+    <div class="event-info event-desc">
+      <h1 class="heading--tag">Description</h1><hr class="heading--hr">
+      <div class="event-desc-content" [innerHTML]="details.description"></div>
+    </div><br>
+
+    <div class="event-info event-organizer">
+      <div class="row">
+        <div class="col-md-9" style="margin-bottom: 20px;">
+          <h1 class="heading--tag">About the Organizer</h1><hr class="heading--hr">
+        </div><br>
+        <div class="col-md-3" style="text-align: right;">
+          <button type="button" class="btn rockies-contact-btn" data-toggle="modal" data-target="#contactOrgannizerModal">Contact the Organizer</button>
+        </div>
+      </div><br>
+      
+      <h5 class="organizer-name">
+        <a href="#" [routerLink]="['/c/o', details.organizer.url]">{{ details.organizer.name}}</a>
+      </h5><br>
+
+      <div class="about-organizer" [innerHTML]="details.organizer.about"></div><br>
+
+      <div class="organizer-footer">
+        <span class="o-footer-item" *ngIf="details.organizer?.socials?.website">
+          <fa name="fas fa-globe"></fa>&nbsp;&nbsp;<a href="{{ details.organizer?.socials?.website }}" target="_blank">Website</a><br>
+        </span>
+
+        <span class="o-footer-item" *ngIf="details.organizer?.socials?.facebook">
+          <fa name="fab fa-facebook-f"></fa>&nbsp;&nbsp;<a href="{{ details.organizer?.socials?.facebook }}" target="_blank">Facebook</a><br>
+        </span>
+
+        <span class="o-footer-item" *ngIf="details.organizer?.socials?.twitter">
+          <fa name="fab fa-twitter"></fa>&nbsp;&nbsp;<a href="{{ details.organizer?.socials?.twitter }}" target="_blank">Twitter</a><br>
+        </span>
+
+        <span class="o-footer-item" *ngIf="details.organizer?.socials?.instagram">
+          <fa name="fab fa-instagram"></fa>&nbsp;&nbsp;<a href="{{ details.organizer?.socials?.instagram }}" target="_blank">Instagram</a><br>
+        </span>
+      </div>
+    </div><br>
+
+    <div class="event-info event-map" *ngIf="showMap">
+      <h1 class="heading--tag">Event Map</h1><hr class="heading--hr"><br>
+      <agm-map [latitude]="map.lat" [longitude]="map.lng">
+        <agm-marker [latitude]="map.lat" [longitude]="map.lng"></agm-marker>
+      </agm-map>
+    </div><br>
+
+    <div class="event-info event-tickets" *ngIf="!reviewVisibility">
+      <h1 class="heading--tag">Select Tickets</h1><hr class="heading--hr"><br>
+
+      <div class="ticket-block" *ngFor="let ticket of details.ticket | slice:0:1; let i = index" [class.ticketCollapse]="ticketCollapse1" [class.ticketOpen]="!ticketCollapse1">
+        <div class="row">
+          <div class="col-md-8">
+            <a href="Javascript:void(0)" (click)="toggleTicket(i)">
+              <span class="ticket-top ticket-arrow" *ngIf="ticketCollapse1"><fa name="fas fa-angle-right"></fa></span>
+              <span class="ticket-top ticket-arrow" *ngIf="!ticketCollapse1"><fa name="fas fa-angle-down"></fa></span>
+
+              <h5 class="ticket-top ticket-name">
+                {{ ticket.name}}<br>
+                <small *ngIf="ticket.normalType === 'Paid'">&#8358;{{ ticket.price | number:'2.' }}</small>
+                <small *ngIf="ticket.normalType === 'Free'">{{ ticket.normalType}}</small>
+              </h5>
+            </a>
+          </div>
+          <div class="col-md-4">
+            <div class="ticketNo">
+              <a href="Javascript:void(0)" class="m-ticketNo" (click)="minusTicketNo(i)"><fa name="fas fa-minus"></fa></a>
+              <span class="v-ticketNo">{{ ticketNo1 }}</span>
+              <a href="Javascript:void(0)" class="a-ticketNo" (click)="plusTicketNo(i)"><fa name="fas fa-plus"></fa></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="ticket-body" *ngIf="!ticketCollapse1"> 
+          <p>
+            {{ ticket.description }}
+          </p>
+          <span *ngIf="ticket.showTicket === 'Yes'">
+            <br>
+            <b>Remaining Ticket: {{ ticket.quantity}}</b>
+          </span>
+          <span>
+            <br>
+            <b>Sale Ends On: {{ ticket.ticketSaleEnds | date: "MMM d" }}</b>
+          </span>
+        </div>
+      </div><br>
+
+      <div *ngIf="showTicket2">
+        <div class="ticket-block" *ngFor="let ticket of details.ticket | slice:1:2; let i = index" [class.ticketCollapse]="ticketCollapse2" [class.ticketOpen]="!ticketCollapse2">
+          <div class="row">
+            <div class="col-md-8">
+              <a href="Javascript:void(0)" (click)="toggleTicket(i+1)">
+                <span class="ticket-top ticket-arrow" *ngIf="ticketCollapse2"><fa name="fas fa-angle-right"></fa></span>
+                <span class="ticket-top ticket-arrow" *ngIf="!ticketCollapse2"><fa name="fas fa-angle-down"></fa></span>
+
+                <h5 class="ticket-top ticket-name">
+                  {{ ticket.name}}<br>
+                  <small *ngIf="ticket.normalType === 'Paid' || ticket.normalType === 'Vip'">&#8358;{{ ticket.price | number:'2.' }}</small>
+                  <small *ngIf="ticket.normalType === 'Free'">{{ ticket.normalType}}</small>
+                </h5>
+              </a>
+            </div>
+            <div class="col-md-4">
+              <div class="ticketNo">
+                <a href="Javascript:void(0)" class="m-ticketNo" (click)="minusTicketNo(i+1)"><fa name="fas fa-minus"></fa></a>
+                <span class="v-ticketNo">{{ ticketNo2 }}</span>
+                <a href="Javascript:void(0)" class="a-ticketNo" (click)="plusTicketNo(i+1)"><fa name="fas fa-plus"></fa></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="ticket-body" *ngIf="!ticketCollapse2"> 
+            <p>
+              {{ ticket.description }}
+            </p>
+            <span *ngIf="ticket.showTicket === 'Yes'">
+              <br>
+              <b>Remaining Ticket: {{ ticket.quantity}}</b>
+            </span>
+            <span>
+              <br>
+              <b>Sale Ends On: {{ ticket.ticketSaleEnds | date: "MMM d" }}</b>
+            </span>
+          </div>
+        </div><br>
+      </div>
+
+      <div class="ticket-order">
+        <button type="button" class="btn order-btn" [disabled]="orderDisable" *ngIf="orderVisibility" (click)="orderTickets()">Order</button>
+        <span *ngIf="!orderVisibility" style = "color: red">Tickets are sold out!</span>
+      </div>
+    </div>
+
+    <div class="event-info event-reviews" *ngIf="reviewVisibility">
+      <h1 class="heading--tag">Event Reviews</h1><hr class="heading--hr"><br>
+      <div class="reviews-list-block" *ngIf="showReviews">
+        <b>Total Rating Score: {{ ratingScore | number:'1.0-4' }}</b><br><br>
+        <div class="review-list">
+          <div class="row">
+            <div class="col-sm-6" *ngFor="let review of details.reviews">
+              <div class="review-list-item">
+                {{ review.review }}<hr><br>
+                <div class="row">
+                  <div class="col-sm-6">
+                    {{ review.reviewBy.name }} <br> {{ review.createdOn | date:"MMM y"}}
+                  </div>
+                  <div class="col-sm-6">
+                    Review Score: {{ review.sentimentRating }}
+                  </div>
+                </div>
+              </div><br>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reviews-list-empty" *ngIf="!showReviews">
+        <h5 style="text-align: center;">
+          <fa name="fas fa-exclamation-triangle"></fa>
+          Sorry, there are no reviews for this event yet. Be the first to add a review
+        </h5>
+      </div>
+      <div class="reviews-post-block">
+        <br>
+        <flash-messages></flash-messages><br>
+        <div class="review-logged-in" *ngIf="!authService.notAuthorized()">
+          <form novalidate #reviewF="ngForm" (ngSubmit)="postReview(reviewF)">
+            <div class="row">
+              <div class="col-sm-9">
+                <div class="form-group mb-3" style="width: 100%;">
+                  <label for="review" class="sr-only">Review</label>
+                  <textarea class="form-control" id="review" name="review" placeholder="Enter your review" [(ngModel)]="review" #myReview="ngModel" required></textarea>
+                </div>
+                <div class='disclamier' *ngIf='!myReview.valid && myReview.touched'>Enter a review before posting!</div>
+              </div>
+              <div class="col-sm-3">
+                <button type="submit" class="btn order-btn mb-3 mt-2" [disabled]="!reviewF.valid">Post Review</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="review-logged-out" *ngIf="authService.notAuthorized()">
+          <a href="Javascript:void(0)" class="btn order-btn" routerLink="/c/login">Log In</a>
+          <h5>Login to post review.</h5>
+        </div>
+      </div>
+    </div><br>
+
+    <div class="more-events" *ngIf="otherEvents">
+      <div *ngIf="otherEventsInner">
+        <h1 class="heading--tag">More Events From This Organizer</h1><hr class="heading--hr"><br>
+        <div class="row">
+          <div class="col-sm-3" *ngFor="let event of moreEvents">
+            <div class="event-box mb-4">
+              <div class="more-event-title h5">
+                <a href="Javascript:void(0)" [routerLink]="['/c/e', event.eventLink]">{{ event.title }}</a>
+              </div>
+              <a href="Javascript:void(0)" class="more-event-category" title="Filter search by {{ event.settings.category }}" [routerLink]="['/c/sf',  {cat: event.settings.category}]">#{{ event.settings.category }}</a><br>
+              <a href="Javascript:void(0)" class="more-event-details" [routerLink]="['/c/e', event.eventLink]">
+                <time>{{ event.startDate | date:"MMMM d, y" }}</time> | {{ event.location.address.state }}<br><br>
+                <div class="event-price">
+                  <div class="inline-price" *ngFor="let eventTicket of event.ticket">
+                    <span *ngIf="eventTicket.normalType === 'Paid'">&#8358;{{ eventTicket.price | number:'2.' }}</span>
+                    <span *ngIf="eventTicket.normalType === 'Vip'">&nbsp;- &#8358;{{ eventTicket.price | number:'2.' }}</span>
+                    <span *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!otherEventsInner">
+        <h1 class="heading--tag">More Events You May Like</h1><hr class="heading--hr"><br>
+        <div class="row">
+          <div class="col-sm-3" *ngFor="let event of moreEvents">
+            <div class="event-box mb-4">
+              <div class="more-event-title h5">
+                <a href="Javascript:void(0)" [routerLink]="['/c/e', event.eventLink]">{{ event.title }}</a>
+              </div>
+              <a href="Javascript:void(0)" class="more-event-category" title="Filter search by {{ event.settings.category }}" [routerLink]="['/c/sf',  {cat: event.settings.category}]">#{{ event.settings.category }}</a><br>
+              <a href="Javascript:void(0)" class="more-event-details" [routerLink]="['/c/e', event.eventLink]">
+                <time>{{ event.startDate | date:"MMMM d, y" }}</time> | {{ event.location.address.state }}<br><br>
+                <div class="event-price">
+                  <div class="inline-price" *ngFor="let eventTicket of event.ticket">
+                    <span *ngIf="eventTicket.normalType === 'Paid'">&#8358;{{ eventTicket.price | number:'2.' }}</span>
+                    <span *ngIf="eventTicket.normalType === 'Vip'">&nbsp;- &#8358;{{ eventTicket.price | number:'2.' }}</span>
+                    <span *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br><br>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="contactOrgannizerModal" tabindex="-1" role="dialog" aria-labelledby="contactOrgannizerLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contactOrgannizerLabel">Contact The Organizer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form novalidate #contactO="ngForm" (ngSubmit)="contactOrganizer(contactO)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" class="form-control" id="name" name="name" [(ngModel)]="contactO.name" #name="ngModel"  placeholder="Enter full name" required minlength="3">
+          </div>
+
+          <div class='disclamier' *ngIf='!name.valid && name.touched'>Enter a valid name</div>
+
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" [(ngModel)]="contactO.email" #email="ngModel" placeholder="Enter email" required pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}">
+          </div>
+
+          <div class='disclamier' *ngIf='!email.valid && email.touched'>Enter a valid email address</div>
+
+          <div class="form-group">
+            <label for="contactReason">Contact Reason</label>
+            <select class="form-control" id="contactReason" name="contactReason" [(ngModel)]="contactO.contactReason" #contactReason="ngModel" required>
+              <option value="">Choose One...</option>
+              <option value="event">Inquiry About The Event</option>
+              <option value="ticket">Inquiry About My Ticket</option>
+            </select>
+          </div>
+
+          <div class='disclamier' *ngIf='!contactReason.valid && contactReason.touched'>Contact reason is required!</div>
+
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea class="form-control" id="message" name="message" [(ngModel)]="contactO.message" #message="ngModel" required minlength="10" style="height: 150px;"></textarea>
+          </div>
+
+          <div class='disclamier' *ngIf='!message.valid && message.touched'>Your message is required with a minimum length of 10 characters!</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn order-btn" [disabled]="!contactO.valid">Continue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="preloader">
+  <app-preloader></app-preloader>
+</div>

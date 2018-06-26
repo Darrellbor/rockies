@@ -5,7 +5,7 @@
 }
 
 .search-filter {
-    margin-top: 50px;
+    margin-top: 120px;
     background-color: #fff;
     padding: 20px;
     min-height: 200px;
@@ -115,8 +115,17 @@
     margin-top: 50px;
 }
 
+.sortBar-small {
+    display: none;
+}
+
+.sortBar-big {
+    display: block;
+}
+
 .sortBar {
     text-align: right;
+    margin-bottom: 20px;
 }
 
 .sortItem {
@@ -300,4 +309,19 @@
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+@media(max-width: 767px) {
+    .search-filter {
+        margin-top: 20px;
+    }
+
+    .sortBar-small {
+        display: block;
+        margin-top: 30px;
+    }
+
+    .sortBar-big {
+        display: none;
+    }
 }

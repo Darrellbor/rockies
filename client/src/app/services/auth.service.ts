@@ -55,6 +55,7 @@ export class AuthService {
   }
 
   storeUserToken(token) {
+    this.logOut();
     localStorage.setItem('token', token);
     this.authToken = token;
   }

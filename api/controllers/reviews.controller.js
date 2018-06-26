@@ -4,12 +4,12 @@ var Sentiment = require('sentiment');
 var sentiment = new Sentiment();
 
 module.exports.getAllReviews = function(req, res) {
-    var eventId = req.params.id;
-    console.log("GET event!", eventId);
+    var eventLink = req.params.id;
+    console.log("GET event!", eventLink);
 
     Event
         .findOne({
-             _id: eventId,
+             eventLink: eventLink,
              endDate: { $lt : new Date() }
         })
         .select('reviews')
@@ -28,7 +28,7 @@ module.exports.getAllReviews = function(req, res) {
             } else if(!doc) {
                 response.status = 404;
                 response.message = {
-                    message: 'Event not found, cannot get reviews for an event that has not ended! '+ eventId
+                    message: 'Event not found, cannot get reviews for an event that has not ended! '+ eventLink
                 }
             } else {
                  console.log('Found reviews ', doc.reviews.length);
@@ -70,7 +70,7 @@ var _addReview = function(req, res, event) {
 }
 
 module.exports.reviewAddOne = function(req, res) {
-    var eventId = req.params.id;
+    var eventLink = req.params.id;
     
     if(!req.body.review) {
         res 
@@ -81,7 +81,7 @@ module.exports.reviewAddOne = function(req, res) {
 
     Event
         .findOne({
-             _id: eventId,
+             eventLink: eventLink,
              endDate: { $lt : new Date() },
              "orders.buyer._id": req.user._id
         })
@@ -101,7 +101,7 @@ module.exports.reviewAddOne = function(req, res) {
             } else if(!doc) {
                 response.status = 404;
                 response.message = {
-                    message: 'Event not found, cannot add a review to an event that has not ended, neither can you review an event that you did not order for!'+ eventId
+                    message: 'Event not found, cannot add a review to an event that has not ended, neither can you review an event that you did not order for!'+ eventLink
                 }
             } 
             
@@ -116,13 +116,13 @@ module.exports.reviewAddOne = function(req, res) {
 }
 
 module.exports.reviewUpdateOne = function(req, res) {
-    var eventId = req.params.id;
+    var eventLink = req.params.id;
     var reviewId = req.params.reviewId;
-    console.log("GET event!", eventId);
+    console.log("GET event!", eventLink);
 
     Event
         .findOne({
-             _id: eventId,
+             eventLink: eventLink,
              endDate: { $lt : new Date() }
         })
         .select('reviews')
@@ -142,7 +142,7 @@ module.exports.reviewUpdateOne = function(req, res) {
             } else if(!event) {
                 response.status = 404;
                 response.message = {
-                    message: 'Event not found, '+ eventId
+                    message: 'Event not found, '+ eventLink
                 }
             } else {
                 reviewInstance = event.reviews.id(reviewId);

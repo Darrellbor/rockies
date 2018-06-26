@@ -372,11 +372,13 @@ module.exports.eventsUpdateAll = function(req, res) {
 }
 
 module.exports.eventsUpdateOne = function(req, res) {
-    var eventId = req.params.id;
-    console.log("GET event ", eventId);
+    var eventLink = req.params.id;
+    console.log("GET event ", eventLink);
 
     Event
-        .findById(eventId)
+        .findOne({
+            eventLink: eventLink
+        })
         .exec(function(err, doc) {
             var response = {
                 status: 200,
@@ -392,7 +394,7 @@ module.exports.eventsUpdateOne = function(req, res) {
             } else if(!doc) {
                 response.status = 404;
                 response.message = {
-                    message: 'Event id not found! '+blogId
+                    message: 'Event link not found! '+eventLink
                 }
             }
 
@@ -417,11 +419,6 @@ module.exports.eventsUpdateOne = function(req, res) {
                         })
                     return;
                 }
-
-                //for updating totalViewed
-                var updateViewed = doc.totalViewed + parseInt(req.body.viewed, 10);
-
-                doc.totalViewed = updateViewed;
 
                 //for updating tickets
                 var updateTicketQuantity = doc.ticket[0].quantity;
@@ -460,6 +457,11 @@ module.exports.eventsUpdateOne = function(req, res) {
                 }
 
                 if(req.body && req.body.viewed) {
+                    //for updating totalViewed
+                    var updateViewed = doc.totalViewed + parseInt(req.body.viewed, 10);
+
+                    doc.totalViewed = updateViewed;
+
                     if(req.body._id) {
                         if(req.body._id === doc.organizer.user_id) {
                             res 
@@ -500,7 +502,7 @@ module.exports.eventsUpdateOne = function(req, res) {
 
                 Event
                     .update({
-                        _id: eventId
+                        eventLink: eventLink
                     }, doc, function(err, updatedEvent) {
                         if(err) {
                             res 
@@ -549,7 +551,7 @@ module.exports.organizerGetEvents = function(req, res) {
             "organizer._id": organizerId,
             "startDate": { $gte: new Date() }
         })
-        .sort("-createdOn")
+        .sort("startDate")
         .exec(function(err, events) {
             var response = {
                 status: 200,

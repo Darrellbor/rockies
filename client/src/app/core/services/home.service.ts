@@ -8,18 +8,39 @@ export class HomeService {
 
   constructor(private http: Http, private authService: AuthService) {}
 
-  fetchEvents(url, filter) {
-    return this.http.post(this.authService.url + url, filter)
+  fetchEvents(link, filter) {
+    return this.http.post(this.authService.url + link, filter)
       .map(res => res.json());
   }
 
-  getLocations(url) {
-    return this.http.get(this.authService.url + url)
+  getLocations(link) {
+    return this.http.get(this.authService.url + link)
       .map(res => res.json());
   }
 
   getCategories() {
     return this.http.get(this.authService.url + 'api/settings/categories')
+      .map(res => res.json());
+  }
+
+  updateTotalViewed(link) {
+    return this.http.patch(this.authService.url + 'api/events/'+link, { viewed: 1 })
+      .map(res => res.json());
+  }
+
+  getEventDetailsByLink(link) {
+    return this.http.get(this.authService.url + 'api/events/search?for=eventLink&title='+link)
+      .map(res => res.json());
+  }
+
+  addReview(link, review) {
+    this.authService.createHeaders();
+    return this.http.post(this.authService.url + 'api/events/'+link+'/reviews', review, this.authService.options)
+      .map(res => res.json());
+  }
+
+  nextOrganizerEvents(id) {
+    return this.http.get(this.authService.url + 'api/events/organizer/'+id)
       .map(res => res.json());
   }
 
