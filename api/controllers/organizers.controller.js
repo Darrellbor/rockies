@@ -190,7 +190,7 @@ module.exports.getOneOrganizer = function(req, res) {
                         "organizer.url": organizerUrl,
                         "startDate": { $gte: new Date() }
                     })
-                    .sort("-createdOn")
+                    .sort("startDate")
                     .exec(function(err, events) {
                         if(err) {
                             console.log('Error finding events');
@@ -213,7 +213,7 @@ module.exports.getOneOrganizer = function(req, res) {
                                     "organizer.url": organizerUrl,
                                     "endDate": { $lt: new Date() }
                                 })
-                                .sort("-createdOn")
+                                .sort("startDate")
                                 .exec(function(err, events) {
                                     if(err) {
                                         console.log('Error finding events');

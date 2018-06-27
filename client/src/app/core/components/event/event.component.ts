@@ -61,9 +61,9 @@ export class EventComponent implements OnInit {
         this.decernOrderDisable();
         this.decernOrderVisibility();
         this.reviewsHandler();
+        this.updateCategoryTimes();
         this.preloader = false;
         this.fetchMoreEvents(this.details.organizer._id);
-        console.log(this.details);
       }, (err) => {
           console.log(err);
       });
@@ -192,7 +192,7 @@ export class EventComponent implements OnInit {
     this.homeService.nextOrganizerEvents(id)
       .subscribe((res) => {
         if(res.length === 0) {
-          this.homeService.fetchEvents('api/events/search?count=10&sort=-totalViewed', myQuery)
+          this.homeService.fetchEvents('api/events/search?count=8&sort=-totalViewed', myQuery)
             .subscribe((res) => {
               if(res.length > 0) {
                 this.moreEvents = res;
@@ -209,6 +209,16 @@ export class EventComponent implements OnInit {
       }, (err) => {
         console.log(err);
       });
+  }
+
+  updateCategoryTimes() {
+    if(!this.authService.notAuthorized()) {
+      this.homeService.categoryTimes(this.details.settings.category)
+        .subscribe((res) => {
+        }, (err) => {
+            console.log(err);
+        });
+    }
   }
 
   contactOrganizer({value, valid}) {

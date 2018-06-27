@@ -44,4 +44,15 @@ export class HomeService {
       .map(res => res.json());
   }
 
+  getOrganizerDetailsByUrl(url) {
+    return this.http.get(this.authService.url + 'api/organizer/'+url)
+      .map(res => res.json());
+  }
+
+  categoryTimes(category) {
+    this.authService.createHeaders();
+    return this.http.patch(this.authService.url + 'api/users/profile', { type: 'Categories', name: category }, this.authService.options)
+      .map(res => res.json());
+  }
+
 }

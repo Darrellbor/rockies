@@ -48,9 +48,14 @@ module.exports.registerUser = function(req, res) {
                         })
                 }
             } else {
+                let token = jwt.sign({ _id: user._id, name: user.name, email: user.email }, db_config.secret, { expiresIn: 604800 }); //expires after 1 week
                 res
                     .status(201)
-                    .json(user)
+                    .json({
+                        success: true,
+                        token: token,
+                        user: user
+                    })
             }
         });
 }
@@ -89,7 +94,7 @@ module.exports.loginUser = function(req, res) {
 
                 if(bcrypt.compareSync(req.body.password, user.password)) {
                     if(user.confirmed === "Yes") {
-                        var token = jwt.sign({ _id: user._id, name: user.name, email: user.email }, db_config.secret, { expiresIn: 604800 }); //expires after 1 week
+                        let token = jwt.sign({ _id: user._id, name: user.name, email: user.email }, db_config.secret, { expiresIn: 604800 }); //expires after 1 week
                         res
                             .status(200)
                             .json({Success: true, token: token})

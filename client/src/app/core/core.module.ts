@@ -11,7 +11,11 @@ import { HomeResolveService } from './resolves/home-resolve.service';
 import { SearchFilterComponent } from './components/search-filter/search-filter.component';
 import { SearchFilterResolveService } from './resolves/search-filter-resolve.service';
 import { EventResolveService } from './resolves/event-resolve.service';
+import { OrganizerResolveService } from './resolves/organizer-resolve.service';
 import { EventComponent } from './components/event/event.component';
+import { OrganizerComponent } from './components/organizer/organizer.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   imports: [
@@ -26,13 +30,17 @@ import { EventComponent } from './components/event/event.component';
   declarations: [
     HomeComponent,
     SearchFilterComponent,
-    EventComponent
+    EventComponent,
+    OrganizerComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   providers: [
     HomeService,
     HomeResolveService,
     SearchFilterResolveService,
-    EventResolveService
+    EventResolveService,
+    OrganizerResolveService
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

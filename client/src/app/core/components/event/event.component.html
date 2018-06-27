@@ -45,7 +45,7 @@
       </div><br>
       
       <h5 class="organizer-name">
-        <a href="#" [routerLink]="['/c/o', details.organizer.url]">{{ details.organizer.name}}</a>
+        <a href="#" [routerLink]="['/c/o', details.organizer.url]" target="_blank">{{ details.organizer.name}}</a>
       </h5><br>
 
       <div class="about-organizer" [innerHTML]="details.organizer.about"></div><br>
@@ -221,7 +221,7 @@
       <div *ngIf="otherEventsInner">
         <h1 class="heading--tag">More Events From This Organizer</h1><hr class="heading--hr"><br>
         <div class="row">
-          <div class="col-sm-3" *ngFor="let event of moreEvents">
+          <div class="col-md-3" *ngFor="let event of moreEvents">
             <div class="event-box mb-4">
               <div class="more-event-title h5">
                 <a href="Javascript:void(0)" [routerLink]="['/c/e', event.eventLink]">{{ event.title }}</a>
@@ -245,7 +245,7 @@
       <div *ngIf="!otherEventsInner">
         <h1 class="heading--tag">More Events You May Like</h1><hr class="heading--hr"><br>
         <div class="row">
-          <div class="col-sm-3" *ngFor="let event of moreEvents">
+          <div class="col-md-3" *ngFor="let event of moreEvents">
             <div class="event-box mb-4">
               <div class="more-event-title h5">
                 <a href="Javascript:void(0)" [routerLink]="['/c/e', event.eventLink]">{{ event.title }}</a>
