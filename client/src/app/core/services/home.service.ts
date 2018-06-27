@@ -55,4 +55,9 @@ export class HomeService {
       .map(res => res.json());
   }
 
+  forgetPassword(email) {
+    return this.http.post(this.authService.url + 'api/users/forgotPassword', { email: email })
+      .map(res => res.json());
+  }
+
 }

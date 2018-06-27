@@ -2,3 +2,8 @@
 body {
     font-family: 'Quicksand', sans-serif !important;
 }
+
+.flash-message p {
+    margin: 0;
+    padding: 0;
+}
