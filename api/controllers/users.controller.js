@@ -48,14 +48,9 @@ module.exports.registerUser = function(req, res) {
                         })
                 }
             } else {
-                let token = jwt.sign({ _id: user._id, name: user.name, email: user.email }, db_config.secret, { expiresIn: 604800 }); //expires after 1 week
                 res
                     .status(201)
-                    .json({
-                        success: true,
-                        token: token,
-                        user: user
-                    })
+                    .json(user)
             }
         });
 }
@@ -106,7 +101,7 @@ module.exports.loginUser = function(req, res) {
                 } else {
                     res
                         .status(401)
-                        .json({message: 'Invalid password!'})
+                        .json({message: 'Incorrect password!'})
                 } 
                 
             }

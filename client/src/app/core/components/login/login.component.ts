@@ -51,9 +51,7 @@ export class LoginComponent implements OnInit {
   }
 
   loginUser({value, valid}) {
-    if(valid) {
-      console.log(value);
-      
+    if(valid) {      
       this.authService.loginUser(value)
         .subscribe((res) => {
           this.authService.storeUserToken(res.token);
