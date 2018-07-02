@@ -510,6 +510,166 @@ export class CreateEventComponent implements OnInit {
 
   saveEvent() {
     this.event.status = "Saved";
+
+    if(this.event.ticket[0].name === "" || this.event.ticket[0].description === "") {
+        this.finalAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show("Ticket details were not recorded", {cssClass: 'alert-danger', timeout: 4000});
+          setTimeout(() => {
+            this.finalAlert = false;
+          },4000);
+          return;
+        }, 500);
+      }
+
+      if(this.paidTicketInstance || this.vipTicketInstance && this.event.payout.subaccountCode === "") {
+        this.finalAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show("Please re-verify your payout details", {cssClass: 'alert-danger', timeout: 4000});
+          setTimeout(() => {
+            this.finalAlert = false;
+          },4000);
+          return;
+        }, 500);
+      }
+      this.event.startDate = this.event.startDate +" "+ this.event.startTime;
+      this.event.endDate = this.event.endDate +" "+ this.event.endTime;
+      this.event.ticket[0].ticketSaleStarts = this.event.ticket[0].ticketSaleStarts +" "+ this.ticketStartTime;
+      this.event.ticket[0].ticketSaleEnds = this.event.ticket[0].ticketSaleEnds +" "+ this.ticketEndTime;
+
+      if(this.event.ticket[1].name !== "") {
+        this.event.ticket[1].ticketSaleStarts = this.event.ticket[1].ticketSaleStarts +" "+ this.vipTicketStartTime;
+        this.event.ticket[1].ticketSaleEnds = this.event.ticket[1].ticketSaleEnds +" "+ this.vipTicketEndTime;
+      }
+
+      delete this.event.startTime;
+      delete this.event.endTime;
+
+      if(!this.isCategoryListed) {
+        this.accountService.addCategory(this.event.settings.category)
+          .subscribe((res) => {
+            this.finalAlert = true;
+            setTimeout(() => {
+              this.flashMessages.show("New category added!", {cssClass: 'alert-info', timeout: 3000});
+              setTimeout(() => {
+                this.finalAlert = false;
+              },3000);
+            }, 500);
+          }, (err) => {
+            this.finalAlert = true;
+            setTimeout(() => {
+              this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
+              setTimeout(() => {
+                this.finalAlert = false;
+              },4000);
+            }, 500);
+          });
+      }
+
+      this.accountService.getLocationChoords(this.event.location.address.street+" "+this.event.location.address.state+" "+this.event.location.address.country)
+        .subscribe((res) => {
+          this.event.location.coordinates.push(res.results[0].geometry.location.lng);
+          this.event.location.coordinates.push(res.results[0].geometry.location.lat);
+
+          this.accountService.createEvent(this.event)
+            .subscribe((res) => {
+
+              this.event = {
+                status: 'Saved',
+                title: '',
+                startDate: '',
+                startTime: '',
+                endDate: '',
+                endTime: '',
+                eventImage: '',
+                eventLink: '',
+                description: '',
+                location: {
+                  name: '',
+                  address: {
+                    street: '',
+                    cityOrProvince: '',
+                    state: '',
+                    zipCode: '',
+                    country: ''
+                  },
+                  coordinates: [],
+                  showMap: 'Yes'
+                },
+                organizer: {
+                  _id: '',
+                  user_id: '',
+                  socials: {},
+                  name: '',
+                  about: '',
+                  phone: '',
+                  email: '',
+                  logo: '',
+                  url: ''
+                },
+                ticket: [{
+                  name: '',
+                  type: '',
+                  normalType: '',  //accepts a free or paid
+                  description: '',
+                  quantity: 1,
+                  price: 0.00,
+                  ticketSaleStarts: '',
+                  ticketSaleEnds: '',
+                  maxTicketPerPerson: 1,
+                  showTicket: 'Yes'
+                },
+                {
+                    name: '',
+                    type: '',
+                    normalType: '',  //accepts a free or paid
+                    description: '',
+                    quantity: 1,
+                    price: 0.00,
+                    ticketSaleStarts: '',
+                    ticketSaleEnds: '',
+                    maxTicketPerPerson: 1,
+                    showTicket: 'Yes'
+                  }],
+                payout: {
+                  subaccountCode: '',
+                  settlementBank: '',
+                  accountNo: ""
+                },
+                settings: {
+                  category: '',
+                  reservationLimit: '',
+                  showVipRemaining: 'Yes',
+                  showNormalRemaining: 'Yes'
+                }
+              }
+
+              this.finalAlert = true;
+                setTimeout(() => {
+                this.flashMessages.show("Event Successfully Created And Is Saved!", {cssClass: 'alert-success', timeout: 6000});
+                setTimeout(() => {
+                  this.finalAlert = false;
+                },6000);
+              }, 500);
+            }, (err) => {
+              this.finalAlert = true;
+                setTimeout(() => {
+                this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
+                setTimeout(() => {
+                  this.finalAlert = false;
+                },4000);
+              }, 500);
+            });
+
+        }, (err) => {
+          this.finalAlert = true;
+          setTimeout(() => {
+          this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
+          setTimeout(() => {
+            this.finalAlert = false;
+          },4000);
+        }, 500);
+        });
   }
 
 }
