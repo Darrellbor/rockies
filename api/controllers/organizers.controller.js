@@ -176,11 +176,19 @@ module.exports.getOneOrganizer = function(req, res) {
                     err, 
                     message: "An error occured!"
                 };
+
+                res 
+                    .status(response.status)
+                    .json(response.message)
             } else if(!user) {
                 response.status = 404;
                 response.message = {
                     message: 'User id not found! '
                 }
+
+                res 
+                    .status(response.status)
+                    .json(response.message)
             } else {
                 organizer['profile'] = user.organizerProfiles.length !== 0 ? user.organizerProfiles : { message: 'There are no profiles to display' };
                 response.message = organizer;

@@ -82,10 +82,6 @@ var eventSchema = new mongoose.Schema({
         default: Date.now
     },
     location: {
-        _id: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: [true, "Location id cannot be empty!"]
-        },
         name: String,
         address: {
             street: {
@@ -94,7 +90,7 @@ var eventSchema = new mongoose.Schema({
             },
             cityOrProvince: String,
             state: String,
-            zipCode: Number,
+            zipCode: String,
             country: String
         },
         //Always store coordinates as longitude (E/W) and latitude (N/S)
@@ -161,7 +157,6 @@ var eventSchema = new mongoose.Schema({
         maxTicketPerPerson: {
             type: Number,
             min: 1,
-            max: 10,
             default: 1
         },
         showTicket: {        //accepts a yes or no
@@ -170,6 +165,11 @@ var eventSchema = new mongoose.Schema({
             default: "No"
         }     
     }],
+    payout: {
+        subaccountCode: String,
+        settlementBank: String,
+        accountNo: String
+    },
     settings: {
         category: {         
             type: String,
@@ -198,7 +198,12 @@ var eventSchema = new mongoose.Schema({
         type: String,
         trim: true,
         default: "No"
-    }, 
+    },
+    status: {
+        type: String,
+        trim: true,
+        default: 'Saved'
+    },
     createdOn: {
         type: Date,
         default: Date.now

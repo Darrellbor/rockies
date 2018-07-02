@@ -28,7 +28,6 @@ export class OrganizerComponent implements OnInit {
         this.profile = this.organizer.profile[0];
         this.checkEventAvailability();
         this.preloader = false;
-        console.log(this.organizer);
       }, (err) => {
           console.log(err);
       });

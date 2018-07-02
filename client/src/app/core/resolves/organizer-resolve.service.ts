@@ -14,6 +14,11 @@ export class OrganizerResolveService {
   }
 
   getOrganizerDetails() {
+    this.homeService.getOrganizerDetailsByUrl(this.url)
+      .subscribe((res) => {
+      }, (err) => {
+        this.router.navigate(['notAvailable']);
+      });
     return this.homeService.getOrganizerDetailsByUrl(this.url);
   }
 

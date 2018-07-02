@@ -11,6 +11,7 @@ module.exports.getAllReviews = function(req, res) {
         .findOne({
              eventLink: eventLink,
              endDate: { $lt : new Date() }
+             
         })
         .select('reviews')
         .exec(function(err, doc) {
@@ -123,7 +124,7 @@ module.exports.reviewUpdateOne = function(req, res) {
     Event
         .findOne({
              eventLink: eventLink,
-             endDate: { $lt : new Date() }
+             endDate: { $lt : new Date() }             
         })
         .select('reviews')
         .exec(function(err, event) {

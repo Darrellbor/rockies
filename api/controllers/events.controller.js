@@ -41,7 +41,8 @@ var runGeoQuery = function(req, res) {
                     "query": { startDate: { 
                         $gte: new Date((new Date().getTime() + (-1 * 24 * 60 * 60 * 1000))),
                         $lte: new Date((new Date().getTime() + (21 * 24 * 60 * 60 * 1000))) 
-                    } }
+                    },
+                    status: "Live"  }
             }
         }])
         .exec(function(err, results) {
@@ -153,75 +154,37 @@ module.exports.eventsAddOne = function(req, res) {
 
     if(!req.body.title || !req.body.description || !req.body.startDate ||
        !req.body.endDate || !req.body.location || !req.body.organizer ||
-       !req.body.ticket || !req.body.settings) {
+       !req.body.ticket || !req.body.settings || !req.body.status || 
+       !req.body.eventLink || !req.body.eventImage) {
         res 
             .status(400)
             .json({message: 'Please ensure all fields are filled '})
         return;
     }
 
-    if (!req.files) {
-        res
-            .status(400)
-            .json({ message: 'No files were uploaded.' });
-        return;
-    }
-
-    //Obtaining the event link
-    var linkTitle = req.body.title.split(" ");
-    linkTitle = linkTitle.join("-");
-    var uniqueKey = "";
-    var count = 0;
-    while(count < 8) {
-    	var randNum = (Math.floor(Math.random() * 100) + 1);
-        uniqueKey += randNum;
-        count += 1;
-    }
-
-    linkTitle = linkTitle + "-" + uniqueKey;
-    imageTitle = linkTitle + "" + uniqueKey;
-    //eventTitle = "https://rockies.ng/e/" + linkTitle;
-    eventTitle = linkTitle;
-
     //check for exclusives
     var exclusive = "No";
     if(req.body.exclusive) {
         exclusive = "Yes";
     }
-
-    //handling uploaded event image
-    var eventImage = req.files.eventImage;
- 
-    // Use the mv() method to place the file somewhere on your server
-    eventImage.mv('../../assets/images/events/'+imageTitle+'.jpg', function(err) {
-        if (err) {
-            res
-                .status(500)
-                .send({
-                    err,
-                    message: 'An error occured uploading event image'
-                });
-            return;
-        }
-    
-        console.log('File uploaded!', eventImage);
-    });
     
 
     Event
         .create({
             title: req.body.title,
             description: req.body.description,
-            eventImage: imageTitle, //handle as a fileupload
+            eventImage: req.body.eventImage, //handle as a fileupload
             startDate: req.body.startDate,
             endDate: req.body.endDate,
             location: req.body.location,    //expecting an object
-            eventLink: eventTitle,
+            eventLink: req.body.eventLink,
             totalViewed: 0,
             organizer: req.body.organizer,  //expecting an object
             ticket: req.body.ticket,      //expecting an object or array
             settings: req.body.settings,     //expecting an object
-            exclusive: exclusive
+            exclusive: exclusive,
+            status: req.body.status,
+            payout: req.body.payout
         }, function(err, event) {
             if(err) {
                 res 
@@ -236,6 +199,62 @@ module.exports.eventsAddOne = function(req, res) {
                     .json(event)
             }
         });
+}
+
+module.exports.eventUploadImage = function(req, res) {
+    var eventLink = "";
+    console.log(req.files, req.body);
+    
+    if(!req.files) {
+        res
+            .status(400)
+            .json({ message: 'No files were uploaded.' });
+        return;
+    }
+
+    if(req.body && req.body.title) {
+        //Obtaining the event link
+        var linkTitle = req.body.title.split(" ");
+        linkTitle = linkTitle.join("-");
+        var uniqueKey = "";
+        var count = 0;
+        while(count < 8) {
+            var randNum = (Math.floor(Math.random() * 20) + 1);
+            uniqueKey += randNum;
+            count += 1;
+        }
+
+        linkTitle = linkTitle + "-" + uniqueKey;
+        //eventTitle = "https://rockies.ng/e/" + linkTitle;
+        eventLink = linkTitle;
+    } else if(req.body && req.body.eventLink) {
+        eventLink = req.body.eventLink
+    }
+
+    //handling uploaded event image
+    var eventImage = req.files.eventImage;
+    console.log(eventImage.path);
+ 
+    // Use the mv() method to place the file somewhere on your server
+    eventImage.mv('c://users/DELL/workspace/rockies/assets/images/events/'+eventLink+'.jpg', function(err) {
+        if (err) {
+            res
+                .status(500)
+                .send({
+                    err,
+                    message: 'An error occured uploading event image'
+                });
+            return;
+        } else {
+             console.log('File uploaded!', eventImage);
+             res
+                .status(201)
+                .json({
+                    eventLink: eventLink,
+                    eventImage: '/assets/images/events/'+eventLink+'.jpg'
+                });
+        }
+    });
 }
 
 module.exports.eventsGetOne = function(req, res) {
@@ -274,7 +293,10 @@ module.exports.checkEventTitle = function(req, res) {
 
     if(req.query && req.query.title && req.query.for === "eventLink") {
         title = req.query.title;
-        query = { eventLink: title };
+        query = { 
+            eventLink: title,
+            status: "Live" 
+        };
     } else if(req.query && req.query.title && req.query.for === "organizerUrl") {
         title = req.query.title;
         query = { "organizer.url": title };
@@ -549,7 +571,8 @@ module.exports.organizerGetEvents = function(req, res) {
     Event
         .find({
             "organizer._id": organizerId,
-            "startDate": { $gte: new Date() }
+            "startDate": { $gte: new Date() },
+            status: "Live"
         })
         .sort("startDate")
         .exec(function(err, events) {

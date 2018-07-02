@@ -1,0 +1,77 @@
+<div class="profile-bg">
+  <div class="container myContainer">
+    <div class="profile-info">
+      <h1 class="heading--tag">Account Details</h1><hr class="heading--hr"><br>
+      <div *ngIf="accountAlert">
+        <flash-messages></flash-messages><br>
+      </div>
+      <form novalidate #profileAF="ngForm" (ngSubmit)="accountEdit(profileAF)">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="first">First Name</label>
+              <input type="text" class="form-control r--form-control" id="first" name="first" placeholder="Enter first name" [(ngModel)]="user.name.first" #first="ngModel" required minlength="3">
+            </div>
+
+            <div class='disclamier' *ngIf='!first.valid && first.touched'>Enter a valid first name</div>
+
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label for="last">Last Name</label>
+              <input type="text" class="form-control r--form-control" id="last" name="last" placeholder="Enter last name" [(ngModel)]="user.name.last" #last="ngModel" required minlength="3">
+            </div>
+
+            <div class='disclamier' *ngIf='!last.valid && last.touched'>Enter a valid last name</div>
+
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control r--form-control" id="email" name="email" placeholder="Enter email address" [(ngModel)]="user.email" #email="ngModel" required pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}" readonly>
+        </div>
+
+        <div class='disclamier' *ngIf='!email.valid && email.touched'>Enter a valid email</div>
+
+        <button type="submit" class="btn rockies-btn" [disabled]="!profileAF.valid">Save</button>
+      </form>
+    </div><br>
+
+    <div class="profile-info">
+      <h1 class="heading--tag">Passwords</h1><hr class="heading--hr"><br>
+      <div *ngIf="passwordAlert">
+        <flash-messages></flash-messages><br>
+      </div>
+      <form novalidate #profilePF="ngForm" (ngSubmit)="changePassword(profilePF)">
+        
+        <div class="form-group">
+          <label for="oldPassword">Old Password</label>
+          <input type="password" class="form-control r--form-control" id="oldPassword" name="oldPassword" [(ngModel)]="passwords.oldPassword" #oldPassword="ngModel" required minlength="8">
+        </div>
+
+        <div class='disclamier' *ngIf='!oldPassword.valid && oldPassword.touched && oldPassword.value !== ""'>Enter your current password</div>
+
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <input type="password" class="form-control r--form-control" id="newPassword" name="newPassword" [(ngModel)]="passwords.newPassword" #newPassword="ngModel" required minlength="8">
+        </div>
+
+        <div class='disclamier' *ngIf='!newPassword.valid && newPassword.touched && newPassword.value !== ""'>Enter a new password of at least 8 characters</div>
+
+        <div class="form-group">
+          <label for="confirmNewPassword">Confirm New Password</label>
+          <input type="password" class="form-control r--form-control" id="confirmNewPassword" name="confirmNewPassword" [(ngModel)]="passwords.confirmNewPassword" #confirmNewPassword="ngModel" required minlength="8">
+        </div>
+
+        <div class='disclamier' *ngIf='!confirmNewPassword.valid && confirmNewPassword.touched && confirmNewPassword.value !== "" || confirmNewPassword.value !== newPassword.value'>Make sure your new passwords match</div><br>
+
+        <button type="submit" class="btn rockies-btn" [disabled]="!profilePF.valid">Save</button>
+      </form>
+    </div>
+  </div>
+  <br><br>
+</div>
+
+<div *ngIf="preloader">
+  <app-preloader></app-preloader>
+</div>

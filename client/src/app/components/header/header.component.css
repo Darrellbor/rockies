@@ -1,6 +1,7 @@
 .rockies-nav {
     border-bottom: 1px solid #d6d6d6;
     background-color: #fff !important;
+    z-index: 99;
 }
 
 .nav-item {
@@ -47,6 +48,21 @@
 
 .dropdown-toggle::after {
     display: none;
+}
+
+.dropdown-item {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.dropdown-item img {
+    width: 23px;
+    height: 23px;
+}
+
+.dropdown-item fa {
+    font-size: 22px;
+    text-decoration: none;
 }
 
 @media(max-width: 991px) {

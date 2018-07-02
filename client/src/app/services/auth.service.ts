@@ -24,6 +24,25 @@ export class AuthService {
     });
   }
 
+  createImageHeaders() {
+    this.loadToken();
+    this.options = new RequestOptions({
+      headers: new Headers({
+        'encType': 'multipart/form-data',
+        'authorization': 'Bearer '+this.authToken
+      })
+    });
+  }
+
+  paystackHeaders() {
+    this.options = new RequestOptions({
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer sk_test_160a871559bfd2c0c5076225baffe07b526a8f90'
+      })
+    });
+  }
+
   constructor(private http:Http) { }
 
   registerUser(user) {

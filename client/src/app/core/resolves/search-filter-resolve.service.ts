@@ -99,7 +99,8 @@ export class SearchFilterResolveService {
           $or: [ { title: { "$regex": this.query.catTitle } }, { "settings.category": { "$regex": this.query.catTitle } } ],
           "settings.category": { "$regex": this.query.cat },
           "ticket.normalType": this.query.price,
-          "location.address.state": { "$regex": this.city[0] }
+          "location.address.state": { "$regex": this.city[0] },
+          status: "Live"
         }
       }
     } else if((this.query.catTitle && this.query.cat && this.query.city && this.query.date) && (this.query.catTitle !== "" && (this.query.cat !== "" && this.query.cat !== "All Categories") && this.query.city !== "" && this.query.date !== "")) {
@@ -109,7 +110,8 @@ export class SearchFilterResolveService {
           startDate: this.dateQuery,
           $or: [ { title: { "$regex": this.query.catTitle } }, { "settings.category": { "$regex": this.query.catTitle } } ],
           "settings.category": { "$regex": this.query.cat },
-          "location.address.state": { "$regex": this.city[0] }
+          "location.address.state": { "$regex": this.city[0] },
+          status: "Live"
         }
       }
     } else if((this.query.price && this.query.cat && this.query.city && this.query.date) && ((this.query.price !== "" && this.query.price !== "All Prices") && (this.query.cat !== "" && this.query.cat !== "All Categories") && this.query.city !== "" && this.query.date !== "")) {
@@ -119,7 +121,8 @@ export class SearchFilterResolveService {
           startDate: this.dateQuery,
           "settings.category": { "$regex": this.query.cat },
           "ticket.normalType": this.query.price,
-          "location.address.state": { "$regex": this.city[0] }
+          "location.address.state": { "$regex": this.city[0] },
+          status: "Live"
         }
       }
     } else if((this.query.cat && this.query.city && this.query.date) && ((this.query.cat !== "" && this.query.cat !== "All Categories") && this.query.city !== "" && this.query.date !== "")) {
@@ -128,7 +131,8 @@ export class SearchFilterResolveService {
         filter: {
           startDate: this.dateQuery,
           "settings.category": { "$regex": this.query.cat },
-          "location.address.state": { "$regex": this.city[0] }
+          "location.address.state": { "$regex": this.city[0] },
+          status: "Live"
         }
       }
     } else if((this.query.price && this.query.cat && this.query.date) && ((this.query.price !== "" && this.query.price !== "All Prices") && (this.query.cat !== "" && this.query.cat !== "All Categories") && this.query.date !== "")) {
@@ -136,7 +140,8 @@ export class SearchFilterResolveService {
         filter: {
           startDate: this.dateQuery,
           "settings.category": { "$regex": this.query.cat },
-          "ticket.normalType": this.query.price
+          "ticket.normalType": this.query.price,
+          status: "Live"
         }
       }
     } else if((this.query.price && this.query.city && this.query.date) && ((this.query.price !== "" && this.query.price !== "All Prices") && this.query.city !== "" && this.query.date !== "")) {
@@ -145,7 +150,8 @@ export class SearchFilterResolveService {
         filter: {
           startDate: this.dateQuery,
           "ticket.normalType": this.query.price,
-          "location.address.state": { "$regex": this.city[0] }
+          "location.address.state": { "$regex": this.city[0] },
+          status: "Live"
         }
       }
     } else if((this.query.catTitle && this.query.city && this.query.date) && (this.query.catTitle !== "" && this.query.city !== "" && this.query.date !== "")) {
@@ -154,28 +160,32 @@ export class SearchFilterResolveService {
         filter: {
           startDate: this.dateQuery,
           $or: [ { title: { "$regex": this.query.catTitle } }, { "settings.category": { "$regex": this.query.catTitle } } ],
-          "location.address.state": { "$regex": this.city[0] }
+          "location.address.state": { "$regex": this.city[0] },
+          status: "Live"
         }
       }
     } else if((this.query.cat && this.query.date) && ((this.query.cat !== "" && this.query.cat !== "All Categories") && this.query.date !== "")) {
       this.myQuery = {
         filter: {
           startDate: this.dateQuery,
-          "settings.category": { "$regex": this.query.cat }
+          "settings.category": { "$regex": this.query.cat },
+          status: "Live"
         }
       }
     } else if((this.query.price && this.query.date) && ((this.query.price !== "" && this.query.price !== "All Prices") && this.query.date !== "")) {
       this.myQuery = {
         filter: {
           startDate: this.dateQuery,
-          "ticket.normalType": this.query.price
+          "ticket.normalType": this.query.price,
+          status: "Live"
         }
       }
     } else if((this.query.catTitle && this.query.date) && (this.query.catTitle !== "" && this.query.date !== "" && this.query.date !== "All Dates")) {
       this.myQuery = {
         filter: {
           startDate: this.dateQuery,
-          $or: [ { title: { "$regex": this.query.catTitle } }, { "settings.category": { "$regex": this.query.catTitle } } ]
+          $or: [ { title: { "$regex": this.query.catTitle } }, { "settings.category": { "$regex": this.query.catTitle } } ],
+          status: "Live"
         }
       }
     } else if((this.query.city && this.query.date) && (this.query.city !== "" && this.query.date !== "")) {
@@ -183,20 +193,23 @@ export class SearchFilterResolveService {
       this.myQuery = {
         filter: {
           startDate: this.dateQuery,
-          "location.address.state": { "$regex": this.city[0] }
+          "location.address.state": { "$regex": this.city[0] },
+          status: "Live"
         }
       }
     } else if((this.query.cat) && ((this.query.cat !== "" && this.query.cat !== "All Categories"))) {
       this.myQuery = {
         filter: {
           startDate: this.dateQuery,
-          "settings.category": { "$regex": this.query.cat }
+          "settings.category": { "$regex": this.query.cat },
+          status: "Live"
         }
       }
     } else {
       this.myQuery = {
         filter: {
-          startDate: this.dateQuery
+          startDate: this.dateQuery,
+          status: "Live"
         }
       }
     }

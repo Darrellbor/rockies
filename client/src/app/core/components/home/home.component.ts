@@ -56,10 +56,11 @@ export class HomeComponent implements OnInit {
           if(this.events[this.cat_index].categories !== "empty") {
             this.cat_visibility = true;
           }
-          console.log(this.events);
+
+          
           this.preloader = false;
           
-        }, 4000);
+        }, 5000);
         
       }, (err) => {
         console.log(err);

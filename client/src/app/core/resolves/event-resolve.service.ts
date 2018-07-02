@@ -21,7 +21,8 @@ export class EventResolveService {
     this.homeService.updateTotalViewed(this.url)
       .subscribe((res) => {
       }, (err) => {
-          console.log(err);
+          console.log(err);          
+          this.router.navigate(['notAvailable']);
       });
 
      return this.getEventDetails();

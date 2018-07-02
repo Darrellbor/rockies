@@ -63,7 +63,8 @@ export class HomeResolveService {
           startDate: {
                 $gte: new Date((new Date().getTime() + (-1 * 24 * 60 * 60 * 1000))),
                 $lte: new Date((new Date().getTime() + (14 * 24 * 60 * 60 * 1000))) 
-          }
+          },
+          status: "Live"
         }
       }
 
@@ -112,7 +113,8 @@ export class HomeResolveService {
           startDate: {
                 $gte: new Date((new Date().getTime() + (-1 * 24 * 60 * 60 * 1000))),
                 $lte: new Date((new Date().getTime() + (14 * 24 * 60 * 60 * 1000))) 
-          }
+          },
+          status: "Live"
         }
       }
 
@@ -121,7 +123,8 @@ export class HomeResolveService {
           startDate: {
                 $gte: new Date((new Date().getTime() + (15 * 24 * 60 * 60 * 1000))),
                 $lte: new Date((new Date().getTime() + (31 * 24 * 60 * 60 * 1000))) 
-          }
+          },
+          status: "Live"
         }
       }
 
@@ -134,15 +137,15 @@ export class HomeResolveService {
           this.homeService.fetchEvents('api/events/search?count=6&sort=-totalViewed', eventFilter2)
             .subscribe((res) => {
               if(res !== null) {
-                for(var i = 0; i < this.events.length; i++) {
-                  for(var k = 0; k < this.events[i].length; k++) {
-                    for(var j = 0; j < res.length; j++) {
-                        if(this.events[i][k]._id !== res[j]._id) {
+                for(var j = 0; j < res.length; j++) {
+                  // for(var i = 0; i < this.events.length; i++) {
+                  //   for(var k = 0; k < this.events[i].length; k++) {
+                  //       if(res[j]._id !== this.events[i][k]._id) {
                           this.pendingEvents.push(res[j]);
-                        }
-                    }
-                  }
-                }
+                  //       }
+                  //   }
+                  // }
+                }                
               }
 
               if(this.pendingEvents.length !== 0) {

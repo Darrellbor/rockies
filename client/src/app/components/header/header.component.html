@@ -20,11 +20,42 @@
         </div>
       </li>
       <div class="headerDivider"></div>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="authService.notAuthorized()">
         <a class="nav-link" href="#" routerLink="/c/login">Account</a>
       </li>
+      <li class="nav-item dropdown" *ngIf="!authService.notAuthorized()">
+        <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Account <fa name='fas fa-angle-down'></fa>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="accountDropdown">
+          <a class="dropdown-item" href="#">
+            <fa name="fas fa-calendar"></fa>
+            My Events
+          </a>
+          <a class="dropdown-item" href="#">
+            <img src="/assets/images/app/ticket.svg" alt="Ticket">
+            My Tickets
+          </a>
+          <a class="dropdown-item" href="#">
+            <fa name="fas fa-sitemap"></fa>
+            Organizer Profiles
+          </a>
+          <a class="dropdown-item" href="#">
+            <img src="/assets/images/app/rating.svg" alt="Reviews">
+            My Reviews
+          </a>
+          <a class="dropdown-item" href="#" routerLink="/a/profile">
+            <fa name="far fa-user-circle"></fa>
+            Profile
+          </a>
+          <a class="dropdown-item" href="Javascript:void(0)" (click)="logOut()">
+            <img src="/assets/images/app/sign-out.svg" alt="Log Out">
+            Log Out
+          </a>
+        </div>
+      </li>
       <li class="nav-item">
-        <a class="nav-link btn rockies-nav-btn" href="#">Create Event</a>
+        <a class="nav-link btn rockies-nav-btn" href="#" routerLink="/a/create-event">Create Event</a>
       </li>
     </ul>
   </div>

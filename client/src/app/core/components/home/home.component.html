@@ -78,8 +78,8 @@
           </div><br>
         </div>
 
-        <div class="col-lg-3 col-sm-6" *ngIf="eventShowSet2">
-          <div *ngFor="let event of events[1]">
+        <ng-container *ngIf="eventShowSet2">
+          <div class="col-lg-3 col-sm-6" *ngFor="let event of events[1]">
               <div class="event-cover">
                 <a href="#" [routerLink]="['/c/e', event.eventLink]">
                   <div class="event-image" [ngStyle]="{'background-image': 'linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url(' + event.eventImage + ')'}">
@@ -107,8 +107,8 @@
                 </div>
               </div><br>
             </div>
-          </div>
-        </div>
+        </ng-container>
+      </div>
 
       <div class="event-loadMore">
         <a href="#" class="btn rockies-btn-inverse" routerLink="/c/sf">Load More...</a>
@@ -127,7 +127,7 @@
 <div class="call-to-action">
   <h3>Get More With No Surprises</h3>
   <h5>Easy to use platform for hosting successful events</h5><br>
-  <a href="#" class="btn rockies-btn-round">Create Event</a>
+  <a href="#" class="btn rockies-btn-round" routerLink="/a/create-event">Create Event</a>
   <a href="#" class="btn rockies-btn-inverse-round" routerLink="/c/sf">Find Events</a><br><br>
 </div>
 

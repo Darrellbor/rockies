@@ -16,6 +16,10 @@ router
     .post(usersCtrl.authenticate, eventsCtrl.eventsAddOne);
 
 router 
+    .route('/events/uploadImage')
+    .post(usersCtrl.authenticate, eventsCtrl.eventUploadImage);
+
+router 
     .route('/events/:id')
     .get(eventsCtrl.eventsGetOne)
     .put(usersCtrl.authenticate, eventsCtrl.eventsUpdateAll)
