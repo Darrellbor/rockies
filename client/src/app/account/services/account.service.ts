@@ -52,7 +52,7 @@ export class AccountService {
   createSubaccount(businessName, settlementBank, accountNo) {
     this.authService.paystackHeaders();
     return this.http.post('https://api.paystack.co/subaccount',{
-      "business_name": businessName, "settlement_bank": settlementBank, "account_number": accountNo, "percentage_charge": 1.5
+      "business_name": businessName, "settlement_bank": settlementBank, "account_number": accountNo, "percentage_charge": 5
     }, this.authService.options)
       .map(res => res.json());
   }
@@ -65,6 +65,11 @@ export class AccountService {
   addCategory(category) {
     this.authService.createHeaders();
     return this.http.post(this.authService.url + 'api/settings/categories', { name: category}, this.authService.options)
+      .map(res => res.json());
+  }
+
+  getEventDetailsByLink(id) {
+    return this.http.get(this.authService.url + 'api/events/'+id)
       .map(res => res.json());
   }
 
@@ -82,6 +87,34 @@ export class AccountService {
   createEvent(payload) {
     this.authService.createHeaders();
     return this.http.post(this.authService.url + 'api/events', payload, this.authService.options)
+      .map(res => res.json());
+  }
+
+  getMyEvents() {
+    this.authService.createHeaders();
+    return this.http.get(this.authService.url + 'api/users/events', this.authService.options)
+      .map(res => res.json());
+  }
+
+  editEvent(id, payload) {
+    this.authService.createHeaders();
+    return this.http.put(this.authService.url + 'api/events/'+id, payload, this.authService.options)
+      .map(res => res.json());
+  }
+
+  removeEvent(id) {
+    this.authService.createHeaders();
+    return this.http.delete(this.authService.url + 'api/events/'+id, this.authService.options)
+      .map(res => res.json());
+  }
+
+  makeEventLive(link) {
+    return this.http.patch(this.authService.url + 'api/events/'+link, { activate: 'Status' })
+      .map(res => res.json());
+  }
+
+  checkAvailability(title) {
+    return this.http.get(this.authService.url + 'api/events/search?for=eventLink&title='+title)
       .map(res => res.json());
   }
 

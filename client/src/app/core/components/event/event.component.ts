@@ -80,19 +80,19 @@ export class EventComponent implements OnInit {
   }
 
   showSecondTicket() {
-    if(this.details.ticket[1]) {
+    if(this.details.ticket[1] && this.details.ticket[1] !== null) {
       this.showTicket2 = true;
     }
   }
 
   decernOrderDisable() {
     if(this.details.ticket[1]) {
-      if(new Date(this.details.ticket[0].ticketSaleStarts) <= new Date() || (new Date(this.details.ticket[0].ticketSaleStarts) >= new Date()) && new Date(this.details.ticket[0].ticketSaleEnds) >= new Date() ||
-         new Date(this.details.ticket[1].ticketSaleStarts ) <= new Date() || (new Date(this.details.ticket[1].ticketSaleStarts) >= new Date()) && new Date(this.details.ticket[1].ticketSaleEnds) >= new Date()) {
+      if(new Date(this.details.ticket[0].ticketSaleStarts) <= new Date() && new Date(this.details.ticket[0].ticketSaleEnds) >= new Date() ||
+         new Date(this.details.ticket[1].ticketSaleStarts ) <= new Date() && new Date(this.details.ticket[1].ticketSaleEnds) >= new Date()) {
             this.orderDisable = false;
       }
     } else {
-      if(new Date(this.details.ticket[0].ticketSaleStarts) <= new Date() || (new Date(this.details.ticket[0].ticketSaleStarts) >= new Date()) && new Date(this.details.ticket[0].ticketSaleEnds) >= new Date()) {
+      if(new Date(this.details.ticket[0].ticketSaleStarts) <= new Date() && new Date(this.details.ticket[0].ticketSaleEnds) >= new Date()) {
         this.orderDisable = false;
       }
     }

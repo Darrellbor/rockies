@@ -5,12 +5,14 @@ import { AccountService } from '../../services/account.service';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
-  selector: 'app-create-event',
-  templateUrl: './create-event.component.html',
-  styleUrls: ['./create-event.component.css']
+  selector: 'app-edit-event',
+  templateUrl: './edit-event.component.html',
+  styleUrls: ['./edit-event.component.css']
 })
-export class CreateEventComponent implements OnInit {
+export class EditEventComponent implements OnInit {
+  _id;
   preloader:boolean = true;
+  eventDetails;
   organizerList;
   organizerName = '';
   freeTicketInstance:boolean = false;
@@ -130,10 +132,98 @@ export class CreateEventComponent implements OnInit {
               public authService: AuthService) {}
 
   ngOnInit() {
-    this.getOrganizersList();
-    this.fetchPaystackBanks();
-    this.fetchCategories();
-    this.preloader = false;
+    this.route.params 
+      .subscribe((res) => {
+        this._id = res.id;
+      }, (err) => {
+        window.alert('An error occured, please reload the page!');
+      });
+    this.route.data 
+      .subscribe((res) => {
+        this.eventDetails = res.eventDetails;
+        this.event = this.eventDetails;
+        this.pageBuilder();
+        this.getOrganizersList();
+        this.fetchPaystackBanks();
+        this.fetchCategories();
+        this.preloader = false;
+      }, (err) => {
+        window.alert('An error occured, please reload the page!');
+      });
+  }
+
+  pageBuilder() {
+    //handle start dates
+    let startDate;
+    let startTime;
+    startDate = this.event.startDate.split("T");
+    startTime = startDate[1].split(".");
+    this.event.startDate = startDate[0];
+    this.event.startTime = startTime[0];
+
+    //handle end dates
+    let endDate;
+    let endTime;
+    endDate = this.event.endDate.split("T");
+    endTime = endDate[1].split(".");
+    this.event.endDate = endDate[0];
+    this.event.endTime = endTime[0];
+
+    //handle free or paid ticket start dates and time
+    let ticketSaleStarts;
+    let ticketStartTime;
+    ticketSaleStarts = this.event.ticket[0].ticketSaleStarts.split("T");
+    ticketStartTime = ticketSaleStarts[1].split(".");
+    this.event.ticket[0].ticketSaleStarts = ticketSaleStarts[0];
+    this.ticketStartTime = ticketStartTime[0];
+
+    //handle free or paid ticket end dates and time
+    let ticketSaleEnds;
+    let ticketEndTime;
+    ticketSaleEnds = this.event.ticket[0].ticketSaleEnds.split("T");
+    ticketEndTime = ticketSaleEnds[1].split(".");
+    this.event.ticket[0].ticketSaleEnds = ticketSaleEnds[0];
+    this.ticketEndTime = ticketEndTime[0];
+    
+    if(this.event.ticket[0].normalType === "Paid") {
+      this.paidTicketInstance = true;
+    } else {
+      this.freeTicketInstance = true;
+    }
+
+    if(this.event.ticket[1] === null) {
+      this.event.ticket[1] = {
+        name: '',
+        type: '',
+        normalType: '',  //accepts a free or paid
+        description: '',
+        quantity: 1,
+        price: 0.00,
+        ticketSaleStarts: '',
+        ticketSaleEnds: '',
+        maxTicketPerPerson: 1,
+        showTicket: 'Yes'
+      }
+    } else {
+      //handle vip ticket dates and time
+      let ticketSaleStarts1;
+      let vipTicketStartTime;
+      ticketSaleStarts1 = this.event.ticket[1].ticketSaleStarts.split("T");
+      vipTicketStartTime = ticketSaleStarts1[1].split(".");
+      this.event.ticket[1].ticketSaleStarts = ticketSaleStarts1[0];
+      this.vipTicketStartTime = vipTicketStartTime[0];
+
+      //handle vip ticket dates and time
+      let ticketSaleEnds1;
+      let vipTicketEndTime;
+      ticketSaleEnds1 = this.event.ticket[1].ticketSaleEnds.split("T");
+      vipTicketEndTime = ticketSaleEnds1[1].split(".");
+      this.event.ticket[1].ticketSaleEnds = ticketSaleEnds1[0];
+      this.vipTicketEndTime = vipTicketEndTime[0];
+
+      this.vipTicketInstance = true;
+    }
+
   }
 
   fetchPaystackBanks() {
@@ -344,193 +434,6 @@ export class CreateEventComponent implements OnInit {
     }
   }
 
-  createEvent({value, valid}) {
-    if(valid) {      
-      if(this.event.ticket[0].name === "" || this.event.ticket[0].description === "") {
-        this.finalAlert = true;
-        setTimeout(() => {
-          this.flashMessages.show("Ticket details were not recorded", {cssClass: 'alert-danger', timeout: 4000});
-          setTimeout(() => {
-            this.finalAlert = false;
-          },4000);
-        }, 500);
-        return;
-      }
-
-      if(this.event.eventImage === "") {
-        this.finalAlert = true;
-        setTimeout(() => {
-          this.flashMessages.show("Please upload an event image", {cssClass: 'alert-danger', timeout: 4000});
-          setTimeout(() => {
-            this.finalAlert = false;
-          },4000);
-        }, 500);
-        return;
-      }
-
-      if(this.paidTicketInstance || this.vipTicketInstance && this.event.payout.subaccountCode === "") {
-        this.finalAlert = true;
-        setTimeout(() => {
-          this.flashMessages.show("Please re-verify your payout details", {cssClass: 'alert-danger', timeout: 4000});
-          setTimeout(() => {
-            this.finalAlert = false;
-          },4000);
-        }, 500);
-        return;
-      }
-      this.event.startDate = this.event.startDate +" "+ this.event.startTime;
-      this.event.endDate = this.event.endDate +" "+ this.event.endTime;
-      this.event.ticket[0].ticketSaleStarts = this.event.ticket[0].ticketSaleStarts +" "+ this.ticketStartTime;
-      this.event.ticket[0].ticketSaleEnds = this.event.ticket[0].ticketSaleEnds +" "+ this.ticketEndTime;
-
-      if(this.event.ticket[1].name !== "" && this.event.ticket[1].description !== "") {
-        this.event.ticket[1].ticketSaleStarts = this.event.ticket[1].ticketSaleStarts +" "+ this.vipTicketStartTime;
-        this.event.ticket[1].ticketSaleEnds = this.event.ticket[1].ticketSaleEnds +" "+ this.vipTicketEndTime;
-      } else {
-        this.event.ticket[1] = undefined;
-      }
-
-      delete this.event.startTime;
-      delete this.event.endTime;
-
-      if(!this.isCategoryListed) {
-        this.accountService.addCategory(this.event.settings.category)
-          .subscribe((res) => {
-            this.finalAlert = true;
-            setTimeout(() => {
-              this.flashMessages.show("New category added!", {cssClass: 'alert-info', timeout: 3000});
-              setTimeout(() => {
-                this.finalAlert = false;
-              },3000);
-            }, 500);
-          }, (err) => {
-            this.finalAlert = true;
-            setTimeout(() => {
-              this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
-              setTimeout(() => {
-                this.finalAlert = false;
-              },4000);
-            }, 500);
-          });
-      }
-
-      this.accountService.getLocationChoords(this.event.location.address.street+" "+this.event.location.address.state+" "+this.event.location.address.country)
-        .subscribe((res) => {
-          this.event.location.coordinates.push(res.results[0].geometry.location.lng);
-          this.event.location.coordinates.push(res.results[0].geometry.location.lat);
-
-          this.accountService.createEvent(this.event)
-            .subscribe((res) => {
-
-              this.event = {
-                status: 'Live',
-                exclusive: 'No',
-                title: '',
-                startDate: '',
-                startTime: '',
-                endDate: '',
-                endTime: '',
-                eventImage: '',
-                eventLink: '',
-                description: '',
-                location: {
-                  name: '',
-                  address: {
-                    street: '',
-                    cityOrProvince: '',
-                    state: '',
-                    zipCode: '',
-                    country: ''
-                  },
-                  coordinates: [],
-                  showMap: 'Yes'
-                },
-                organizer: {
-                  _id: '',
-                  user_id: '',
-                  socials: {},
-                  name: '',
-                  about: '',
-                  phone: '',
-                  email: '',
-                  logo: '',
-                  url: ''
-                },
-                ticket: [{
-                  name: '',
-                  type: '',
-                  normalType: '',  //accepts a free or paid
-                  description: '',
-                  quantity: 1,
-                  price: 0.00,
-                  ticketSaleStarts: '',
-                  ticketSaleEnds: '',
-                  maxTicketPerPerson: 1,
-                  showTicket: 'Yes'
-                },
-                {
-                    name: '',
-                    type: '',
-                    normalType: '',  //accepts a free or paid
-                    description: '',
-                    quantity: 1,
-                    price: 0.00,
-                    ticketSaleStarts: '',
-                    ticketSaleEnds: '',
-                    maxTicketPerPerson: 1,
-                    showTicket: 'Yes'
-                  }],
-                payout: {
-                  subaccountCode: '',
-                  settlementBank: '',
-                  accountNo: ""
-                },
-                settings: {
-                  category: '',
-                  reservationLimit: '',
-                  showVipRemaining: 'Yes',
-                  showNormalRemaining: 'Yes'
-                }
-              }
-
-              this.finalAlert = true;
-                setTimeout(() => {
-                this.flashMessages.show("Event Successfully Created And Is Live!", {cssClass: 'alert-success', timeout: 6000});
-                setTimeout(() => {
-                  this.finalAlert = false;
-                },6000);
-              }, 500);
-            }, (err) => {
-              this.finalAlert = true;
-                setTimeout(() => {
-                this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
-                setTimeout(() => {
-                  this.finalAlert = false;
-                },4000);
-              }, 500);
-            });
-
-        }, (err) => {
-          this.finalAlert = true;
-          setTimeout(() => {
-          this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
-          setTimeout(() => {
-            this.finalAlert = false;
-          },4000);
-        }, 500);
-        });
-
-    } else {
-      this.finalAlert = true;
-      setTimeout(() => {
-        this.flashMessages.show('Invalid form submission!', {cssClass: 'alert-danger', timeout: 6000});
-        setTimeout(() => {
-          this.finalAlert = false;
-        },6000);
-      }, 500);
-    }
-  }
-
   saveEvent() {
     this.event.status = "Saved";
 
@@ -607,85 +510,15 @@ export class CreateEventComponent implements OnInit {
         this.event.location.coordinates.push(res.results[0].geometry.location.lng);
         this.event.location.coordinates.push(res.results[0].geometry.location.lat);
 
-        this.accountService.createEvent(this.event)
+        this.accountService.editEvent(this._id, this.event)
           .subscribe((res) => {
-
-            this.event = {
-              status: 'Saved',
-              exclusive: 'No',
-              title: '',
-              startDate: '',
-              startTime: '',
-              endDate: '',
-              endTime: '',
-              eventImage: '',
-              eventLink: '',
-              description: '',
-              location: {
-                name: '',
-                address: {
-                  street: '',
-                  cityOrProvince: '',
-                  state: '',
-                  zipCode: '',
-                  country: ''
-                },
-                coordinates: [],
-                showMap: 'Yes'
-              },
-              organizer: {
-                _id: '',
-                user_id: '',
-                socials: {},
-                name: '',
-                about: '',
-                phone: '',
-                email: '',
-                logo: '',
-                url: ''
-              },
-              ticket: [{
-                name: '',
-                type: '',
-                normalType: '',  //accepts a free or paid
-                description: '',
-                quantity: 1,
-                price: 0.00,
-                ticketSaleStarts: '',
-                ticketSaleEnds: '',
-                maxTicketPerPerson: 1,
-                showTicket: 'Yes'
-              },
-              {
-                  name: '',
-                  type: '',
-                  normalType: '',  //accepts a free or paid
-                  description: '',
-                  quantity: 1,
-                  price: 0.00,
-                  ticketSaleStarts: '',
-                  ticketSaleEnds: '',
-                  maxTicketPerPerson: 1,
-                  showTicket: 'Yes'
-                }],
-              payout: {
-                subaccountCode: '',
-                settlementBank: '',
-                accountNo: ""
-              },
-              settings: {
-                category: '',
-                reservationLimit: '',
-                showVipRemaining: 'Yes',
-                showNormalRemaining: 'Yes'
-              }
-            }
 
             this.finalAlert = true;
               setTimeout(() => {
-              this.flashMessages.show("Event Successfully Created And Is Saved!", {cssClass: 'alert-success', timeout: 6000});
+              this.flashMessages.show("Event Successfully Edited And Is Saved!", {cssClass: 'alert-success', timeout: 6000});
               setTimeout(() => {
                 this.finalAlert = false;
+                this.router.navigate(['/a/myEvents']);
               },6000);
             }, 500);
           }, (err) => {

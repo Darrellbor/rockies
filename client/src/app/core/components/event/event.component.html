@@ -19,11 +19,21 @@
         </div>
         <div class="col-md-3">
           <div class="event-price">
-            <div class="inline-price" *ngFor="let eventTicket of details.ticket">
-              <span *ngIf="eventTicket.normalType === 'Paid'">&#8358;{{ eventTicket.price | number:'2.' }}</span>
-              <span *ngIf="eventTicket.normalType === 'Vip'">&nbsp;- &#8358;{{ eventTicket.price | number:'2.' }}</span>
-              <span *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</span>
-            </div>
+            <ng-container *ngIf="showTicket2">
+              <div class="inline-price" *ngFor="let eventTicket of details.ticket">
+                <span *ngIf="eventTicket.normalType === 'Paid'">&#8358;{{ eventTicket.price | number:'2.' }}</span>
+                <span *ngIf="eventTicket.normalType === 'Vip'">&nbsp;- &#8358;{{ eventTicket.price | number:'2.' }}</span>
+                <span *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</span>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="!showTicket2">
+              <div class="inline-price" *ngFor="let eventTicket of details.ticket | slice:0:1 ">
+                <span *ngIf="eventTicket.normalType === 'Paid'">&#8358;{{ eventTicket.price | number:'2.' }}</span>
+                <span *ngIf="eventTicket.normalType === 'Vip'">&nbsp;- &#8358;{{ eventTicket.price | number:'2.' }}</span>
+                <span *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</span>
+              </div>
+            </ng-container>
           </div>
         </div>
       </div>
@@ -230,11 +240,21 @@
               <a href="Javascript:void(0)" class="more-event-details" [routerLink]="['/c/e', event.eventLink]">
                 <time>{{ event.startDate | date:"MMMM d, y" }}</time> | {{ event.location.address.state }}<br><br>
                 <div class="event-price">
-                  <div class="inline-price" *ngFor="let eventTicket of event.ticket">
-                    <span *ngIf="eventTicket.normalType === 'Paid'">&#8358;{{ eventTicket.price | number:'2.' }}</span>
-                    <span *ngIf="eventTicket.normalType === 'Vip'">&nbsp;- &#8358;{{ eventTicket.price | number:'2.' }}</span>
-                    <span *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</span>
-                  </div>
+                  <ng-container *ngIf="showTicket2">
+                    <div class="inline-price" *ngFor="let eventTicket of details.ticket">
+                      <span *ngIf="eventTicket.normalType === 'Paid'">&#8358;{{ eventTicket.price | number:'2.' }}</span>
+                      <span *ngIf="eventTicket.normalType === 'Vip'">&nbsp;- &#8358;{{ eventTicket.price | number:'2.' }}</span>
+                      <span *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</span>
+                    </div>
+                  </ng-container>
+
+                  <ng-container *ngIf="!showTicket2">
+                    <div class="inline-price" *ngFor="let eventTicket of details.ticket | slice:0:1 ">
+                      <span *ngIf="eventTicket.normalType === 'Paid'">&#8358;{{ eventTicket.price | number:'2.' }}</span>
+                      <span *ngIf="eventTicket.normalType === 'Vip'">&nbsp;- &#8358;{{ eventTicket.price | number:'2.' }}</span>
+                      <span *ngIf="eventTicket.normalType === 'Free'">{{ eventTicket.normalType}}</span>
+                    </div>
+                  </ng-container>
                 </div>
               </a>
             </div>
@@ -262,7 +282,7 @@
                 </div>
               </a>
             </div>
-          </div>
+          </div><br>
         </div>
       </div>
     </div>

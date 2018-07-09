@@ -1,6 +1,6 @@
 <div class="ce-bg">
   <div class="container myContainer">
-    <form novalidate #createEF="ngForm" (ngSubmit)="createEvent(createEF)">
+    <form novalidate #createEF="ngForm">
       <div class="top-declarations">
         <span class="create-text">
           <h1>Create An Event</h1>
@@ -718,12 +718,12 @@
       <div class="ce-info event-settings">
         <img src="/assets/images/app/settings.svg" alt="Event" style="max-height: 30px; max-width: 30px;">
         <h1 class="heading--tag"><small>Step 3 of 3</small>Additional Settings</h1><hr class="heading--hr" style="margin-left: 45px;"><br>
-
+ 
         <div class="form-check" style="margin-left: 20px;">
           <input type="checkbox" class="form-check-input" id="exclusives" (click)="changeExclusive()">
           <label class="form-check-label" for="exclusives" style="padding-left: 0px;">Are you selling all your tickets on rockies?</label>
         </div>
-      
+
         <div class="form-group" *ngIf="isCategoryListed">
           <label for="categories">Categories</label>
           <select class="form-control r--form-control" id="categories" name="categories" [(ngModel)]="event.settings.category" #categories="ngModel">
@@ -753,8 +753,7 @@
         <div *ngIf="finalAlert">
           <flash-messages></flash-messages><br>
         </div>
-        <button type="button" class="btn rockies-grey-btn" (click)="saveEvent()" [disabled]="!createEF.valid">Save Event</button>
-        <button type="submit" class="btn rockies-btn"  [disabled]="!createEF.valid">Make Event Live</button>
+        <button type="button" class="btn rockies-btn" (click)="saveEvent()">Edit And Save Event</button>
       </div>
     </form>
   </div>

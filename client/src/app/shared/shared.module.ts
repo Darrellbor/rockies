@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PreloaderComponent } from '../components/preloader/preloader.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { FlashMessagesModule } from 'angular2-flash-messages';
+import { SearchPipe } from '../pipes/search.pipe';
 
 @NgModule({
   imports: [
@@ -11,12 +12,14 @@ import { FlashMessagesModule } from 'angular2-flash-messages';
     FlashMessagesModule
   ],
   declarations: [
-    PreloaderComponent
+    PreloaderComponent,
+    SearchPipe
   ],
   exports: [
     PreloaderComponent,
     AngularFontAwesomeModule,
-    FlashMessagesModule
+    FlashMessagesModule,
+    SearchPipe
   ]
 })
 export class SharedModule { }

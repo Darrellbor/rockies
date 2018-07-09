@@ -487,7 +487,7 @@ module.exports.getAllUserEvents = function(req, res) {
         .find({
             'organizer.user_id': req.user._id
         })
-        .select('title startDate endDate eventLink settings.category')
+        .select('title startDate endDate eventLink status settings.category location.address.state ticket.price ticket.normalType')
         .exec(function(err, event) {
             var response = {
                 status: 200,
