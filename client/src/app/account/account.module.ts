@@ -11,10 +11,14 @@ import { CreateEventComponent } from './components/create-event/create-event.com
 import { AccountService } from './services/account.service';
 import { MyEventResolveService } from './resolves/my-event-resolve.service';
 import { EditEventResolveService } from './resolves/edit-event-resolve.service';
+import { MyOrdersResolveService } from './resolves/my-orders-resolve.service';
+import { OrderDetailsResolveService } from './resolves/order-details-resolve.service';
 import { ProfileComponent } from './components/profile/profile.component';
 import { MyEventsComponent } from './components/my-events/my-events.component';
 import { EditEventComponent } from './components/edit-event/edit-event.component';
 import { ManageEventComponent } from './components/manage-event/manage-event.component';
+import { MyOrdersComponent } from './components/my-orders/my-orders.component';
+import { OrderDetailsComponent } from './components/order-details/order-details.component';
 
 @NgModule({
   imports: [
@@ -31,12 +35,16 @@ import { ManageEventComponent } from './components/manage-event/manage-event.com
     ProfileComponent,
     MyEventsComponent,
     EditEventComponent,
-    ManageEventComponent
+    ManageEventComponent,
+    MyOrdersComponent,
+    OrderDetailsComponent
   ],
   providers: [
     AccountService,
     MyEventResolveService,
-    EditEventResolveService
+    EditEventResolveService,
+    MyOrdersResolveService,
+    OrderDetailsResolveService
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

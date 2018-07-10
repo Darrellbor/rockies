@@ -118,4 +118,16 @@ export class AccountService {
       .map(res => res.json());
   }
 
+  getOrders() {
+    this.authService.createHeaders();
+    return this.http.get(this.authService.url + 'api/users/tickets', this.authService.options)
+      .map(res => res.json());
+  }
+
+  getOrderByIds(eventId, orderId) {
+    this.authService.createHeaders();
+    return this.http.get(this.authService.url + 'api/users/events/'+eventId+'/tickets/'+orderId, this.authService.options)
+      .map(res => res.json());
+  }
+
 }

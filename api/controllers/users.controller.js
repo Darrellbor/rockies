@@ -446,7 +446,7 @@ module.exports.getAllUserOrders = function(req, res) {
         .find({
             'orders.buyer._id': req.user._id
         })
-        .select('eventImage title startDate orders._id orders.createdOn orders.normalType orders.buyer._id')
+        .select('eventImage title startDate orders._id orders.createdOn orders.normalType orders.buyer._id orders.noOfSeats')
         .exec(function(err, event) {
             var response = {
                 status: 200,
@@ -521,7 +521,7 @@ module.exports.getOneUserOrders = function(req, res) {
 
     Event
         .findById(eventId)
-        .select('title startDate endDate location.name location.address orders')
+        .select('title startDate endDate eventLink location.name location.address orders')
         .exec(function(err, event) {
             var orderInstance = {};
             var response = {

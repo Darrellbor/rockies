@@ -1,0 +1,50 @@
+<div class="myOrders-bg">
+  <div class="container myContainer">
+    <div class="myOrders-info">
+      <h1 class="heading--tag">My Ticket Orders</h1><hr class="heading--hr"><br>
+
+      <div class="myOrders-block" *ngIf="ordersToShow">
+        <div class="order-box" *ngFor="let order of myOrders">
+          <div class="row">
+            <div class="col-sm-1" style="text-align: center;">
+              <h3>{{ order.startDate | date:'d'}} <br> <span class="order-month">{{ order.startDate | date:'MMM'}}</span></h3>
+            </div>
+
+            <div class="col-sm-4">
+              <div class="event-img" [ngStyle]="{'background-image': 'url(' + order.eventImage + ')'}"></div>
+            </div>
+
+            <div class="col-sm-7">
+              <div class="event-title">
+                {{ order.title }}
+              </div>
+              <time class="event-date">{{ order.startDate | date:'EEE, d MMM y. h:mm a'}}</time><br>
+              <div class="indept-orders">
+                <div class="each-order" *ngFor="let eachOrder of order.orders">
+                  <a href="#" title="Click for more details" [routerLink]="['/a/myOrders/', order._id, 'order', eachOrder._id]">
+                    <span class="each-order-item">{{ eachOrder.normalType }} order #{{ eachOrder._id }} on {{ eachOrder.createdOn | date:'EEE, d MMM y'}} for {{ eachOrder.noOfSeats}} ticket(s)</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="noOrders-block" *ngIf="!ordersToShow">
+        <div class="noOrders-img-block">
+          <img src="/assets/images/app/tickets.svg" alt="No ticket icon"><br><br>
+          <span class="empty-text">
+            <h3>oops, sorry you have no ticket orders to display.</h3>
+          </span><br>
+          <a href="#" class="btn rockies-btn" routerLink="/c/sf">Find Events</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br><br>
+</div>
+
+<div *ngIf="preloader">
+  <app-preloader></app-preloader>
+</div>
