@@ -11,6 +11,8 @@ import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { MyOrdersResolveService } from './resolves/my-orders-resolve.service';
 import { OrderDetailsComponent } from './components/order-details/order-details.component';
 import { OrderDetailsResolveService } from './resolves/order-details-resolve.service';
+import { MyReviewsComponent } from './components/my-reviews/my-reviews.component';
+import { MyReviewsResolveService } from './resolves/my-reviews-resolve.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'create-event', pathMatch: 'full' },
@@ -20,7 +22,8 @@ export const routes: Routes = [
     { path: 'myEvents/edit/:id', component: EditEventComponent, resolve: { eventDetails: EditEventResolveService } },
     { path: 'myEvents/:id', component: ManageEventComponent, resolve: { eventDetails: EditEventResolveService } },
     { path: 'myOrders', component: MyOrdersComponent, resolve: { myOrders: MyOrdersResolveService } },
-    { path: 'myOrders/:eventId/order/:orderId', component: OrderDetailsComponent, resolve: { orderDetails: OrderDetailsResolveService } }
+    { path: 'myOrders/:eventId/order/:orderId', component: OrderDetailsComponent, resolve: { orderDetails: OrderDetailsResolveService } },
+    { path: 'myReviews', component: MyReviewsComponent, resolve: { myReviews: MyReviewsResolveService } }
 ];
 
 export const AccountRoutingModule: ModuleWithProviders = RouterModule.forChild(routes);

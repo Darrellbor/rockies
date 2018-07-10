@@ -130,4 +130,22 @@ export class AccountService {
       .map(res => res.json());
   }
 
+  getReviews() {
+    this.authService.createHeaders();
+    return this.http.get(this.authService.url + 'api/users/events/reviews', this.authService.options)
+      .map(res => res.json());
+  }
+
+  editReview(eventId, reviewId, review) {
+    this.authService.createHeaders();
+    return this.http.put(this.authService.url + 'api/events/'+eventId+'/reviews/'+reviewId, { review: review }, this.authService.options)
+      .map(res => res.json());
+  }
+
+  deleteReview(eventId, reviewId) {
+    this.authService.createHeaders();
+    return this.http.delete(this.authService.url + 'api/events/'+eventId+'/reviews/'+reviewId, this.authService.options)
+      .map(res => res.json());
+  }
+
 }

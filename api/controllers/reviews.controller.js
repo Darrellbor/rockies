@@ -117,14 +117,13 @@ module.exports.reviewAddOne = function(req, res) {
 }
 
 module.exports.reviewUpdateOne = function(req, res) {
-    var eventLink = req.params.id;
+    var eventId = req.params.id;
     var reviewId = req.params.reviewId;
-    console.log("GET event!", eventLink);
+    console.log("GET event!", eventId);
 
     Event
         .findOne({
-             eventLink: eventLink,
-             endDate: { $lt : new Date() }             
+             _id: eventId            
         })
         .select('reviews')
         .exec(function(err, event) {
@@ -143,7 +142,7 @@ module.exports.reviewUpdateOne = function(req, res) {
             } else if(!event) {
                 response.status = 404;
                 response.message = {
-                    message: 'Event not found, '+ eventLink
+                    message: 'Event not found, '+ eventId
                 }
             } else {
                 reviewInstance = event.reviews.id(reviewId);

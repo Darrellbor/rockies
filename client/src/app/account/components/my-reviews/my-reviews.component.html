@@ -1,0 +1,63 @@
+<div class="flash-alert" *ngIf="flashAlert">
+    <flash-messages></flash-messages>
+</div>
+
+<div class="myReviews-bg">
+  <div class="container myContainer">
+    <div class="myReviews-info">
+      <h1 class="heading--tag">My Event Reviews</h1><hr class="heading--hr"><br>
+
+      <div class="myReviews-block" *ngIf="reviewsToShow">
+        <div class="review-block" *ngFor="let review of myReviews; let i = index">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="review-event-box">
+                <h4><b>{{ review.title }}</b></h4><br><br>
+                <b>Event held from:</b> {{ review.startDate | date:'EEE, d MMM y. h:mm a'}} to {{ review.endDate | date:'EEE, d MMM y. h:mm a'}}<br>
+                <b>Event held at {{ review.location.name }}, </b>{{ review.location.address.street }} {{ review.location.address.state }}, {{ review.location.address.country }}
+              </div>
+            </div>
+            <div class="col-md-8 review-scroll">
+              <div class="review-box" *ngFor="let eachReview of review.reviews; let j = index">
+                <div class="review-box-header">
+                  <div class="row">
+                    <div class="col-sm-9">
+                      <b>Rating Score: </b>{{ eachReview.sentimentRating }}<br>
+                      <b>Review Posted On: </b>{{ eachReview.createdOn | date:'EEE, d MMM y. h:mm a'}}
+                    </div>
+                    <div class="col-sm-3 review-controls">
+                      <a href="Javascript:void(0)" title="Click to edit review" (click)="setEditView(i, j)"><fa name="far fa-edit"></fa></a>
+                      <a href="Javascript:void(0)" title="Click to delete review" (click)="deleteReview(review._id, eachReview._id, i, j)"><fa name="fas fa-trash" style="color: red"></fa></a>
+                    </div>
+                  </div>
+                </div>
+                <div class="review-box-footer">
+                  <p *ngIf="!editBox || editBoxENo !== i || editBoxRNo !== j">{{ eachReview.review }}</p>
+                  <div *ngIf="editBox && editBoxENo === i && editBoxRNo === j">
+                    <textarea name="review-{{ eachReview._id }}" id="review-{{ eachReview._id }}" class="form-control reviewBox" [(ngModel)]="eachReview.review"></textarea><br>
+                    <div style="text-align: center;"> <button type="button" class="btn rockies-btn-white" (click)="editReview(review._id, eachReview._id, i, j)">Update Review</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="noReviews-block" *ngIf="!reviewsToShow">
+        <div class="noReviews-img-block">
+          <img src="/assets/images/app/rating.svg" alt="No rating icon"><br><br>
+          <span class="empty-text">
+            <h3>oops, sorry you have no event reviews to display.</h3>
+          </span><br>
+          <a href="#" class="btn rockies-btn" routerLink="/c/sf">Find Events</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br><br>
+</div>
+
+<div *ngIf="preloader">
+  <app-preloader></app-preloader>
+</div>
