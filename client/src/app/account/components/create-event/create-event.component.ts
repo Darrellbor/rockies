@@ -115,7 +115,7 @@ export class CreateEventComponent implements OnInit {
       "border-radius": "25px",
       "font-size": "15px",
       "padding-top": "5px",
-      "width": "500px"
+      "max-width": "500px"
     },
     previewPanel: {
       "background-color": "#fff",

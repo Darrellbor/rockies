@@ -18,7 +18,7 @@ var organizerSchema = new mongoose.Schema({
     },
     about: String,
     url: String,
-    phone: Number,
+    phone: String,
     email: String,
     socials: {
         facebook: String,

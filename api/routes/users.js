@@ -47,11 +47,14 @@ router
     .get(usersCtrl.authenticate, organizersCtrl.getAllOrganizers)
     .post(usersCtrl.authenticate, organizersCtrl.addOneOrganizer);
 
+router 
+    .route('/organizer/uploadLogo')
+    .post(usersCtrl.authenticate, organizersCtrl.organizerUploadLogo);
+
 router
     .route('/organizer/:id')
     .get(organizersCtrl.getOneOrganizer)
     .put(usersCtrl.authenticate, organizersCtrl.updateAllOrganizer)
-    .patch(usersCtrl.authenticate, organizersCtrl.updateOneOrganizer)
     .delete(usersCtrl.authenticate, organizersCtrl.deleteOneOrganizer);
 
 module.exports = router;

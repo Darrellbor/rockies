@@ -13,6 +13,11 @@ import { OrderDetailsComponent } from './components/order-details/order-details.
 import { OrderDetailsResolveService } from './resolves/order-details-resolve.service';
 import { MyReviewsComponent } from './components/my-reviews/my-reviews.component';
 import { MyReviewsResolveService } from './resolves/my-reviews-resolve.service';
+import { CreateOrganizerComponent } from './components/create-organizer/create-organizer.component';
+import { MyOrganizersComponent } from './components/my-organizers/my-organizers.component';
+import { MyOrganizersResolveService } from './resolves/my-organizers-resolve.service';
+import { EditOrganizerComponent } from './components/edit-organizer/edit-organizer.component';
+import { EditOrganizerResolveService } from './resolves/edit-organizer-resolve.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'create-event', pathMatch: 'full' },
@@ -23,7 +28,10 @@ export const routes: Routes = [
     { path: 'myEvents/:id', component: ManageEventComponent, resolve: { eventDetails: EditEventResolveService } },
     { path: 'myOrders', component: MyOrdersComponent, resolve: { myOrders: MyOrdersResolveService } },
     { path: 'myOrders/:eventId/order/:orderId', component: OrderDetailsComponent, resolve: { orderDetails: OrderDetailsResolveService } },
-    { path: 'myReviews', component: MyReviewsComponent, resolve: { myReviews: MyReviewsResolveService } }
+    { path: 'myReviews', component: MyReviewsComponent, resolve: { myReviews: MyReviewsResolveService } },
+    { path: 'organizers/create', component: CreateOrganizerComponent },
+    { path: 'organizers', component: MyOrganizersComponent, resolve: { myOrganizers: MyOrganizersResolveService } },
+    { path: 'organizers/edit/:url', component: EditOrganizerComponent, resolve: { organizerDetails: EditOrganizerResolveService } }
 ];
 
 export const AccountRoutingModule: ModuleWithProviders = RouterModule.forChild(routes);

@@ -32,7 +32,7 @@ export class AccountService {
       .map(res => res.json());
   }
 
-   getOrganizerDetailsByUrl(url) {
+  getOrganizerDetailsByUrl(url) {
     return this.http.get(this.authService.url + 'api/organizer/'+url)
       .map(res => res.json());
   }
@@ -145,6 +145,36 @@ export class AccountService {
   deleteReview(eventId, reviewId) {
     this.authService.createHeaders();
     return this.http.delete(this.authService.url + 'api/events/'+eventId+'/reviews/'+reviewId, this.authService.options)
+      .map(res => res.json());
+  }
+
+  uploadOrganizerLogo(payload) {
+    this.authService.createImageHeaders();
+    return this.http.post(this.authService.url + 'api/organizer/uploadLogo', payload, this.authService.options)
+      .map(res => res.json());
+  }
+
+  createOrganizer(payload) {
+    this.authService.createHeaders();
+    return this.http.post(this.authService.url + 'api/organizer', payload, this.authService.options)
+      .map(res => res.json());
+  }
+
+  getAllOrganizersProfiles() {
+    this.authService.createHeaders();
+    return this.http.get(this.authService.url + 'api/organizer', this.authService.options)
+      .map(res => res.json());
+  }
+
+  editOrganizer(id, payload) {
+    this.authService.createHeaders();
+    return this.http.put(this.authService.url + 'api/organizer/'+id, payload, this.authService.options)
+      .map(res => res.json());
+  }
+
+  deleteOrganizer(organizerId) {
+    this.authService.createHeaders();
+    return this.http.delete(this.authService.url + 'api/organizer/'+organizerId, this.authService.options)
       .map(res => res.json());
   }
 
