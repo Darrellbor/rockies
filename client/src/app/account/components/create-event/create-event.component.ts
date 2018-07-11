@@ -28,6 +28,8 @@ export class CreateEventComponent implements OnInit {
   verifyAlert:boolean = false;
   finalAlert:boolean = false;
   eventImage;
+  exclusiveCat = '';
+  exclusiveCheck:boolean = false;
   event = {
     status: 'Live',
     exclusive: 'No',
@@ -298,6 +300,19 @@ export class CreateEventComponent implements OnInit {
 
   changeExclusive() {
     this.event.exclusive === "No" ? this.event.exclusive = "Yes" : this.event.exclusive = "No";
+
+    if(this.event.settings.category === "" && this.exclusiveCheck === false) {
+      window.alert('Please select or fill in a category to perform this action!');
+    } else if(this.exclusiveCheck === false && this.event.settings.category !== "") {
+      this.exclusiveCat = this.event.settings.category;
+      this.exclusiveCheck = true;
+    } else {
+      if(this.event.exclusive === "Yes" && this.exclusiveCheck === true) {
+        this.event.settings.category = "exclusive"
+      } else {
+        this.event.settings.category = this.exclusiveCat;
+      }
+    }
   }
 
   onTicketInstanceClick(ticket, type) {
