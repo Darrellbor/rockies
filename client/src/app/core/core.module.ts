@@ -16,6 +16,8 @@ import { EventComponent } from './components/event/event.component';
 import { OrganizerComponent } from './components/organizer/organizer.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { PricingComponent } from './components/pricing/pricing.component';
+import { HowItWorksComponent } from './components/how-it-works/how-it-works.component';
 
 @NgModule({
   imports: [
@@ -33,7 +35,9 @@ import { RegisterComponent } from './components/register/register.component';
     EventComponent,
     OrganizerComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    PricingComponent,
+    HowItWorksComponent
   ],
   providers: [
     HomeService,

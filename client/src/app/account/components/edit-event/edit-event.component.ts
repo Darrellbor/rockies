@@ -392,7 +392,7 @@ export class EditEventComponent implements OnInit {
     this.event.exclusive === "No" ? this.event.exclusive = "Yes" : this.event.exclusive = "No";
 
     if(this.event.settings.category === "" && this.exclusiveCheck === false) {
-      window.alert('Please select or fill in a category to perform this action!');
+      window.alert('Please select or fill in a category and recheck to take effect!');
     } else if(this.exclusiveCheck === false && this.event.settings.category !== "") {
       this.exclusiveCat = this.event.settings.category;
       this.exclusiveCheck = true;

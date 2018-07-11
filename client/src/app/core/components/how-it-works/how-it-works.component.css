@@ -1,9 +1,9 @@
-.pnf-outer-bg {
+.overview-outer-bg {
     min-height: 500px;
-    background-color: maroon;
+    background-color: #1d1f54;
 }
 
-.pnf-bg {
+.overview-bg {
     padding-top: 100px;
     min-height: 500px;
     border-top-left-radius: 25%;
@@ -17,9 +17,11 @@
     margin-right: auto;
 }
 
-.pnf-info {
+.overview-info {
     padding: 50px;
     background-color: #fff;
+    margin-bottom: 15px;
+    border-bottom: 4px solid #1d1f54;
 }
 
 .heading--tag {
@@ -48,31 +50,7 @@
     background-color: #783c82;
 }
 
-.error-img {
-    text-align: center;
-}
-
-.error-img img {
-    max-width: 250px;
-    max-height: 250px;
-}
-
-.error-texts {
-    color: maroon;
-    margin-top: 20px;
-}
-
-.error-texts h1 {
-    font-weight: bolder;
+.overview-item {
     display: block;
     margin-bottom: 10px;
-}
-
-.error-btn-block {
-    display: inline-block;
-}
-
-.error-btn-block a {
-    margin-right: 15px;
-    margin-bottom: 15px;
 }

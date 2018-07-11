@@ -6,6 +6,8 @@ import { EventComponent } from './components/event/event.component';
 import { OrganizerComponent } from './components/organizer/organizer.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { PricingComponent } from './components/pricing/pricing.component';
+import { HowItWorksComponent } from './components/how-it-works/how-it-works.component';
 import { HomeResolveService } from './resolves/home-resolve.service';
 import { SearchFilterResolveService } from './resolves/search-filter-resolve.service';
 import { EventResolveService } from './resolves/event-resolve.service';
@@ -18,7 +20,9 @@ export const routes: Routes = [
   { path: 'e/:url', component: EventComponent, resolve: { eventDetails: EventResolveService }},
   { path: 'o/:url', component: OrganizerComponent, resolve: { organizerDetails: OrganizerResolveService }},
   { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [NotAuthGuard] }
+  { path: 'register', component: RegisterComponent, canActivate: [NotAuthGuard] },
+  { path: 'pricing', component: PricingComponent },
+  { path: 'overview', component: HowItWorksComponent }
 ];
 
 export const CoreRoutingModule: ModuleWithProviders = RouterModule.forChild(routes);

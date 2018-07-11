@@ -718,11 +718,6 @@
       <div class="ce-info event-settings">
         <img src="/assets/images/app/settings.svg" alt="Event" style="max-height: 30px; max-width: 30px;">
         <h1 class="heading--tag"><small>Step 3 of 3</small>Additional Settings</h1><hr class="heading--hr" style="margin-left: 45px;"><br>
- 
-        <div class="form-check" style="margin-left: 20px;">
-          <input type="checkbox" class="form-check-input" id="exclusives" (click)="changeExclusive()">
-          <label class="form-check-label" for="exclusives" style="padding-left: 0px;">Are you selling all your tickets on rockies?</label>
-        </div>
 
         <div class="form-group" *ngIf="isCategoryListed">
           <label for="categories">Categories</label>
@@ -746,6 +741,11 @@
         </div>
 
         <div class='disclamier' *ngIf='!reservationLimit.valid && reservationLimit.touched && reservationLimit.value !== ""'>Enter a reservation number in </div>
+      
+        <div class="form-check" style="margin-left: 20px;">
+          <input type="checkbox" class="form-check-input" id="exclusives" (click)="changeExclusive()">
+          <label class="form-check-label" for="exclusives" style="padding-left: 0px;">Are you selling all your tickets on rockies?</label>
+        </div>
       </div><br>
 
       <div class="ce-info final-buttons-block">
