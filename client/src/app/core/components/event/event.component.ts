@@ -12,6 +12,7 @@ import { AuthService } from '../../../services/auth.service';
 export class EventComponent implements OnInit {
   eventUrl:string = "";
   preloader:boolean = true;
+  flashAlert:boolean = false;
   details;
   showMap:boolean = false;
   map = {
@@ -38,6 +39,14 @@ export class EventComponent implements OnInit {
     emali: '',
     contactReason: '',
     message: ''
+  }
+  orderQuery = {
+    number: 0,
+    type: '',
+    name: '',
+    url: '',
+    time: 0,
+    price: 0
   }
 
   constructor(private router: Router,
@@ -159,7 +168,41 @@ export class EventComponent implements OnInit {
 
   orderTickets() {
     if(this.ticketNo1 < 1 && this.ticketNo2 < 1) {
-      window.alert("Please specity the number of tickets before buying!");
+      this.flashAlert = true;
+      setTimeout(() => {
+        this.flashMessages.show("Please specity the number of tickets before buying!", {cssClass: 'alert-danger', timeout: 6000});
+        setTimeout(() => {
+          this.flashAlert = false;
+        },6000);
+      }, 500);
+    } else if(this.ticketNo1 > 0 && this.ticketNo2 > 0) {
+      this.flashAlert = true;
+      setTimeout(() => {
+        this.flashMessages.show("You cannot order two different ticket types at a time, set one to 0 and proceed", {cssClass: 'alert-danger', timeout: 6000});
+        setTimeout(() => {
+          this.flashAlert = false;
+        },6000);
+      }, 500);
+    } else {
+      if(this.ticketNo1 > 0) {
+        this.orderQuery.name = this.details.ticket[0].name;
+        this.orderQuery.number = this.ticketNo1;
+        this.orderQuery.type = this.details.ticket[0].normalType;
+        this.orderQuery.url = this.eventUrl;
+        this.orderQuery.time = this.details.settings.reservationLimit;
+        this.orderQuery.price = this.details.ticket[0].price;
+      } else if(this.ticketNo2 > 0) {
+        this.orderQuery.name = this.details.ticket[1].name;
+        this.orderQuery.number = this.ticketNo2;
+        this.orderQuery.type = this.details.ticket[1].normalType;
+        this.orderQuery.url = this.eventUrl;
+        this.orderQuery.time = this.details.settings.reservationLimit;
+        this.orderQuery.price = this.details.ticket[1].price;
+      }
+
+      localStorage.removeItem('orderQuery');
+      localStorage.setItem('orderQuery', JSON.stringify(this.orderQuery));
+      this.router.navigate(['/a/order']);
     }
   }
 
@@ -167,16 +210,34 @@ export class EventComponent implements OnInit {
     if(valid) {
       this.homeService.addReview(this.eventUrl, value)
         .subscribe((res) => {
-          this.flashMessages.show('Review successfully posted!', {cssClass: 'alert-success', timeout: 8000});
+          this.flashAlert = true;
+          setTimeout(() => {
+            this.flashMessages.show("Review successfully posted!", {cssClass: 'alert-success', timeout: 8000});
+            setTimeout(() => {
+              this.flashAlert = false;
+            },8000);
+          }, 500);
           this.review = "Enter your review";
           this.details.reviews.unshift(res);
           this.reviewsHandler();
         }, (err) => {
           let val = JSON.parse(err._body);
-          this.flashMessages.show(val.message, {cssClass: 'alert-danger', timeout: 6000});
+          this.flashAlert = true;
+          setTimeout(() => {
+            this.flashMessages.show(val.message, {cssClass: 'alert-danger', timeout: 6000});
+            setTimeout(() => {
+              this.flashAlert = false;
+            },6000);
+          }, 500);
         });
     } else {
-      this.flashMessages.show('Invalid form submission!', {cssClass: 'alert-danger', timeout: 5000});
+      this.flashAlert = true;
+      setTimeout(() => {
+        this.flashMessages.show('Invalid form submission!', {cssClass: 'alert-danger', timeout: 6000});
+        setTimeout(() => {
+          this.flashAlert = false;
+        },6000);
+      }, 500);
     }
   }
 

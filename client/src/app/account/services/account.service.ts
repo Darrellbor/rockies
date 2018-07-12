@@ -178,4 +178,38 @@ export class AccountService {
       .map(res => res.json());
   }
 
+  getEventByLink(link) {
+    return this.http.get(this.authService.url + 'api/events/search?for=eventLink&title='+link)
+      .map(res => res.json());
+  }
+
+  manipulateEventTickets(link, payload) {
+    return this.http.patch(this.authService.url + 'api/events/'+link, payload)
+      .map(res => res.json());
+  }
+
+  manipulateIncompleteEvents(payload) {
+    this.authService.createHeaders();
+    return this.http.patch(this.authService.url + 'api/users/profile', payload, this.authService.options)
+      .map(res => res.json());
+  }
+
+  initializePayment(payload) {
+    this.authService.paystackHeaders();
+    return this.http.post('https://api.paystack.co/transaction/initialize',payload, this.authService.options)
+      .map(res => res.json());
+  }
+
+  verifyTrans(reference) {
+    this.authService.paystackHeaders();
+    return this.http.get('https://api.paystack.co/transaction/verify/'+reference, this.authService.options)
+      .map(res => res.json());
+  }
+
+  recordOrder(url, payload) {
+    this.authService.createHeaders();
+    return this.http.post(this.authService.url + 'api/events/'+url+'/orders', payload, this.authService.options)
+      .map(res => res.json());
+  }
+
 }

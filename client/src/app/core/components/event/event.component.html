@@ -1,3 +1,7 @@
+<div class="flash-alert" *ngIf="flashAlert">
+    <flash-messages></flash-messages>
+</div>
+
 <div class="event-bg">
   <div class="container myContainer">
     <div class="event-image" [ngStyle]="{'background-image': 'url(' + details.eventImage + ')'}"></div>
@@ -202,8 +206,6 @@
         </h5>
       </div>
       <div class="reviews-post-block">
-        <br>
-        <flash-messages></flash-messages><br>
         <div class="review-logged-in" *ngIf="!authService.notAuthorized()">
           <form novalidate #reviewF="ngForm" (ngSubmit)="postReview(reviewF)">
             <div class="row">

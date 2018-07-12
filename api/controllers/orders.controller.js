@@ -70,8 +70,20 @@ var _addOrder = function(req, res, event) {
 module.exports.orderAddOne = function(req, res) {
     var eventId = req.params.id;
 
+    if(req.body.cost && req.body.cost < 0) {
+        res 
+            .status(400)
+            .json({message: 'Cost cannot be less than 0 '})
+        return;
+    } else if(!req.body.cost && req.body.cost !== 0) {
+        res 
+            .status(400)
+            .json({message: 'Please ensure the cost field is filled '})
+        return;
+    }
+
     if(!req.body.ticketName || !req.body.ticketType || !req.body.normalType ||
-       !req.body.status || !req.body.noOfSeats || !req.body.cost || !req.body.transactionId) {
+       !req.body.status || !req.body.noOfSeats || !req.body.transactionId) {
         res 
             .status(400)
             .json({message: 'Please ensure all fields are filled '})
@@ -79,7 +91,9 @@ module.exports.orderAddOne = function(req, res) {
     }
 
     Event
-        .findById(eventId)
+        .findOne({
+            eventLink: eventId
+        })
         .select('orders')
         .exec(function(err, doc) {
             var response = {

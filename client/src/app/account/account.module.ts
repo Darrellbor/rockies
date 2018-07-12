@@ -17,6 +17,7 @@ import { OrderDetailsResolveService } from './resolves/order-details-resolve.ser
 import { MyReviewsResolveService } from './resolves/my-reviews-resolve.service';
 import { MyOrganizersResolveService } from './resolves/my-organizers-resolve.service';
 import { EditOrganizerResolveService } from './resolves/edit-organizer-resolve.service';
+import { OrderResolveService } from './resolves/order-resolve.service';
 import { ProfileComponent } from './components/profile/profile.component';
 import { MyEventsComponent } from './components/my-events/my-events.component';
 import { EditEventComponent } from './components/edit-event/edit-event.component';
@@ -27,6 +28,8 @@ import { MyReviewsComponent } from './components/my-reviews/my-reviews.component
 import { CreateOrganizerComponent } from './components/create-organizer/create-organizer.component';
 import { MyOrganizersComponent } from './components/my-organizers/my-organizers.component';
 import { EditOrganizerComponent } from './components/edit-organizer/edit-organizer.component';
+import { OrderComponent } from './components/order/order.component';
+import { OrderVerifyComponent } from './components/order-verify/order-verify.component';
 
 @NgModule({
   imports: [
@@ -50,7 +53,9 @@ import { EditOrganizerComponent } from './components/edit-organizer/edit-organiz
     MyReviewsComponent,
     CreateOrganizerComponent,
     MyOrganizersComponent,
-    EditOrganizerComponent
+    EditOrganizerComponent,
+    OrderComponent,
+    OrderVerifyComponent
   ],
   providers: [
     AccountService,
@@ -60,7 +65,8 @@ import { EditOrganizerComponent } from './components/edit-organizer/edit-organiz
     OrderDetailsResolveService,
     MyReviewsResolveService,
     MyOrganizersResolveService,
-    EditOrganizerResolveService
+    EditOrganizerResolveService,
+    OrderResolveService
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

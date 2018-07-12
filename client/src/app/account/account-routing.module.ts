@@ -18,6 +18,9 @@ import { MyOrganizersComponent } from './components/my-organizers/my-organizers.
 import { MyOrganizersResolveService } from './resolves/my-organizers-resolve.service';
 import { EditOrganizerComponent } from './components/edit-organizer/edit-organizer.component';
 import { EditOrganizerResolveService } from './resolves/edit-organizer-resolve.service';
+import { OrderComponent } from './components/order/order.component';
+import { OrderResolveService } from './resolves/order-resolve.service';
+import { OrderVerifyComponent } from './components/order-verify/order-verify.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'create-event', pathMatch: 'full' },
@@ -31,7 +34,9 @@ export const routes: Routes = [
     { path: 'myReviews', component: MyReviewsComponent, resolve: { myReviews: MyReviewsResolveService } },
     { path: 'organizers/create', component: CreateOrganizerComponent },
     { path: 'organizers', component: MyOrganizersComponent, resolve: { myOrganizers: MyOrganizersResolveService } },
-    { path: 'organizers/edit/:url', component: EditOrganizerComponent, resolve: { organizerDetails: EditOrganizerResolveService } }
+    { path: 'organizers/edit/:url', component: EditOrganizerComponent, resolve: { organizerDetails: EditOrganizerResolveService } },
+    { path: 'order', component: OrderComponent, resolve: { orderData: OrderResolveService } },
+    { path: 'order/confirm', component: OrderVerifyComponent }
 ];
 
 export const AccountRoutingModule: ModuleWithProviders = RouterModule.forChild(routes);
