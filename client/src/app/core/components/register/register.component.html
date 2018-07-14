@@ -55,6 +55,7 @@
         <div class='disclamier' *ngIf='!password.valid && password.touched'>Enter password of at least 8 characters</div>
 
         <button type="submit" class="btn rockies-btn" [disabled]="!registerF.valid">Register</button>
+        <div *ngIf="resendE" class="resend-confirm"><a href="Javascript:void(0)"(click)="resendConfirm()">Resend Confirmation Email</a></div>
         </form>
     </div><br>
 

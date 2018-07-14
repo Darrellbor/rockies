@@ -12,6 +12,7 @@ import { HomeResolveService } from './resolves/home-resolve.service';
 import { SearchFilterResolveService } from './resolves/search-filter-resolve.service';
 import { EventResolveService } from './resolves/event-resolve.service';
 import { OrganizerResolveService } from './resolves/organizer-resolve.service';
+import { AccountConfirmComponent } from './components/account-confirm/account-confirm.component';
 import { NotAuthGuard } from '../guards/not-auth.guard';
 
 export const routes: Routes = [
@@ -22,7 +23,8 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [NotAuthGuard] },
   { path: 'pricing', component: PricingComponent },
-  { path: 'overview', component: HowItWorksComponent }
+  { path: 'overview', component: HowItWorksComponent },
+  { path: 'confirm', component: AccountConfirmComponent }
 ];
 
 export const CoreRoutingModule: ModuleWithProviders = RouterModule.forChild(routes);

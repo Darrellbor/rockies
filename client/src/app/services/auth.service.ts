@@ -63,6 +63,16 @@ export class AuthService {
       .map(res => res.json());
   }
 
+  sendMail(payload) {
+    return this.http.post(this.url+'api/sendMail', payload, this.options)
+      .map(res => res.json());
+  }
+
+  sendMailWithAttach(payload) {
+    return this.http.post(this.url+'api/sendMailWithAttach', payload, this.options)
+      .map(res => res.json());
+  }
+
   logOut() {
     this.authToken = null;
     localStorage.removeItem('token');

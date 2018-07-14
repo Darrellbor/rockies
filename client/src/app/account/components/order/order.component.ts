@@ -29,6 +29,8 @@ export class OrderComponent implements OnInit {
     this.route.data
       .subscribe((res) => {
         this.eventData = res.orderData;
+        localStorage.removeItem('eventData');
+        localStorage.setItem('eventData', JSON.stringify(this.eventData));
         this.preloader = false;
         this.timeAlgorithm();
       }, (err) => {
@@ -123,8 +125,21 @@ export class OrderComponent implements OnInit {
       });
   }
 
+  checkForIncompleteE() {
+    this.authService.getProfile()
+      .subscribe((res) => {
+        for(var i = 0; i < res.explore.incompleteEventOrders.length; i++) {
+          if(this.eventData._id === res.explore.incompleteEventOrders[i]._id) {
+            this.removeIncompleteE();
+          }
+        }
+      }, (err) => {
+        console.log(err);
+      });
+  }
+
   payForTicket() {   
-    this.removeIncompleteE(); 
+    this.checkForIncompleteE();
     let myEmail = this.authService.decodedJwt().email;
     let price = this.orderParams.price * this.orderParams.number;
     let transFee = (1.5 / 100) * price;
@@ -157,7 +172,7 @@ export class OrderComponent implements OnInit {
   }
 
   obtainTicket() {
-    this.removeIncompleteE();
+    this.checkForIncompleteE();
     this.router.navigate(['/a/order/confirm']);
   }
 

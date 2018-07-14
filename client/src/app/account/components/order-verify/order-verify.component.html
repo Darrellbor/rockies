@@ -19,6 +19,8 @@
               <div class="orderV-btn-block">
                 <a href="#" class="btn rockies-btn" routerLink="/c/sf">Find More Events</a>
                 <a href="#" class="btn rockies-btn" routerLink="/a/create-event">Create Event</a>
+                <a href="Javascript:void(0)" *ngIf="emailError === 'Ticket'" class="btn rockies-btn" (click)="createTicketPdf()">Recreate Ticket</a>
+                <a href="Javascript:void(0)" *ngIf="emailError === 'Email'" class="btn rockies-btn" (click)="sendTicketMail()">Resend E-Ticket</a>
               </div>
             </div>
           </div>

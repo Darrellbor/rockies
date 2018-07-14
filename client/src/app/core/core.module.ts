@@ -18,6 +18,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { PricingComponent } from './components/pricing/pricing.component';
 import { HowItWorksComponent } from './components/how-it-works/how-it-works.component';
+import { AccountConfirmComponent } from './components/account-confirm/account-confirm.component';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { HowItWorksComponent } from './components/how-it-works/how-it-works.comp
     LoginComponent,
     RegisterComponent,
     PricingComponent,
-    HowItWorksComponent
+    HowItWorksComponent,
+    AccountConfirmComponent
   ],
   providers: [
     HomeService,

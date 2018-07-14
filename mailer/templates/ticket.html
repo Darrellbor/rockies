@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Rockies</title>
+</head>
+
+<body>
+  <div class="ticket-bg" style="padding-top:20px;padding-bottom:20px;padding-right:20px;padding-left:20px;background-color:#fff;margin-top:40px;" >
+
+    <div class="ticket-body" style="margin-left:auto;margin-right:auto;min-height:1000px;max-width:900px;padding-top:15px;padding-bottom:15px;padding-right:15px;padding-left:15px;background-color:#e4e4e4;" >
+         <div class="customer-barcode" style="background-color:#fff;padding-top:15px;padding-bottom:15px;padding-right:15px;padding-left:15px;text-align:center;" >
+            <!-- <svg id="barcode"></svg> -->
+            <img src="https://www.barcodesinc.com/generator_files/image.php?code={{ orderId }}&style=196&type=C128B&width=400&height=100&xres=1&font=3" alt="Ticket Order Barcode">
+        </div><br> 
+
+         <div class="event-name" style="background-color:#fff;padding-top:15px;padding-bottom:15px;padding-right:15px;padding-left:15px;width:700px;" >
+            Event Title<br>
+            <b><h1 style="font-weight:bolder;text-align:right;" >{{ title }}</h1></b>
+        </div><br>
+
+        <div class="details-left" style="float:left;" >
+
+            <div class="event-date" style="background-color:#fff;padding-top:15px;padding-bottom:15px;padding-right:15px;padding-left:15px;width:350px;" >
+                Event Start Date And Time<br>
+                <h3 style="font-weight:bolder;text-align:center;" >{{ startDate }}</h3><br>
+                Event End Date And Time<br>
+                <h3 style="font-weight:bolder;text-align:center;" >{{ endDate }}</h3>
+            </div><br>
+
+            <div class="event-location" style="background-color:#fff;padding-top:15px;padding-bottom:15px;padding-right:15px;padding-left:15px;width:350px;" >
+                Event Location
+                <h4 style="text-align:right;" >{{ locationName }},<br>
+                {{ street }}<br>
+                {{ state }}<br>
+                {{ country }}</h4>
+            </div><br>
+
+            <div class="event-ticketName" style="background-color:#fff;padding-top:15px;padding-bottom:15px;padding-right:15px;padding-left:15px;width:350px;" >
+                Ticket Name
+                <h4 style="font-weight:bolder;text-align:right;" >{{ ticketName }}</h4>
+            </div><br>
+
+            <div class="event-order" style="background-color:#fff;padding-top:15px;padding-bottom:15px;padding-right:15px;padding-left:15px;width:350px;" >
+                Order
+                <h4 style="font-weight:bolder;" >Order #{{ orderId }} made by {{ customerName }} on {{ orderCreatedOn }}</h4>
+            </div>
+        </div>
+
+        <div class="details-right" style="float:right;" >
+            <img src="../../client/src{{ image }}" alt="event image" style="max-width:300px;max-height:125px;margin-bottom:15px;" ><br>
+            <div class="customer-name" style="background-color:#fff;padding-top:15px;padding-bottom:15px;padding-right:15px;padding-left:15px;width:300px;" >
+                Name<br>
+                <h3 style="font-weight:bolder;text-align:center;" >{{ customerName }}</h3><br>
+                Admits<br>
+                <h3 style="font-weight:bolder;text-align:center;" >{{ admits }} person(s)</h3><br>
+                Amount Paid<br>
+                <h3 style="font-weight:bolder;text-align:center;" >&#8358;{{ price }}<h3 style="font-weight:bolder;text-align:center;" >
+            </div><br>
+
+            <div class="qrcode-body" style="background-color:#fff;padding-top:15px;padding-bottom:15px;padding-right:15px;padding-left:15px;width:300px;text-align:center;" >
+                <img src="http://qrfree.kaywa.com/?s=7&d={{ eventId }}" alt="Event Qrcode">
+            </div>
+        </div>
+    </div>
+
+    <div class="ticket-footer" style="text-align:left;margin-left:auto;margin-right:auto;padding-left:10px;" >
+         <div class="logo-block" style="text-align:left;margin-top:30px;" >
+            <img src="../../client/src/assets/images/app/rockies_logo.png" alt="Rockies Logo" style="max-height:200px;max-width:200px;" >
+        </div> 
+        <h3 style="font-weight:bolder;" >Do you have events to organize?</h3>
+        <h4>Begin selling tickets in minutes.<br> www.rockies.ng</h4>
+        <img src="../../client/src/assets/images/app/signature.png" alt="Rockies Signature">
+    </div>
+  </div>
+
+  <script src="../scripts/qrcode/jquery.min.js"></script>
+  <script src="../scripts/JsBarcode.all.min.js"></script>
+  <script src="../scripts/qrcode/qrcode.js"></script>
+
+  <script>
+    JsBarcode("#barcode", "{{ orderId }}", {
+        height: 60
+    });
+
+    var qrcode = new QRCode("qrcode");
+
+    function makeCode () {      
+        var elText = "{{ eventId }}";
+        
+        qrcode.makeCode(elText);
+    }
+
+    makeCode();
+  </script>
+</body>
+</html>

@@ -65,9 +65,13 @@ export class ManageEventComponent implements OnInit {
   }
 
   obtainAmountForTickets() {
+    let fee;
     for(var i = 0; i < this.myEvent.orders.length; i++) {
       this.totalAmount += this.myEvent.orders[i].cost;
     }
+
+    fee = (5 / 100) * this.totalAmount;
+    this.totalAmount = this.totalAmount - fee;
   }
 
   changeEventLinks(link) {

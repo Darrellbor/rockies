@@ -45,4 +45,16 @@ router
     .put(usersCtrl.authenticate, reviewsCtrl.reviewUpdateOne)
     .delete(usersCtrl.authenticate, reviewsCtrl.reviewDeleteOne);
 
+router
+    .route('/sendMail')
+    .post(ordersCtrl.sendEmail);
+
+router
+    .route('/sendMailWithAttach')
+    .post(ordersCtrl.sendEmailWithAttach);
+
+router
+    .route('/createPdf')
+    .post(ordersCtrl.createHtmlPdf);
+
 module.exports = router;

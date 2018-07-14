@@ -36,9 +36,15 @@
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "express-fileupload": "^0.4.0",
+    "grabzit": "*",
+    "handlebars": "^4.0.11",
+    "html-pdf": "^2.2.0",
+    "html-to-pdf": "^0.1.11",
     "jsonwebtoken": "^8.2.1",
+    "jspdf": "^1.4.1",
     "mongoose": "^5.0.16",
     "nodemailer": "^4.6.5",
+    "nodemailer-smtp-transport": "^2.7.4",
     "sentiment": "^5.0.0"
   }
 }

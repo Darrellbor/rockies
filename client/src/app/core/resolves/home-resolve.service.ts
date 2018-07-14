@@ -189,7 +189,7 @@ export class HomeResolveService {
             this.getCategories();
           }
         }, (err) => {
-          console.log(err.statusText);
+          console.log(err);
           this.getCategories();
         });
     } else {

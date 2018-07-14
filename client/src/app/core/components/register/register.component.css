@@ -91,3 +91,13 @@
 flash-messages {
     margin-bottom: 10px;
 }
+
+.resend-confirm {
+    text-align: right !important;
+    margin-top: 10px;
+}
+
+.resend-confirm a {
+    text-decoration: none;
+    font-size: 13px;
+}

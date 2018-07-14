@@ -212,4 +212,9 @@ export class AccountService {
       .map(res => res.json());
   }
 
+  createPdf(payload) {
+    return this.http.post(this.authService.url + 'api/createPdf', payload)
+      .map(res => res.json());
+  }
+
 }

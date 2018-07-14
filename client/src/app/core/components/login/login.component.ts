@@ -14,11 +14,13 @@ declare var $: any;
 })
 export class LoginComponent implements OnInit {
   preloader:boolean = true;
+  resendE:boolean = false;
   previousUrl;
   user = {
     email: '',
     password: ''
   }
+  resetPass;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -40,13 +42,53 @@ export class LoginComponent implements OnInit {
     this.preloader = false;
   }
 
+  resetPassword() {
+    let payload = {
+      "to": this.user.email,
+      "subject": "Password Reset",
+      "messageObj": {
+        password: this.resetPass
+      },
+      "template": "/templates/forgotPassword.html"
+    }
+
+    this.authService.sendMail(payload)
+      .subscribe((res) => {
+        this.flashMessages.show(res.message, {cssClass: 'alert-success', timeout: 6000});
+      }, (err) => {
+        let val = JSON.parse(err._body);
+        this.flashMessages.show(val.message, {cssClass: 'alert-danger', timeout: 6000});
+      });
+  }
+
   forgotPassword() {
     this.homeService.forgetPassword(this.user.email)
       .subscribe((res) => {
-        this.flashMessages.show("Your password has been reset and sent to your email.", {cssClass: 'alert-success', timeout: 7000});
+        this.resetPass = res.password;
+        this.flashMessages.show("Your password has been reset and is being sent to your email.", {cssClass: 'alert-success', timeout: 7000});
+        this.resetPassword();
       }, (err) => {
           let val = JSON.parse(err._body);
           this.flashMessages.show(val.message, {cssClass: 'alert-danger', timeout: 6000});
+      });
+  }
+
+  resendConfirm() {
+    let payload = {
+      "to": this.user.email,
+      "subject": "Account Confirmation",
+      "messageObj": {},
+      "template": "/templates/confirmLogin.html"
+    }
+
+    this.flashMessages.show("Email Sending...", {cssClass: 'alert-info', timeout: 6000});
+
+    this.authService.sendMail(payload)
+      .subscribe((res) => {
+        this.flashMessages.show(res.message, {cssClass: 'alert-success', timeout: 6000});
+      }, (err) => {
+        let val = JSON.parse(err._body);
+        this.flashMessages.show(val.message, {cssClass: 'alert-danger', timeout: 6000});
       });
   }
 
@@ -66,6 +108,11 @@ export class LoginComponent implements OnInit {
         }, (err) => {
           let val = JSON.parse(err._body);
           this.flashMessages.show(val.message, {cssClass: 'alert-danger', timeout: 6000});
+
+          if(val.message === "Account not confirmed, confirm your account to continue") {
+            this.authService.storeUserToken(val.token);
+            this.resendE = true;
+          }
         });
     } else {
       this.flashMessages.show('Invalid form submission!', {cssClass: 'alert-danger', timeout: 5000});

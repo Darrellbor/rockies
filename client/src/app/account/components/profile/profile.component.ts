@@ -35,6 +35,24 @@ export class ProfileComponent implements OnInit {
     this.preloader = false;
   }
 
+  sendPasswordChanged() {
+    let payload = {
+      "to": this.authService.decodedJwt().email,
+      "subject": "Password Changed",
+      "messageObj": {
+        name: this.authService.decodedJwt().name.first
+      },
+      "template": "/templates/passwordChanged.html"
+    }
+
+    this.authService.sendMail(payload)
+      .subscribe((res) => {
+      }, (err) => {
+        let val = JSON.parse(err._body);
+        console.log(err);
+      });
+  }
+
   getProfile() {
     this.authService.getProfile()
       .subscribe((res) => {
@@ -113,6 +131,7 @@ export class ProfileComponent implements OnInit {
             this.passwords.confirmNewPassword = "";
             this.passwordAlert = true;
             setTimeout(() => {
+              this.sendPasswordChanged();
               this.flashMessages.show("Password has been successfully updated", {cssClass: 'alert-info', timeout: 6000});
               setTimeout(() => {
                 this.passwordAlert = false;

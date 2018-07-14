@@ -14,8 +14,13 @@ export class OrderVerifyComponent implements OnInit {
   flashAlert:boolean = false;
   orderQuery = localStorage.getItem('orderQuery');
   orderParams = JSON.parse(this.orderQuery);
+  eventQuery = localStorage.getItem('eventData');
+  eventData = JSON.parse(this.eventQuery);
+  orderId;
+  orderCreatedOn;
   reference;
   state;
+  emailError;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -96,6 +101,9 @@ export class OrderVerifyComponent implements OnInit {
       .subscribe((res) => {
         this.flashAlert = true;
         setTimeout(() => {
+          this.orderId = res._id;
+          this.orderCreatedOn = res.createdOn;
+          this.createTicketPdf();
           this.flashMessages.show("Order recorded Successfully!", {cssClass: 'alert-success', timeout: 6000});
           setTimeout(() => {
             this.flashAlert = false;
@@ -111,11 +119,89 @@ export class OrderVerifyComponent implements OnInit {
         }, 500);
         console.log(err);
       });
+  }
 
-    this.sendTicketMail();
+  createTicketPdf() {
+    let payload = {
+      "bodyObj": {
+        orderId: this.orderId,
+        eventId: this.eventData._id,
+        title: this.eventData.title,
+        startDate: this.eventData.startDate,
+        endDate: this.eventData.endDate,
+        locationName: this.eventData.location.name,
+        street: this.eventData.location.address.street,
+        state: this.eventData.location.address.state,
+        country: this.eventData.location.address.country,
+        ticketName: this.orderParams.name,
+        customerName: this.authService.decodedJwt().name.first +" "+ this.authService.decodedJwt().name.last,
+        admits: this.orderParams.number,
+        price: this.orderParams.price * this.orderParams.number,
+        orderCreatedOn: this.orderCreatedOn,
+        image: this.eventData.eventImage
+      },
+      "template": "/templates/ticket.html"
+    }
+
+    this.accountService.createPdf(payload)
+      .subscribe((res) => {
+        this.flashAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show(res.message, {cssClass: 'alert-success', timeout: 6000});
+          this.emailError = undefined;
+          this.sendTicketMail();
+          setTimeout(() => {
+            this.flashAlert = false;
+          },6000);
+        }, 500);
+      }, (err) => {
+        this.flashAlert = true;
+        setTimeout(() => {
+          this.emailError = "Ticket";
+          this.flashMessages.show("An error occured trying to create your ticket, please reload the page", {cssClass: 'alert-danger', timeout: 6000});
+          setTimeout(() => {
+            this.flashAlert = false;
+          },6000);
+        }, 500);
+        console.log(err);
+      });
   }
 
   sendTicketMail() {
+    let payload = {
+      "to": this.authService.decodedJwt().email,
+      "subject": "E-Ticket For "+this.eventData.title,
+      "messageObj": {
+        title: this.eventData.title,
+        customerName: this.authService.decodedJwt().name.first +" "+ this.authService.decodedJwt().name.last,
+        admits: this.orderParams.number,
+      },
+      "attach": "c://users/DELL/workspace/rockies/assets/tickets/"+this.orderId+".pdf",
+      "template": "/templates/orderTicket.html"
+    }
+    this.authService.sendMailWithAttach(payload)
+      .subscribe((res) => {
+          this.flashAlert = true;
+          setTimeout(() => {
+            this.flashMessages.show(res.message, {cssClass: 'alert-success', timeout: 6000});
+            localStorage.removeItem('orderQuery');
+            localStorage.removeItem('eventData');
+            this.emailError = undefined;
+            setTimeout(() => {
+              this.flashAlert = false;
+            },6000);
+          }, 500);
+        }, (err) => {
+          this.flashAlert = true;
+          setTimeout(() => {
+            this.emailError = "Email";
+            this.flashMessages.show("An error occured trying to send your ticket, please reload the page", {cssClass: 'alert-danger', timeout: 6000});
+            setTimeout(() => {
+              this.flashAlert = false;
+            },6000);
+          }, 500);
+          console.log(err);
+        });
     //delete localStorage orderQuery here
   }
 

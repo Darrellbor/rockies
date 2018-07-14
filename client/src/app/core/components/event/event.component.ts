@@ -36,9 +36,10 @@ export class EventComponent implements OnInit {
   moreEvents;
   contactO = {
     name: '',
-    emali: '',
+    email: '',
     contactReason: '',
-    message: ''
+    message: '',
+    eventName: ''
   }
   orderQuery = {
     number: 0,
@@ -282,8 +283,53 @@ export class EventComponent implements OnInit {
     }
   }
 
-  contactOrganizer({value, valid}) {
+  sendOMessage() {
+    this.contactO.eventName = this.details.title;
+    let payload = {
+      "to": this.details.organizer.email,
+      "subject": "Rockies Organizer - "+this.contactO.contactReason,
+      "messageObj": this.contactO,
+      "template": "/templates/contactOrganizer.html"
+    }
 
+    this.flashAlert = true;
+    setTimeout(() => {
+      this.flashMessages.show("Email Sending...", {cssClass: 'alert-info', timeout: 4000});
+      setTimeout(() => {
+        this.flashAlert = false;
+      },4000);
+    }, 500);
+
+    this.authService.sendMail(payload)
+      .subscribe((res) => {
+        this.flashAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show(res.message, {cssClass: 'alert-success', timeout: 6000});
+          setTimeout(() => {
+            this.flashAlert = false;
+          },6000);
+        }, 500);
+      }, (err) => {
+        let val = JSON.parse(err._body);
+        this.flashAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show(val.message, {cssClass: 'alert-danger', timeout: 6000});
+          setTimeout(() => {
+            this.flashAlert = false;
+          },6000);
+        }, 500);
+      });
+  }
+
+  contactOrganizer({value, valid}) {
+    this.sendOMessage();
+    this.contactO = {
+      name: '',
+      email: '',
+      contactReason: '',
+      message: '',
+      eventName: ''
+    }
   }
 
 }

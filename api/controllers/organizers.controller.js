@@ -218,6 +218,7 @@ module.exports.getOneOrganizer = function(req, res) {
                 Event
                     .find({
                         "organizer.url": organizerUrl,
+                        "status": "Live",
                         "startDate": { $gte: new Date() }
                     })
                     .sort("startDate")
@@ -241,6 +242,7 @@ module.exports.getOneOrganizer = function(req, res) {
                             Event
                                 .find({
                                     "organizer.url": organizerUrl,
+                                    "status": "Live",
                                     "endDate": { $lt: new Date() }
                                 })
                                 .sort("startDate")

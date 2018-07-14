@@ -60,4 +60,10 @@ export class HomeService {
       .map(res => res.json());
   }
 
+  confirmAccount() {
+    this.authService.createHeaders();
+    return this.http.patch(this.authService.url + 'api/users/profile', { type: 'Confirm' }, this.authService.options)
+      .map(res => res.json());
+  }
+
 }

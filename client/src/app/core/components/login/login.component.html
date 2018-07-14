@@ -29,8 +29,9 @@
         <div class='disclamier' *ngIf='!password.valid && password.touched'>Enter password</div>
 
         <button type="submit" class="btn rockies-btn" [disabled]="!loginF.valid">Login</button><br>
-        <div *ngIf="!email.valid" class="forgot-password"><a href="Javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="Enter your email to continue">Forgot Password?</a></div>
+        <div *ngIf="!email.valid" class="forgot-password"><a href="Javascript:void(0)" data-toggle="tooltip" data-placement="left" title="Enter your email to continue">Forgot Password?</a></div>
         <div *ngIf="email.valid" class="forgot-password"><a href="Javascript:void(0)"(click)="forgotPassword()">Forgot Password?</a></div>
+        <div *ngIf="resendE" class="resend-confirm"><a href="Javascript:void(0)"(click)="resendConfirm()">Resend Confirmation Email</a></div>
       </form>
     </div><br>
 

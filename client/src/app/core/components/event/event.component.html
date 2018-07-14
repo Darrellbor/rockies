@@ -302,7 +302,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form novalidate #contactO="ngForm" (ngSubmit)="contactOrganizer(contactO)">
+      <form novalidate #contactOF="ngForm" (ngSubmit)="contactOrganizer(contactOF)">
         <div class="modal-body">
           <div class="form-group">
             <label for="name">Your Name</label>
@@ -322,8 +322,8 @@
             <label for="contactReason">Contact Reason</label>
             <select class="form-control r--form-control" id="contactReason" name="contactReason" [(ngModel)]="contactO.contactReason" #contactReason="ngModel" required>
               <option value="">Choose One...</option>
-              <option value="event">Inquiry About The Event</option>
-              <option value="ticket">Inquiry About My Ticket</option>
+              <option value="Inquiry About Event">Inquiry About The Event</option>
+              <option value="Inquiry About Ticket">Inquiry About My Ticket</option>
             </select>
           </div>
 
@@ -338,7 +338,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn order-btn" [disabled]="!contactO.valid">Continue</button>
+          <button type="submit" class="btn order-btn" [disabled]="!contactOF.valid">Continue</button>
         </div>
       </form>
     </div>

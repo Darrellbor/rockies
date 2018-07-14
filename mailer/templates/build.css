@@ -1,0 +1,43 @@
+.email-bg {
+    padding: 20px;
+    background-color: #e4e4e4;
+}
+
+.logo-block {
+    text-align: center;
+    margin-bottom: 15px;
+    margin-top: 30px;
+}
+
+.logo-block img {
+    max-height: 200px;
+    max-width: 200px;
+}
+
+.email-body {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+    border: 1px solid #4e2156;
+    border-bottom-width: 5px;
+    padding: 20px;
+    min-height: 100px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    line-height: 2.0;
+}
+
+.email-footer {
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.email-content {
+    line-height: 1.5;
+}
+
+.email-heading {
+    color: #4e2156;
+}

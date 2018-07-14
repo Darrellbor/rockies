@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Event = mongoose.model('Event');
+var mailCtrl = require('../../mailer/mail.controller.js');
 
 module.exports.getAllOrders = function(req, res) {
     var eventId = req.params.id;
@@ -123,4 +124,72 @@ module.exports.orderAddOne = function(req, res) {
             }
            
         });
+}
+
+module.exports.sendEmail = function(req, res) {
+    if(!req.body.to || !req.body.subject || !req.body.messageObj ||
+       !req.body.template) {
+        res 
+            .status(400)
+            .json({message: 'Please ensure all fields are filled '})
+        return;
+    }
+
+    mailCtrl.sendMail(req.body.to, req.body.subject, req.body.messageObj, req.body.template, (err, info) => {
+        if(err) {
+            res
+                .status(421)
+                .json({message: 'Email failed to send '});
+        } else {
+            res
+                .status(200)
+                .json({message: 'Email successfully sent!'});
+        }
+    });
+    
+}
+
+module.exports.sendEmailWithAttach = function(req, res) {
+    if(!req.body.to || !req.body.subject || !req.body.messageObj ||
+       !req.body.template || !req.body.attach) {
+        res 
+            .status(400)
+            .json({message: 'Please ensure all fields are filled '})
+        return;
+    }
+
+    mailCtrl.sendMailWithAttach(req.body.to, req.body.subject, req.body.messageObj, req.body.attach, req.body.template, (err, info) => {
+        if(err) {
+            res
+                .status(421)
+                .json({message: 'Email failed to send '});
+        } else {
+            res
+                .status(200)
+                .json({message: 'Email successfully sent!'});
+        }
+    });
+    
+}
+
+module.exports.createHtmlPdf = function(req, res) {
+    if(!req.body.bodyObj || !req.body.template) {
+        res 
+            .status(400)
+            .json({message: 'Please ensure all fields are filled '})
+        return;
+    }
+
+    mailCtrl.createHtmlPdf(req.body.bodyObj, req.body.template, (err, info) => {
+        if(err) {
+            res
+                .status(421)
+                .json({message: 'Failed to create ticket'});
+        } else {
+            res
+                .status(201)
+                .json({message: 'Ticket successfully created!'});
+        }
+    });
+    
 }

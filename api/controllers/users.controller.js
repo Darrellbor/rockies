@@ -48,9 +48,14 @@ module.exports.registerUser = function(req, res) {
                         })
                 }
             } else {
+                let token = jwt.sign({ _id: user._id, name: user.name, email: user.email }, db_config.secret, { expiresIn: 500 }); //expires after 1 hour
                 res
                     .status(201)
-                    .json(user)
+                    .json({
+                        success: true,
+                        token: token,
+                        user: user
+                    })
             }
         });
 }
@@ -94,9 +99,13 @@ module.exports.loginUser = function(req, res) {
                             .status(200)
                             .json({Success: true, token: token})
                     } else {
+                        let token = jwt.sign({ _id: user._id, name: user.name, email: user.email }, db_config.secret, { expiresIn: 500 }); //expires after 1 hour
                         res
                             .status(401)
-                            .json({message: 'Account not confirmed, confirm your account to countinue'})
+                            .json({
+                                message: 'Account not confirmed, confirm your account to continue',
+                                token: token
+                            })
                     }
                 } else {
                     res
@@ -682,8 +691,8 @@ module.exports.userForgotPassword = function(req, res) {
                                 })
                         } else {
                             res 
-                                .status(204)
-                                .json()
+                                .status(200)
+                                .json({password: text})
                         }
                     });
             }
@@ -743,7 +752,7 @@ module.exports.authenticate = function(req, res, next) {
                     .status(401)
                     .json({
                         err, 
-                        message: "Failed to authenticate!"
+                        message: "Failed to authenticate!, log out and login again."
                     })
             } else {
                 console.log('Authentication successfull');
