@@ -9,3 +9,6 @@
 
 #stop the program from commiting ssh keys folder
 /ssh
+
+#ignore the client folder in production mode
+/client
