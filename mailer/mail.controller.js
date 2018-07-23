@@ -18,12 +18,12 @@ module.exports.sendMail = function(to, subject, messageObj, templateFile, callin
     };
 
     let transporter = nodemailer.createTransport(({
-        host: 'smtp.gmail.com',
+        host: 'rockies.ng',
         port: 465,
         secure: true, // true for 465, false for other ports
         auth: {
-            user: 'darrel.idiagbor@stu.cu.edu.ng', // generated ethereal user
-            pass: 'anewbegining5' // generated ethereal password
+            user: 'hello@rockies.ng', // generated ethereal user
+            pass: 'anewbegining' // generated ethereal password
         },
         tls: {
             // do not fail on invalid certs
@@ -46,7 +46,7 @@ module.exports.sendMail = function(to, subject, messageObj, templateFile, callin
             var replacements = messageObj;
             var htmlToSend = template(replacements);
             var mailOptions = {
-                from: 'hello@rockies.ng',
+                from: 'Rockies',
                 to : to,
                 subject : subject,
                 html : htmlToSend
@@ -78,8 +78,8 @@ module.exports.sendMailWithAttach = function(to, subject, messageObj, attachment
 
     let transporter = nodemailer.createTransport(({
         host: 'rockies.ng',
-        port: 587,
-        secure: false, // true for 465, false for other ports
+        port: 465,
+        secure: true, // true for 465, false for other ports
         auth: {
             user: 'hello@rockies.ng', // generated ethereal user
             pass: 'anewbegining' // generated ethereal password
