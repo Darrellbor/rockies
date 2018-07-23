@@ -6,8 +6,7 @@ import { AccountService } from '../services/account.service';
 
 @Injectable()
 export class OrderResolveService {
-  orderQuery = localStorage.getItem('orderQuery');
-  orderParams = JSON.parse(this.orderQuery);
+  orderParams;
 
   constructor(private accountService: AccountService,
               private router: Router,
@@ -15,7 +14,13 @@ export class OrderResolveService {
   }
 
   getEventDetails() {
+    console.log(this.orderParams.url);
     return this.accountService.getEventByLink(this.orderParams.url);
+  }
+
+  getOrderDetails() {
+    this.orderParams = JSON.parse(localStorage.getItem('orderQuery'));
+    return this.removeTickets();
   }
 
   removeTickets() {
@@ -45,8 +50,7 @@ export class OrderResolveService {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.removeTickets();
+    return this.getOrderDetails();
   }
-
 }
 

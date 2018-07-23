@@ -236,7 +236,7 @@ module.exports.eventUploadImage = function(req, res) {
     console.log(eventImage.path);
  
     // Use the mv() method to place the file somewhere on your server
-    eventImage.mv('c://users/DELL/workspace/rockies/assets/images/events/'+eventLink+'.jpg', function(err) {
+    eventImage.mv('https://rockies.ng/assets/images/events/'+eventLink+'.jpg', function(err) {
         if (err) {
             res
                 .status(500)

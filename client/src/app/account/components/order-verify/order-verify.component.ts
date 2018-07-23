@@ -33,6 +33,12 @@ export class OrderVerifyComponent implements OnInit {
       .subscribe((res) => {
         this.reference = res.reference;
 
+        if(!this.orderParams || !this.eventData) {
+          this.router.navigate(['/']);
+        } else if(this.orderParams.orderAdded === "Yes") {
+          this.router.navigate(['/']);
+        }
+
         if(this.reference !== undefined) {
           this.verifyTrans();
         } else {
@@ -103,6 +109,7 @@ export class OrderVerifyComponent implements OnInit {
         setTimeout(() => {
           this.orderId = res._id;
           this.orderCreatedOn = res.createdOn;
+          this.orderParams.orderAdded = "Yes";
           this.createTicketPdf();
           this.flashMessages.show("Order recorded Successfully!", {cssClass: 'alert-success', timeout: 6000});
           setTimeout(() => {

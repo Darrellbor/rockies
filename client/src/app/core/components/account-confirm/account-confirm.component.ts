@@ -14,6 +14,7 @@ export class AccountConfirmComponent implements OnInit {
   preloader:boolean = true;
   flashAlert:boolean = false;
   state;
+  key;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -22,8 +23,25 @@ export class AccountConfirmComponent implements OnInit {
               public authService: AuthService) {}
 
   ngOnInit() {
-    this.confirmAccount();
-    this.preloader = false;
+    this.route.queryParams
+      .subscribe((res) => {
+        this.key = res.key;
+        if(this.key === undefined) {
+          this.router.navigate(['/c/login']);
+        } else {
+          this.authService.storeUserToken(this.key);
+          this.confirmAccount();
+        }
+        this.preloader = false;
+      }, (err) => {
+        this.flashAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show("An error occured! please reload", {cssClass: 'alert-danger', timeout: 6000});
+          setTimeout(() => {
+            this.flashAlert = false;
+          },6000);
+        }, 500);
+      });
   }
 
   confirmAccount() {

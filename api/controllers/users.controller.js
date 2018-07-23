@@ -48,7 +48,7 @@ module.exports.registerUser = function(req, res) {
                         })
                 }
             } else {
-                let token = jwt.sign({ _id: user._id, name: user.name, email: user.email }, db_config.secret, { expiresIn: 500 }); //expires after 1 hour
+                let token = jwt.sign({ _id: user._id, name: user.name, email: user.email }, db_config.secret, { expiresIn: 3600 }); //expires after 1 hour
                 res
                     .status(201)
                     .json({
@@ -99,7 +99,7 @@ module.exports.loginUser = function(req, res) {
                             .status(200)
                             .json({Success: true, token: token})
                     } else {
-                        let token = jwt.sign({ _id: user._id, name: user.name, email: user.email }, db_config.secret, { expiresIn: 500 }); //expires after 1 hour
+                        let token = jwt.sign({ _id: user._id, name: user.name, email: user.email }, db_config.secret, { expiresIn: 3600 }); //expires after 1 hour
                         res
                             .status(401)
                             .json({
@@ -267,7 +267,7 @@ module.exports.editOneUserProfile = function(req, res) {
                 });
     } else if(req.body.type === "Incomplete Event" && req.body.function === "Add" && req.body._id && 
         req.body.title &&  req.body.eventLink && req.body.exclusive && req.body.startDate && 
-        req.body.eventImage && req.body.category && req.body.address && req.body.eventType && req.body.cost) {
+        req.body.eventImage && req.body.category && req.body.address && req.body.eventType && req.body.cost >= 0) {
             User
                 .findOne({ _id: req.user._id })
                 .select("explore.incompleteEventOrders")

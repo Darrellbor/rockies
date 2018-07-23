@@ -22,6 +22,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
+app.use('/api', routes);
+
+app.use('/api', user_routes);
+
+app.use('/api', settings_routes);
+
 app.use(function(req, res, next) {
     console.log(req.method, req.url);
     next();
@@ -29,11 +35,9 @@ app.use(function(req, res, next) {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api', routes);
-
-app.use('/api', user_routes);
-
-app.use('/api', settings_routes);
+app.get('*', function(req, res) {
+    res.redirect("https://rockies.ng");
+});
 
 var server = app.listen(app.get('port'), function() {
     var port = server.address().port;

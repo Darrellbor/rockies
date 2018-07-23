@@ -47,7 +47,8 @@ export class EventComponent implements OnInit {
     name: '',
     url: '',
     time: 0,
-    price: 0
+    price: 0,
+    orderAdded: 'No'
   }
 
   constructor(private router: Router,
@@ -74,6 +75,8 @@ export class EventComponent implements OnInit {
         this.updateCategoryTimes();
         this.preloader = false;
         this.fetchMoreEvents(this.details.organizer._id);
+        localStorage.removeItem('eventData');
+        localStorage.removeItem('orderQuery');
       }, (err) => {
           console.log(err);
       });
@@ -147,22 +150,40 @@ export class EventComponent implements OnInit {
     if(ticket == 0) {
       if(this.ticketNo1 > 0) {
         this.ticketNo1= this.ticketNo1 - 1;
-      }
+      } 
     } else {
       if(this.ticketNo2 > 0) {
         this.ticketNo2 = this.ticketNo2 - 1;
-      }
+      } 
     }
   }
 
   plusTicketNo(ticket) {
     if(ticket == 0) {
-      if(this.ticketNo1 < this.details.ticket[0].maxTicketPerPerson) {
+      if(this.ticketNo1 < this.details.ticket[0].maxTicketPerPerson && 
+         this.details.ticket[0].quantity > 0) {
         this.ticketNo1 = this.ticketNo1 + 1;
+      } else {
+        this.flashAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show("This ticket is sold out!", {cssClass: 'alert-danger', timeout: 6000});
+          setTimeout(() => {
+            this.flashAlert = false;
+          },6000);
+        }, 500);
       }
     } else {
-      if(this.ticketNo2 < this.details.ticket[1].maxTicketPerPerson) {
+      if(this.ticketNo2 < this.details.ticket[1].maxTicketPerPerson &&
+         this.details.ticket[1].quantity > 0) {
         this.ticketNo2 = this.ticketNo2 + 1;
+      } else {
+        this.flashAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show("This ticket is sold out!", {cssClass: 'alert-danger', timeout: 6000});
+          setTimeout(() => {
+            this.flashAlert = false;
+          },6000);
+        }, 500);
       }
     }
   }

@@ -389,20 +389,20 @@ export class EditEventComponent implements OnInit {
   }
 
   changeExclusive() {
-    this.event.exclusive === "No" ? this.event.exclusive = "Yes" : this.event.exclusive = "No";
-
-    if(this.event.settings.category === "" && this.exclusiveCheck === false) {
-      window.alert('Please select or fill in a category and recheck to take effect!');
-    } else if(this.exclusiveCheck === false && this.event.settings.category !== "") {
-      this.exclusiveCat = this.event.settings.category;
-      this.exclusiveCheck = true;
-    } else {
-      if(this.event.exclusive === "Yes" && this.exclusiveCheck === true) {
-        this.event.settings.category = "exclusive"
-      } else {
-        this.event.settings.category = this.exclusiveCat;
-      }
-    }
+    if(this.event.settings.category === "" && this.exclusiveCheck === true) {
+      window.alert('Please select or fill in a category, uncheck and recheck the checkbox to take effect! To be sure it has taken effect the category select bar would be empty');
+      this.exclusiveCheck = false;
+    } else if(this.exclusiveCheck === true && this.event.settings.category !== "") {
+        this.exclusiveCat = this.event.settings.category;
+        this.event.settings.category = "exclusive";
+        this.event.exclusive = "Yes";
+    } else if(this.exclusiveCheck === false) { 
+      this.event.settings.category = this.exclusiveCat;
+      this.event.exclusive = "No"
+    }   
+    
+    console.log(this.event.settings.category);
+    
   }
 
   onTicketInstanceClick(ticket, type) {
@@ -449,112 +449,143 @@ export class EditEventComponent implements OnInit {
     }
   }
 
-  saveEvent() {
-    this.event.status = "Saved";
+  saveEvent({value, valid}) {
+    if(valid) {
+      this.event.status = "Saved";
 
-    if(this.event.ticket[0].name === "" || this.event.ticket[0].description === "") {
-      this.finalAlert = true;
-      setTimeout(() => {
-        this.flashMessages.show("Ticket details were not recorded", {cssClass: 'alert-danger', timeout: 5000});
+      if(this.event.ticket[0].name === "" || this.event.ticket[0].description === "") {
+        this.finalAlert = true;
         setTimeout(() => {
-          this.finalAlert = false;
-        },5000);
-      }, 500);
-      return;
-    }
-
-    if(this.event.eventImage === "") {
-      this.finalAlert = true;
-      setTimeout(() => {
-        this.flashMessages.show("Please upload an event image", {cssClass: 'alert-danger', timeout: 4000});
-        setTimeout(() => {
-          this.finalAlert = false;
-        },4000);
-      }, 500);
-      return;
-    }
-
-    if(this.paidTicketInstance || this.vipTicketInstance && this.event.payout.subaccountCode === "") {
-      this.finalAlert = true;
-      setTimeout(() => {
-        this.flashMessages.show("Please re-verify your payout details", {cssClass: 'alert-danger', timeout: 5000});
-        setTimeout(() => {
-          this.finalAlert = false;
-        },5000);
-      }, 500);
-      return;
-    }
-    this.event.startDate = this.event.startDate +" "+ this.event.startTime;
-    this.event.endDate = this.event.endDate +" "+ this.event.endTime;
-    this.event.ticket[0].ticketSaleStarts = this.event.ticket[0].ticketSaleStarts +" "+ this.ticketStartTime;
-    this.event.ticket[0].ticketSaleEnds = this.event.ticket[0].ticketSaleEnds +" "+ this.ticketEndTime;
-
-    if(this.event.ticket[1].name !== "" && this.event.ticket[1].description !== "") {
-      this.event.ticket[1].ticketSaleStarts = this.event.ticket[1].ticketSaleStarts +" "+ this.vipTicketStartTime;
-      this.event.ticket[1].ticketSaleEnds = this.event.ticket[1].ticketSaleEnds +" "+ this.vipTicketEndTime;
-    } else {
-      this.event.ticket[1] = undefined;
-    }
-
-    delete this.event.startTime;
-    delete this.event.endTime;
-
-    if(!this.isCategoryListed) {
-      this.accountService.addCategory(this.event.settings.category)
-        .subscribe((res) => {
-          this.finalAlert = true;
+          this.flashMessages.show("Ticket details were not recorded", {cssClass: 'alert-danger', timeout: 5000});
           setTimeout(() => {
-            this.flashMessages.show("New category added!", {cssClass: 'alert-info', timeout: 3000});
-            setTimeout(() => {
-              this.finalAlert = false;
-            },3000);
-          }, 500);
-        }, (err) => {
-          this.finalAlert = true;
+            this.finalAlert = false;
+          },5000);
+        }, 500);
+        return;
+      }
+
+      if(this.event.eventImage === "") {
+        this.finalAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show("Please upload an event image", {cssClass: 'alert-danger', timeout: 4000});
           setTimeout(() => {
-            this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
-            setTimeout(() => {
-              this.finalAlert = false;
-            },4000);
-          }, 500);
-        });
-    }
+            this.finalAlert = false;
+          },4000);
+        }, 500);
+        return;
+      }
 
-    this.accountService.getLocationChoords(this.event.location.address.street+" "+this.event.location.address.state+" "+this.event.location.address.country)
-      .subscribe((res) => {
-        this.event.location.coordinates.push(res.results[0].geometry.location.lng);
-        this.event.location.coordinates.push(res.results[0].geometry.location.lat);
+      if(this.paidTicketInstance || this.vipTicketInstance && this.event.payout.subaccountCode === "") {
+        this.finalAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show("Please re-verify your payout details", {cssClass: 'alert-danger', timeout: 5000});
+          setTimeout(() => {
+            this.finalAlert = false;
+          },5000);
+        }, 500);
+        return;
+      }
 
-        this.accountService.editEvent(this._id, this.event)
+      if(!this.isCategoryListed && this.event.settings.category === "exclusive") {
+        this.finalAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show("Your event cannot be set because we noticed that your category field is set to exclusive. reverse back and select an available category, uncheck and recheck the field before continuing", {cssClass: 'alert-danger', timeout: 10000});
+          setTimeout(() => {
+            this.finalAlert = false;
+          },10000);
+        }, 500); 
+        return;
+      }
+      this.event.startDate = this.event.startDate +" "+ this.event.startTime;
+      this.event.endDate = this.event.endDate +" "+ this.event.endTime;
+      this.event.ticket[0].ticketSaleStarts = this.event.ticket[0].ticketSaleStarts +" "+ this.ticketStartTime;
+      this.event.ticket[0].ticketSaleEnds = this.event.ticket[0].ticketSaleEnds +" "+ this.ticketEndTime;
+
+      if(this.event.ticket[1].name !== "" && this.event.ticket[1].description !== "") {
+        this.event.ticket[1].ticketSaleStarts = this.event.ticket[1].ticketSaleStarts +" "+ this.vipTicketStartTime;
+        this.event.ticket[1].ticketSaleEnds = this.event.ticket[1].ticketSaleEnds +" "+ this.vipTicketEndTime;
+      } else {
+        this.event.ticket[1] = undefined;
+      }
+
+      delete this.event.startTime;
+      delete this.event.endTime;
+
+      if(!this.isCategoryListed && this.event.settings.category !== "exclusive") {
+        this.accountService.addCategory(this.event.settings.category)
           .subscribe((res) => {
-
             this.finalAlert = true;
-              setTimeout(() => {
-              this.flashMessages.show("Event Successfully Edited And Is Saved!", {cssClass: 'alert-success', timeout: 6000});
+            setTimeout(() => {
+              this.flashMessages.show("New category added!", {cssClass: 'alert-info', timeout: 3000});
               setTimeout(() => {
                 this.finalAlert = false;
-                this.router.navigate(['/a/myEvents']);
-              },6000);
+              },3000);
             }, 500);
           }, (err) => {
             this.finalAlert = true;
-              setTimeout(() => {
-              this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
+            setTimeout(() => {
+              this.flashMessages.show("An error occured editing your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
               setTimeout(() => {
                 this.finalAlert = false;
               },4000);
             }, 500);
           });
+      }
 
-      }, (err) => {
-        this.finalAlert = true;
-        setTimeout(() => {
-        this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
+      this.accountService.getLocationChoords(this.event.location.address.street+" "+this.event.location.address.state+" "+this.event.location.address.country)
+        .subscribe((res) => {
+          if(res.error_message) {
+            this.finalAlert = true;
+            setTimeout(() => {
+              this.flashMessages.show("An error occured editing your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
+              setTimeout(() => {
+                this.finalAlert = false;
+              },4000);
+            }, 500);
+            return;
+          }
+          this.event.location.coordinates.push(res.results[0].geometry.location.lng);
+          this.event.location.coordinates.push(res.results[0].geometry.location.lat);
+
+          this.accountService.editEvent(this._id, this.event)
+            .subscribe((res) => {
+
+              this.finalAlert = true;
+                setTimeout(() => {
+                this.flashMessages.show("Event Successfully Edited And Is Saved!", {cssClass: 'alert-success', timeout: 6000});
+                setTimeout(() => {
+                  this.finalAlert = false;
+                  this.router.navigate(['/a/myEvents']);
+                },6000);
+              }, 500);
+            }, (err) => {
+              this.finalAlert = true;
+                setTimeout(() => {
+                this.flashMessages.show("An error occured editing your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
+                setTimeout(() => {
+                  this.finalAlert = false;
+                },4000);
+              }, 500);
+            });
+
+        }, (err) => {
+            this.finalAlert = true;
+            setTimeout(() => {
+              this.flashMessages.show("An error occured editing your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
+              setTimeout(() => {
+                this.finalAlert = false;
+              },4000);
+            }, 500);
+        });
+    } else {
+      this.finalAlert = true;
+      setTimeout(() => {
+        this.flashMessages.show('Invalid form submission!', {cssClass: 'alert-danger', timeout: 6000});
         setTimeout(() => {
           this.finalAlert = false;
-        },4000);
+        },6000);
       }, 500);
-      });
+    }
   }
 
 }

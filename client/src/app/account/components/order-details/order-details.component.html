@@ -4,7 +4,11 @@
       <h1 class="heading--tag">Ticket Order For <a href="#" [routerLink]="['/c/e/', orderDetails.eventLink]">{{ orderDetails.title }}</a></h1><hr class="heading--hr"><br>
   
       <div class="myOrder-block" *ngIf="orderToShow">
-        <h4>{{ order.ticketName }}</h4><br>
+        <h4 class="order-ticket-name">{{ order.ticketName }}
+          <a href="/assets/tickets/{{ order._id }}.pdf" download="{{ order._id }}.pdf" title="download ticket">
+            <fa name="fas fa-download"></fa>
+          </a>
+        </h4><br>
         {{ order.normalType }} order #{{ order._id}} made on {{ order.createdOn | date:'d MMM y'}}<br>
         Event from {{ orderDetails.startDate | date:'EEEE, d MMM y'}} to {{ orderDetails.endDate | date:'EEEE, d MMM y'}}<br>
         <b>No of tickets:</b> {{ order.noOfSeats }}<br>

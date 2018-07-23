@@ -58,7 +58,9 @@ export class OrderComponent implements OnInit {
         this.minute = this.minute - 1;
         this.second = 59;
 
-        if(this.minute === 0) {
+        if(this.minute < 0) {
+          this.minute = 0;
+          this.second = "00";
           clearInterval(timerInterval);
           this.disableOrderBtn = true;
 

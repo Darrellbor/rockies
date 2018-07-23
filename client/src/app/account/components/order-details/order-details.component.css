@@ -57,3 +57,9 @@
     max-height: 70px;
     max-width: 70px;
 }
+
+.order-ticket-name a {
+    color: #4e2156;
+    margin-left: 20px;
+    font-size: 20px;
+}

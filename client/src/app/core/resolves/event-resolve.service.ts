@@ -14,6 +14,16 @@ export class EventResolveService {
   }
 
   getEventDetails() {
+    this.homeService.getEventDetailsByLink(this.url)
+      .subscribe((res) => {
+        if(res === null) {
+          this.router.navigate(['notAvailable']);
+        }
+      }, (err) => {
+          console.log(err);          
+          this.router.navigate(['notAvailable']);
+      });
+
     return this.homeService.getEventDetailsByLink(this.url);
   }
 

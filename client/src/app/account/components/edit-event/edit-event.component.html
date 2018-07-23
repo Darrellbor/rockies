@@ -1,6 +1,6 @@
 <div class="ce-bg">
   <div class="container myContainer">
-    <form novalidate #createEF="ngForm">
+    <form novalidate #editEF="ngForm" (ngSubmit)="saveEvent(editEF)">
       <div class="top-declarations">
         <span class="create-text">
           <h1>Create An Event</h1>
@@ -16,7 +16,7 @@
           <input type="text" class="form-control r--form-control" id="title" name="title" placeholder="Give it a short unique name" [(ngModel)]="event.title" #title="ngModel" required minlength="4">
         </div>
 
-        <div class='disclamier' *ngIf='!title.valid && title.touched && title.value !== ""'>Enter a valid title name not less than 4 characters</div>
+        <div class='disclamier' *ngIf='!title.valid && title.touched'>Enter a valid title name not less than 4 characters</div>
 
         <div class="row">
           <div class="col-sm-3">
@@ -58,7 +58,7 @@
           <editor apiKey="voj12mfkwvtx4d10j01tjjr2a4m5ah9fxt4vvnzxnz6jwff0" [init]="{plugins: 'link'}" name="description" [(ngModel)]="event.description" #description="ngModel" required minlength='25'></editor>
         </div>
 
-        <div class='disclamier' *ngIf='!description.valid && description.touched && description.value !== ""'>Enter a description of your event not less than 25 characters</div>
+        <div class='disclamier' *ngIf='!description.valid && description.touched'>Enter a description of your event not less than 25 characters</div>
 
         <div class="form-group">
           <label for="eventImage">Event Image</label>
@@ -81,19 +81,19 @@
           <input type="text" class="form-control r--form-control" id="location" name="location" placeholder="Enter the venue's name" [(ngModel)]="event.location.name" #location="ngModel" required minlength="3">
         </div>
 
-        <div class='disclamier' *ngIf='!location.valid && location.touched && location.value !== ""'>Enter a valid venue name not less than 3 characters</div>
+        <div class='disclamier' *ngIf='!location.valid && location.touched'>Enter a valid venue name not less than 3 characters</div>
 
         <div class="form-group">
           <input type="text" class="form-control r--form-control" id="address" name="address" placeholder="Address" [(ngModel)]="event.location.address.street" #address="ngModel" required minlength="5">
         </div>
 
-        <div class='disclamier' *ngIf='!address.valid && address.touched && address.value !== ""'>Enter a valid address not less than 5 characters</div>
+        <div class='disclamier' *ngIf='!address.valid && address.touched'>Enter a valid address not less than 5 characters</div>
 
         <div class="form-group">
           <input type="text" class="form-control r--form-control" id="city" name="city" placeholder="City Or Province" [(ngModel)]="event.location.address.cityOrProvince" #city="ngModel" required minlength="2">
         </div>
 
-        <div class='disclamier' *ngIf='!city.valid && city.touched && city.value !== ""'>Enter a valid city or province not less than 2 characters</div>
+        <div class='disclamier' *ngIf='!city.valid && city.touched'>Enter a valid city or province not less than 2 characters</div>
         
         <div class="row">
           <div class="col-sm-6">
@@ -101,14 +101,14 @@
               <input type="text" class="form-control r--form-control" id="state" name="state" placeholder="state" [(ngModel)]="event.location.address.state" #state="ngModel" required minlength="2">
             </div>
 
-            <div class='disclamier' *ngIf='!state.valid && state.touched && state.value !== ""'>Enter a valid state not less than 2 characters</div>
+            <div class='disclamier' *ngIf='!state.valid && state.touched'>Enter a valid state not less than 2 characters</div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <input type="text" class="form-control r--form-control" id="zipCode" name="zipCode" placeholder="Zip Code" [(ngModel)]="event.location.address.zipCode" #zipCode="ngModel" required minlength="2">
             </div>
 
-            <div class='disclamier' *ngIf='!zipCode.valid && zipCode.touched && zipCode.value !== ""'>Enter a valid Zip Code not less than 2 characters</div>
+            <div class='disclamier' *ngIf='!zipCode.valid && zipCode.touched'>Enter a valid Zip Code not less than 2 characters</div>
           </div>
         </div>
 
@@ -402,7 +402,7 @@
             <input type="text" class="form-control r--form-control" id="ticketName" name="ticketName" placeholder="Enter the name of the ticket" [(ngModel)]="event.ticket[0].name" #ticketName="ngModel">
           </div>
 
-          <div class='disclamier' *ngIf='!ticketName.valid && ticketName.touched && ticketName.value !== ""'>Enter a valid ticket name not less than 3 characters</div>
+          <div class='disclamier' *ngIf='!ticketName.valid && ticketName.touched'>Enter a valid ticket name not less than 3 characters</div>
         
           <div class="row">
             <div class="col-sm-6">
@@ -411,7 +411,7 @@
                 <input type="number" class="form-control r--form-control" min="1" id="ticketQuantity" name="ticketQuantity" placeholder="Number of tickets" [(ngModel)]="event.ticket[0].quantity" #ticketQuantity="ngModel">
               </div>
 
-              <div class='disclamier' *ngIf='!ticketQuantity.valid && ticketQuantity.touched && ticketQuantity.value !== ""'>Please specify how many tickets can be obtained by guests</div>
+              <div class='disclamier' *ngIf='!ticketQuantity.valid && ticketQuantity.touched'>Please specify how many tickets can be obtained by guests</div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
@@ -419,7 +419,7 @@
                 <input type="text" class="form-control r--form-control" id="ticketPrice" name="ticketPrice" placeholder="Enter the price of the ticket" [(ngModel)]="event.ticket[0].normalType" #ticketPrice="ngModel" readonly>
               </div>
 
-              <div class='disclamier' *ngIf='!ticketPrice.valid && ticketPrice.touched && ticketPrice.value !== ""'>Enter a valid ticket price</div>
+              <div class='disclamier' *ngIf='!ticketPrice.valid && ticketPrice.touched'>Enter a valid ticket price</div>
             </div>
           </div>
 
@@ -463,7 +463,7 @@
             <textarea class="form-control r--form-control" id="ticketDesc" name="ticketDesc" [(ngModel)]="event.ticket[0].description" #ticketDesc="ngModel" style="min-height: 150px;"></textarea>
           </div>
 
-          <div class='disclamier' *ngIf='!ticketDesc.valid && ticketDesc.touched && ticketDesc.value !== ""'>A description of the ticket must be given not less than 10 characters</div>
+          <div class='disclamier' *ngIf='!ticketDesc.valid && ticketDesc.touched'>A description of the ticket must be given not less than 10 characters</div>
           
           <div class="row">
             <div class="col-sm-6">
@@ -472,7 +472,7 @@
                 <input type="number" min="1" class="form-control r--form-control" id="maxTicket" name="maxTicket" placeholder="Enter the price of the ticket" [(ngModel)]="event.ticket[0].maxTicketPerPerson" #maxTicket="ngModel">
               </div>
 
-              <div class='disclamier' *ngIf='!maxTicket.valid && maxTicket.touched && maxTicket.value !== ""'>Please specify the maximum amount of ticket an individual can buy</div>
+              <div class='disclamier' *ngIf='!maxTicket.valid && maxTicket.touched'>Please specify the maximum amount of ticket an individual can buy</div>
             </div>
             <div class="col-sm-6" style="text-align: right; margin-top: 40px;">
               <div class="form-check">
@@ -489,7 +489,7 @@
             <input type="text" class="form-control r--form-control" id="ticketName" name="ticketName" placeholder="Enter the name of the ticket" [(ngModel)]="event.ticket[0].name" #ticketName="ngModel">
           </div>
 
-          <div class='disclamier' *ngIf='!ticketName.valid && ticketName.touched && ticketName.value !== ""'>Enter a valid ticket name not less than 3 characters</div>
+          <div class='disclamier' *ngIf='!ticketName.valid && ticketName.touched'>Enter a valid ticket name not less than 3 characters</div>
         
           <div class="row">
             <div class="col-sm-6">
@@ -498,7 +498,7 @@
                 <input type="number" class="form-control r--form-control" min="1" id="ticketQuantity" name="ticketQuantity" placeholder="Number of tickets" [(ngModel)]="event.ticket[0].quantity" #ticketQuantity="ngModel">
               </div>
 
-              <div class='disclamier' *ngIf='!ticketQuantity.valid && ticketQuantity.touched && ticketQuantity.value !== ""'>Please specify how many tickets can be obtained by guests</div>
+              <div class='disclamier' *ngIf='!ticketQuantity.valid && ticketQuantity.touched'>Please specify how many tickets can be obtained by guests</div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
@@ -506,7 +506,7 @@
                 <input type="text" class="form-control r--form-control" id="ticketPrice" name="ticketPrice" placeholder="Enter the price of the ticket" [(ngModel)]="event.ticket[0].price" #ticketPrice="ngModel">
               </div>
 
-              <div class='disclamier' *ngIf='!ticketPrice.valid && ticketPrice.touched && ticketPrice.value !== ""'>Enter a valid ticket price</div>
+              <div class='disclamier' *ngIf='!ticketPrice.valid && ticketPrice.touched'>Enter a valid ticket price</div>
             </div>
           </div>
 
@@ -550,7 +550,7 @@
             <textarea class="form-control r--form-control" id="ticketDesc" name="ticketDesc" [(ngModel)]="event.ticket[0].description" #ticketDesc="ngModel" style="min-height: 150px;"></textarea>
           </div>
 
-          <div class='disclamier' *ngIf='!ticketDesc.valid && ticketDesc.touched && ticketDesc.value !== ""'>A description of the ticket must be given not less than 10 characters</div>
+          <div class='disclamier' *ngIf='!ticketDesc.valid && ticketDesc.touched'>A description of the ticket must be given not less than 10 characters</div>
           
           <div class="row">
             <div class="col-sm-6">
@@ -559,7 +559,7 @@
                 <input type="number" min="1" class="form-control r--form-control" id="maxTicket" name="maxTicket" placeholder="Enter the price of the ticket" [(ngModel)]="event.ticket[0].maxTicketPerPerson" #maxTicket="ngModel">
               </div>
 
-              <div class='disclamier' *ngIf='!maxTicket.valid && maxTicket.touched && maxTicket.value !== ""'>Please specify the maximum amount of ticket an individual can buy</div>
+              <div class='disclamier' *ngIf='!maxTicket.valid && maxTicket.touched'>Please specify the maximum amount of ticket an individual can buy</div>
             </div>
             <div class="col-sm-6" style="text-align: right; margin-top: 40px;">
               <div class="form-check">
@@ -579,7 +579,7 @@
             <input type="text" class="form-control r--form-control" id="ticketName1" name="ticketName1" placeholder="Enter the name of the ticket" [(ngModel)]="event.ticket[1].name" #ticketName1="ngModel">
           </div>
 
-          <div class='disclamier' *ngIf='!ticketName1.valid && ticketName1.touched && ticketName1.value !== ""'>Enter a valid ticket name not less than 3 characters</div>
+          <div class='disclamier' *ngIf='!ticketName1.valid && ticketName1.touched'>Enter a valid ticket name not less than 3 characters</div>
         
           <div class="row">
             <div class="col-sm-6">
@@ -588,7 +588,7 @@
                 <input type="number" class="form-control r--form-control" min="1" id="ticketQuantity1" name="ticketQuantity1" placeholder="Number of tickets" [(ngModel)]="event.ticket[1].quantity" #ticketQuantity1="ngModel">
               </div>
 
-              <div class='disclamier' *ngIf='!ticketQuantity1.valid && ticketQuantity1.touched && ticketQuantity1.value !== ""'>Please specify how many tickets can be obtained by guests</div>
+              <div class='disclamier' *ngIf='!ticketQuantity1.valid && ticketQuantity1.touched'>Please specify how many tickets can be obtained by guests</div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
@@ -596,7 +596,7 @@
                 <input type="text" class="form-control r--form-control" id="ticketPrice1" name="ticketPrice1" placeholder="Enter the price of the ticket" [(ngModel)]="event.ticket[1].price" #ticketPrice1="ngModel">
               </div>
 
-              <div class='disclamier' *ngIf='!ticketPrice1.valid && ticketPrice1.touched && ticketPrice1.value !== ""'>Enter a valid ticket price</div>
+              <div class='disclamier' *ngIf='!ticketPrice1.valid && ticketPrice1.touched'>Enter a valid ticket price</div>
             </div>
           </div>
 
@@ -640,7 +640,7 @@
             <textarea class="form-control r--form-control" id="ticketDesc1" name="ticketDesc1" [(ngModel)]="event.ticket[1].description" #ticketDesc1="ngModel" style="min-height: 150px;"></textarea>
           </div>
 
-          <div class='disclamier' *ngIf='!ticketDesc1.valid && ticketDesc1.touched && ticketDesc1.value !== ""'>A description of the ticket must be given not less than 10 characters</div>
+          <div class='disclamier' *ngIf='!ticketDesc1.valid && ticketDesc1.touched'>A description of the ticket must be given not less than 10 characters</div>
           
           <div class="row">
             <div class="col-sm-6">
@@ -649,7 +649,7 @@
                 <input type="number" min="1" class="form-control r--form-control" id="maxTicket1" name="maxTicket1" placeholder="Enter the price of the ticket" [(ngModel)]="event.ticket[1].maxTicketPerPerson" #maxTicket1="ngModel">
               </div>
 
-              <div class='disclamier' *ngIf='!maxTicket1.valid && maxTicket1.touched && maxTicket1.value !== ""'>Please specify the maximum amount of ticket an individual can buy</div>
+              <div class='disclamier' *ngIf='!maxTicket1.valid && maxTicket1.touched'>Please specify the maximum amount of ticket an individual can buy</div>
             </div>
             <div class="col-sm-6" style="text-align: right; margin-top: 41px;">
               <div class="form-check">
@@ -683,7 +683,7 @@
                 <input type="text" class="form-control r--form-control" id="accountNo" name="accountNo" placeholder="Enter the name of the ticket" [(ngModel)]="event.payout.accountNo" #accountNo="ngModel">
               </div>
 
-              <div class='disclamier' *ngIf='!accountNo.valid && accountNo.touched && accountNo.value !== ""'>Enter a valid account number</div>
+              <div class='disclamier' *ngIf='!accountNo.valid && accountNo.touched'>Enter a valid account number</div>
             </div>
           </div>
 
@@ -718,7 +718,7 @@
       <div class="ce-info event-settings">
         <img src="/assets/images/app/settings.svg" alt="Event" style="max-height: 30px; max-width: 30px;">
         <h1 class="heading--tag"><small>Step 3 of 3</small>Additional Settings</h1><hr class="heading--hr" style="margin-left: 45px;"><br>
-
+      
         <div class="form-group" *ngIf="isCategoryListed">
           <label for="categories">Categories</label>
           <select class="form-control r--form-control" id="categories" name="categories" [(ngModel)]="event.settings.category" #categories="ngModel">
@@ -740,10 +740,10 @@
           <small id="reservationHelp" class="form-text text-muted">How long do you want each ticket order to last for before releasing the ticket, in minutes</small>
         </div>
 
-        <div class='disclamier' *ngIf='!reservationLimit.valid && reservationLimit.touched && reservationLimit.value !== ""'>Enter a reservation number in </div>
+        <div class='disclamier' *ngIf='!reservationLimit.valid && reservationLimit.touched'>Enter a reservation number in </div>
       
         <div class="form-check" style="margin-left: 20px;">
-          <input type="checkbox" class="form-check-input" id="exclusives" (click)="changeExclusive()">
+          <input type="checkbox" class="form-check-input" id="exclusives" (change)="changeExclusive()" name="exclusives" [(ngModel)]="exclusiveCheck">
           <label class="form-check-label" for="exclusives" style="padding-left: 0px;">Are you selling all your tickets on rockies?</label>
         </div>
       </div><br>
@@ -753,7 +753,7 @@
         <div *ngIf="finalAlert">
           <flash-messages></flash-messages><br>
         </div>
-        <button type="button" class="btn rockies-btn" (click)="saveEvent()">Edit And Save Event</button>
+        <button type="submit" class="btn rockies-btn">Edit Event And Save</button>
       </div>
     </form>
   </div>

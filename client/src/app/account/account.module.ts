@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ClipboardModule } from 'ngx-clipboard';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { ImageUploadModule } from "angular2-image-upload";
-import { ColorPickerModule } from 'angular2-color-picker';
+import { ColorPickerModule } from 'ngx-color-picker';
 import { SharedModule } from '../shared/shared.module';
 
 import { AccountRoutingModule } from './account-routing.module';

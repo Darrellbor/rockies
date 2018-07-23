@@ -6,3 +6,6 @@
 
 #stop the program from commiting assets folder on server for testing purposes
 /assets
+
+#stop the program from commiting ssh keys folder
+/ssh

@@ -20,6 +20,7 @@ export class RegisterComponent implements OnInit {
     email: '',
     password: ''
   }
+  key;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -58,7 +59,8 @@ export class RegisterComponent implements OnInit {
       "to": this.user.email,
       "subject": "Account Confirmation",
       "messageObj": {
-        name: this.user.name.first
+        name: this.user.name.first,
+        key: this.key
       },
       "template": "/templates/confirm.html"
     }
@@ -101,7 +103,7 @@ export class RegisterComponent implements OnInit {
       
       this.authService.registerUser(value)
         .subscribe((res) => {
-          this.authService.storeUserToken(res.token);
+          this.key = res.token;
           this.flashMessages.show("Account Successfully created, confirmation email would be sent within minutes, confirm your account before logging in", {cssClass: 'alert-success', timeout: 7000});
           this.sendConfirm();
           setTimeout(() => {

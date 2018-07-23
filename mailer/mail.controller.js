@@ -77,12 +77,12 @@ module.exports.sendMailWithAttach = function(to, subject, messageObj, attachment
     };
 
     let transporter = nodemailer.createTransport(({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true, // true for 465, false for other ports
+        host: 'rockies.ng',
+        port: 587,
+        secure: false, // true for 465, false for other ports
         auth: {
-            user: 'darrel.idiagbor@stu.cu.edu.ng', // generated ethereal user
-            pass: 'anewbegining5' // generated ethereal password
+            user: 'hello@rockies.ng', // generated ethereal user
+            pass: 'anewbegining' // generated ethereal password
         },
         tls: {
             // do not fail on invalid certs
@@ -105,7 +105,7 @@ module.exports.sendMailWithAttach = function(to, subject, messageObj, attachment
             var replacements = messageObj;
             var htmlToSend = template(replacements);
             var mailOptions = {
-                from: 'hello@rockies.ng',
+                from: 'Rockies',
                 to : to,
                 subject : subject,
                 html : htmlToSend,
@@ -151,7 +151,7 @@ module.exports.createHtmlPdf = function(bodyObj, templateFile, callingBack) {
         //var html = fs.readFileSync('./' + htmlToChange, 'utf8');
         var options = { format: 'Letter' };
         
-        pdf.create(htmlToChange, options).toFile('c://users/DELL/workspace/rockies/assets/tickets/' + bodyObj.orderId + '.pdf', function(err, res) {
+        pdf.create(htmlToChange, options).toFile('https://rockies.ng/assets/tickets/' + bodyObj.orderId + '.pdf', function(err, res) {
             if (err) {
                 callingBack(err);
                 return console.log(err);

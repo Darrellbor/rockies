@@ -148,7 +148,7 @@ module.exports.organizerUploadLogo = function(req, res) {
     var organizerLogo = req.files.organizerLogo;
  
     // Use the mv() method to place the file somewhere on your server
-    organizerLogo.mv('c://users/DELL/workspace/rockies/assets/images/organizers/'+organizerUrl+'.jpg', function(err) {
+    organizerLogo.mv('https://rockies.ng/assets/images/organizers/'+organizerUrl+'.jpg', function(err) {
         if (err) {
             res
                 .status(500)

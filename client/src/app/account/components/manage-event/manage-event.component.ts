@@ -45,7 +45,7 @@ export class ManageEventComponent implements OnInit {
         this.myEvent = res.eventDetails;
         this.obtainAmountForTickets();
         this.eventLink = this.myEvent.eventLink;
-        this.copyLink = "https://rockies.ng/c/e/" + this.eventLink;
+        this.copyLink = "https://rockies.ng/#/c/e/" + this.eventLink;
         this.checkOrderReviewVisible();
         this.preloader = false;
       }, (err) => {
@@ -108,7 +108,7 @@ export class ManageEventComponent implements OnInit {
   updateLink() {
     if(this.linkResColor === "Available") {
       this.myEvent.eventLink = this.eventLink;
-      this.copyLink = "https://rockies.ng/c/e/" + this.eventLink;
+      this.copyLink = "https://rockies.ng/#/c/e/" + this.eventLink;
 
       this.accountService.editEvent(this.id, this.myEvent)
         .subscribe((res) => {

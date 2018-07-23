@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
     password: ''
   }
   resetPass;
+  key;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -77,7 +78,9 @@ export class LoginComponent implements OnInit {
     let payload = {
       "to": this.user.email,
       "subject": "Account Confirmation",
-      "messageObj": {},
+      "messageObj": {
+        key: this.key
+      },
       "template": "/templates/confirmLogin.html"
     }
 
@@ -110,7 +113,7 @@ export class LoginComponent implements OnInit {
           this.flashMessages.show(val.message, {cssClass: 'alert-danger', timeout: 6000});
 
           if(val.message === "Account not confirmed, confirm your account to continue") {
-            this.authService.storeUserToken(val.token);
+            this.key = val.token;
             this.resendE = true;
           }
         });

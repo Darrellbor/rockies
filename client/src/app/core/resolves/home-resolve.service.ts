@@ -235,6 +235,8 @@ export class HomeResolveService {
                       }
                     }
                   }
+
+                  categories =  Array.from(new Set(categories));
                 }
 
                 if(categories.length === 0) {
@@ -264,6 +266,8 @@ export class HomeResolveService {
                     }
                   }
                 }
+
+                categories =  Array.from(new Set(categories));
               }
 
               if(categories.length === 0) {
@@ -291,6 +295,8 @@ export class HomeResolveService {
                   }
                 }
               }
+
+              categories =  Array.from(new Set(categories));
             }
 
             if(categories.length === 0) {

@@ -12,6 +12,11 @@
     background-color: #180d1d;
     color: #debade;
     padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.rockies-footer a {
+    color: #debade;
 }
 
 .footer-links {

@@ -299,20 +299,17 @@ export class CreateEventComponent implements OnInit {
   }
 
   changeExclusive() {
-    this.event.exclusive === "No" ? this.event.exclusive = "Yes" : this.event.exclusive = "No";
-
-    if(this.event.settings.category === "" && this.exclusiveCheck === false) {
-      window.alert('Please select or fill in a category and recheck for it to take effect!');
-    } else if(this.exclusiveCheck === false && this.event.settings.category !== "") {
-      this.exclusiveCat = this.event.settings.category;
-      this.exclusiveCheck = true;
-    } else {
-      if(this.event.exclusive === "Yes" && this.exclusiveCheck === true) {
-        this.event.settings.category = "exclusive"
-      } else {
-        this.event.settings.category = this.exclusiveCat;
-      }
-    }
+    if(this.event.settings.category === "" && this.exclusiveCheck === true) {
+      window.alert('Please select or fill in a category, uncheck and recheck the checkbox to take effect! To be sure it has taken effect the category select bar would be empty');
+      this.exclusiveCheck = false;
+    } else if(this.exclusiveCheck === true && this.event.settings.category !== "") {
+        this.exclusiveCat = this.event.settings.category;
+        this.event.settings.category = "exclusive";
+        this.event.exclusive = "Yes";
+    } else if(this.exclusiveCheck === false) { 
+      this.event.settings.category = this.exclusiveCat;
+      this.event.exclusive = "No"
+    }    
   }
 
   onTicketInstanceClick(ticket, type) {
@@ -393,6 +390,17 @@ export class CreateEventComponent implements OnInit {
         }, 500);
         return;
       }
+
+      if(!this.isCategoryListed && this.event.settings.category === "exclusive") {
+        this.finalAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show("Your event cannot be set because we noticed that your category field is set to exclusive. reverse back and select an available category, uncheck and recheck the field before continuing", {cssClass: 'alert-danger', timeout: 10000});
+          setTimeout(() => {
+            this.finalAlert = false;
+          },10000);
+        }, 500); 
+        return;
+      }
       this.event.startDate = this.event.startDate +" "+ this.event.startTime;
       this.event.endDate = this.event.endDate +" "+ this.event.endTime;
       this.event.ticket[0].ticketSaleStarts = this.event.ticket[0].ticketSaleStarts +" "+ this.ticketStartTime;
@@ -408,7 +416,7 @@ export class CreateEventComponent implements OnInit {
       delete this.event.startTime;
       delete this.event.endTime;
 
-      if(!this.isCategoryListed) {
+      if(!this.isCategoryListed && this.event.settings.category !== "exclusive") {
         this.accountService.addCategory(this.event.settings.category)
           .subscribe((res) => {
             this.finalAlert = true;
@@ -421,7 +429,7 @@ export class CreateEventComponent implements OnInit {
           }, (err) => {
             this.finalAlert = true;
             setTimeout(() => {
-              this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
+              this.flashMessages.show("An error occured editing your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
               setTimeout(() => {
                 this.finalAlert = false;
               },4000);
@@ -431,6 +439,16 @@ export class CreateEventComponent implements OnInit {
 
       this.accountService.getLocationChoords(this.event.location.address.street+" "+this.event.location.address.state+" "+this.event.location.address.country)
         .subscribe((res) => {
+          if(res.error_message) {
+            this.finalAlert = true;
+            setTimeout(() => {
+              this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
+              setTimeout(() => {
+                this.finalAlert = false;
+              },4000);
+            }, 500);
+            return;
+          }
           this.event.location.coordinates.push(res.results[0].geometry.location.lng);
           this.event.location.coordinates.push(res.results[0].geometry.location.lat);
 
@@ -513,6 +531,7 @@ export class CreateEventComponent implements OnInit {
                 this.flashMessages.show("Event Successfully Created And Is Live!", {cssClass: 'alert-success', timeout: 6000});
                 setTimeout(() => {
                   this.finalAlert = false;
+                  this.router.navigate(['/a/myEvents']);
                 },6000);
               }, 500);
             }, (err) => {
@@ -581,6 +600,17 @@ export class CreateEventComponent implements OnInit {
       }, 500);
       return;
     }
+
+    if(!this.isCategoryListed && this.event.settings.category === "exclusive") {
+        this.finalAlert = true;
+        setTimeout(() => {
+          this.flashMessages.show("Your event cannot be set because we noticed that your category field is set to exclusive. reverse back and select an available category, uncheck and recheck the field before continuing", {cssClass: 'alert-danger', timeout: 10000});
+          setTimeout(() => {
+            this.finalAlert = false;
+          },10000);
+        }, 500); 
+        return;
+    }
     this.event.startDate = this.event.startDate +" "+ this.event.startTime;
     this.event.endDate = this.event.endDate +" "+ this.event.endTime;
     this.event.ticket[0].ticketSaleStarts = this.event.ticket[0].ticketSaleStarts +" "+ this.ticketStartTime;
@@ -596,17 +626,30 @@ export class CreateEventComponent implements OnInit {
     delete this.event.startTime;
     delete this.event.endTime;
 
-    if(!this.isCategoryListed) {
-      this.accountService.addCategory(this.event.settings.category)
-        .subscribe((res) => {
-          this.finalAlert = true;
-          setTimeout(() => {
-            this.flashMessages.show("New category added!", {cssClass: 'alert-info', timeout: 3000});
+    if(!this.isCategoryListed && this.event.settings.category !== "exclusive") {
+        this.accountService.addCategory(this.event.settings.category)
+          .subscribe((res) => {
+            this.finalAlert = true;
             setTimeout(() => {
-              this.finalAlert = false;
-            },3000);
-          }, 500);
-        }, (err) => {
+              this.flashMessages.show("New category added!", {cssClass: 'alert-info', timeout: 3000});
+              setTimeout(() => {
+                this.finalAlert = false;
+              },3000);
+            }, 500);
+          }, (err) => {
+            this.finalAlert = true;
+            setTimeout(() => {
+              this.flashMessages.show("An error occured editing your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
+              setTimeout(() => {
+                this.finalAlert = false;
+              },4000);
+            }, 500);
+          });
+      }
+
+    this.accountService.getLocationChoords(this.event.location.address.street+" "+this.event.location.address.state+" "+this.event.location.address.country)
+      .subscribe((res) => {
+        if(res.error_message) {
           this.finalAlert = true;
           setTimeout(() => {
             this.flashMessages.show("An error occured creating your event, please retry", {cssClass: 'alert-danger', timeout: 4000});
@@ -614,11 +657,8 @@ export class CreateEventComponent implements OnInit {
               this.finalAlert = false;
             },4000);
           }, 500);
-        });
-    }
-
-    this.accountService.getLocationChoords(this.event.location.address.street+" "+this.event.location.address.state+" "+this.event.location.address.country)
-      .subscribe((res) => {
+          return;
+        }
         this.event.location.coordinates.push(res.results[0].geometry.location.lng);
         this.event.location.coordinates.push(res.results[0].geometry.location.lat);
 
@@ -701,6 +741,7 @@ export class CreateEventComponent implements OnInit {
               this.flashMessages.show("Event Successfully Created And Is Saved!", {cssClass: 'alert-success', timeout: 6000});
               setTimeout(() => {
                 this.finalAlert = false;
+                this.router.navigate(['/a/myEvents']);
               },6000);
             }, 500);
           }, (err) => {
