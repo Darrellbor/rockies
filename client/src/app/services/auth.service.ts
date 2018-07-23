@@ -38,7 +38,7 @@ export class AuthService {
     this.options = new RequestOptions({
       headers: new Headers({
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer sk_live_8f8ca25f9e025f0a96cb3aaa90c09a8084985939'
+        'Authorization': 'Bearer '
       })
     });
   }

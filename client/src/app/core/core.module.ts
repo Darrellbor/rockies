@@ -26,7 +26,7 @@ import { AccountConfirmComponent } from './components/account-confirm/account-co
     FormsModule,
     SharedModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyD-x64V4KFRIuH6zyb6m0YUJhac7tuURD4'
+      apiKey: ''
     }),
     CoreRoutingModule
   ],
