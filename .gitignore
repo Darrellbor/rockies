@@ -12,3 +12,4 @@
 
 #ignore the client folder in production mode
 /client
+/client/src
