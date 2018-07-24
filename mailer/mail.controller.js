@@ -18,7 +18,7 @@ module.exports.sendMail = function(to, subject, messageObj, templateFile, callin
     };
 
     let transporter = nodemailer.createTransport(({
-        host: 'rockies.ng',
+        host: 'mail.rockies.ng',
         port: 465,
         secure: true, // true for 465, false for other ports
         auth: {
@@ -77,7 +77,7 @@ module.exports.sendMailWithAttach = function(to, subject, messageObj, attachment
     };
 
     let transporter = nodemailer.createTransport(({
-        host: 'rockies.ng',
+        host: 'mail.rockies.ng',
         port: 465,
         secure: true, // true for 465, false for other ports
         auth: {
