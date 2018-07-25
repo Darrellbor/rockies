@@ -23,7 +23,7 @@ module.exports.sendMail = function(to, subject, messageObj, templateFile, callin
         secure: false, // true for 465, false for other ports
         auth: {
             user: 'hello@rockies.ng', // generated ethereal user
-            pass: 'anewbegining' // generated ethereal password
+            pass: '*****' // generated ethereal password
         },
         tls: {
             // do not fail on invalid certs
@@ -82,7 +82,7 @@ module.exports.sendMailWithAttach = function(to, subject, messageObj, attachment
         secure: false, // true for 465, false for other ports
         auth: {
             user: 'hello@rockies.ng', // generated ethereal user
-            pass: 'anewbegining' // generated ethereal password
+            pass: '******' // generated ethereal password
         },
         tls: {
             // do not fail on invalid certs
