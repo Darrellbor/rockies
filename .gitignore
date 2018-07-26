@@ -12,3 +12,6 @@
 
 #ignore the client folder in production mode
 /client
+
+#ignore the api until updates
+/api
